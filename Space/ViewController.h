@@ -7,7 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <GLKit/GLKit.h>
+#import "CHCSVParser.h"
 
-@interface ViewController : UIViewController
+@interface ViewController : GLKViewController <CHCSVParserDelegate>
 
 @end

@@ -7,23 +7,30 @@
 //
 
 #import "ViewController.h"
+#import "PanoramaView.h"
 
-@interface ViewController ()
-
+@interface ViewController (){
+    PanoramaView *panoramaView;
+}
 @end
 
 @implementation ViewController
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad{
     [super viewDidLoad];
-	// Do any additional setup after loading the view, typically from a nib.
+    panoramaView = [[PanoramaView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    [panoramaView setTexture:@"equirectangular-projection-lines.png"];
+    //    [panoramaView setTexture:@"park_2048.png"];
+    [panoramaView setCelestialSphere:YES];  // spinning stars background
+    [panoramaView setOrientToDevice:YES];  // initialize device orientation sensors
+    [panoramaView setPinchZoom:YES];  // activate touch gesture, alters field of view
+    [self setView:panoramaView];
 }
 
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+// OpenGL redraw screen
+-(void) glkView:(GLKView *)view drawInRect:(CGRect)rect{
+    [panoramaView execute];
 }
+
 
 @end

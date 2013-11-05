@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D55E8FE71828E0C10076A9D7 /* Tycho_2048_city_reflection.png in Resources */ = {isa = PBXBuildFile; fileRef = D55E8FE61828E0C10076A9D7 /* Tycho_2048_city_reflection.png */; };
+		D55E8FE91828E0CD0076A9D7 /* equirectangular-projection-lines.png in Resources */ = {isa = PBXBuildFile; fileRef = D55E8FE81828E0CD0076A9D7 /* equirectangular-projection-lines.png */; };
 		D575724718262BBA0071B21E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D575724618262BBA0071B21E /* Foundation.framework */; };
 		D575724918262BBA0071B21E /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D575724818262BBA0071B21E /* CoreGraphics.framework */; };
 		D575724B18262BBA0071B21E /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D575724A18262BBA0071B21E /* UIKit.framework */; };
@@ -22,6 +24,13 @@
 		D575726B18262BBA0071B21E /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D575724A18262BBA0071B21E /* UIKit.framework */; };
 		D575727318262BBA0071B21E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = D575727118262BBA0071B21E /* InfoPlist.strings */; };
 		D575727518262BBA0071B21E /* SpaceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D575727418262BBA0071B21E /* SpaceTests.m */; };
+		D575728018262C5E0071B21E /* CHCSVParser.m in Sources */ = {isa = PBXBuildFile; fileRef = D575727F18262C5E0071B21E /* CHCSVParser.m */; };
+		D575728218262C760071B21E /* hygfull.csv in Resources */ = {isa = PBXBuildFile; fileRef = D575728118262C760071B21E /* hygfull.csv */; };
+		D575728418263B170071B21E /* hygsmall.csv in Resources */ = {isa = PBXBuildFile; fileRef = D575728318263B170071B21E /* hygsmall.csv */; };
+		D5757287182649400071B21E /* Sphere.m in Sources */ = {isa = PBXBuildFile; fileRef = D5757286182649400071B21E /* Sphere.m */; };
+		D575728A182649480071B21E /* PanoramaView.m in Sources */ = {isa = PBXBuildFile; fileRef = D5757289182649480071B21E /* PanoramaView.m */; };
+		D575728E18264B180071B21E /* checker.png in Resources */ = {isa = PBXBuildFile; fileRef = D575728D18264B180071B21E /* checker.png */; };
+		D575729318264E800071B21E /* outside_2048.png in Resources */ = {isa = PBXBuildFile; fileRef = D575729218264E800071B21E /* outside_2048.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -35,6 +44,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		D55E8FE61828E0C10076A9D7 /* Tycho_2048_city_reflection.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Tycho_2048_city_reflection.png; sourceTree = "<group>"; };
+		D55E8FE81828E0CD0076A9D7 /* equirectangular-projection-lines.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "equirectangular-projection-lines.png"; sourceTree = "<group>"; };
 		D575724318262BBA0071B21E /* Space.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Space.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D575724618262BBA0071B21E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		D575724818262BBA0071B21E /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -55,6 +66,16 @@
 		D575727018262BBA0071B21E /* SpaceTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "SpaceTests-Info.plist"; sourceTree = "<group>"; };
 		D575727218262BBA0071B21E /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		D575727418262BBA0071B21E /* SpaceTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SpaceTests.m; sourceTree = "<group>"; };
+		D575727E18262C5E0071B21E /* CHCSVParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CHCSVParser.h; sourceTree = "<group>"; };
+		D575727F18262C5E0071B21E /* CHCSVParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CHCSVParser.m; sourceTree = "<group>"; };
+		D575728118262C760071B21E /* hygfull.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = hygfull.csv; sourceTree = "<group>"; };
+		D575728318263B170071B21E /* hygsmall.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = hygsmall.csv; sourceTree = "<group>"; };
+		D5757285182649400071B21E /* Sphere.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Sphere.h; sourceTree = "<group>"; };
+		D5757286182649400071B21E /* Sphere.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Sphere.m; sourceTree = "<group>"; };
+		D5757288182649480071B21E /* PanoramaView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PanoramaView.h; sourceTree = "<group>"; };
+		D5757289182649480071B21E /* PanoramaView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PanoramaView.m; sourceTree = "<group>"; };
+		D575728D18264B180071B21E /* checker.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = checker.png; sourceTree = "<group>"; };
+		D575729218264E800071B21E /* outside_2048.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = outside_2048.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -120,6 +141,11 @@
 				D575725B18262BBA0071B21E /* Main_iPad.storyboard */,
 				D575725E18262BBA0071B21E /* ViewController.h */,
 				D575725F18262BBA0071B21E /* ViewController.m */,
+				D5757288182649480071B21E /* PanoramaView.h */,
+				D5757289182649480071B21E /* PanoramaView.m */,
+				D575729118264D300071B21E /* resources */,
+				D575729018264CFD0071B21E /* shapes */,
+				D575728F18264CE50071B21E /* third party */,
 				D575726118262BBA0071B21E /* Images.xcassets */,
 				D575724D18262BBA0071B21E /* Supporting Files */,
 			);
@@ -153,6 +179,37 @@
 				D575727118262BBA0071B21E /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		D575728F18264CE50071B21E /* third party */ = {
+			isa = PBXGroup;
+			children = (
+				D575727E18262C5E0071B21E /* CHCSVParser.h */,
+				D575727F18262C5E0071B21E /* CHCSVParser.m */,
+			);
+			name = "third party";
+			sourceTree = "<group>";
+		};
+		D575729018264CFD0071B21E /* shapes */ = {
+			isa = PBXGroup;
+			children = (
+				D5757285182649400071B21E /* Sphere.h */,
+				D5757286182649400071B21E /* Sphere.m */,
+			);
+			name = shapes;
+			sourceTree = "<group>";
+		};
+		D575729118264D300071B21E /* resources */ = {
+			isa = PBXGroup;
+			children = (
+				D575728318263B170071B21E /* hygsmall.csv */,
+				D575728118262C760071B21E /* hygfull.csv */,
+				D575729218264E800071B21E /* outside_2048.png */,
+				D55E8FE81828E0CD0076A9D7 /* equirectangular-projection-lines.png */,
+				D55E8FE61828E0C10076A9D7 /* Tycho_2048_city_reflection.png */,
+				D575728D18264B180071B21E /* checker.png */,
+			);
+			name = resources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -233,7 +290,13 @@
 			files = (
 				D575725D18262BBA0071B21E /* Main_iPad.storyboard in Resources */,
 				D575726218262BBA0071B21E /* Images.xcassets in Resources */,
+				D575729318264E800071B21E /* outside_2048.png in Resources */,
+				D575728E18264B180071B21E /* checker.png in Resources */,
+				D575728218262C760071B21E /* hygfull.csv in Resources */,
+				D575728418263B170071B21E /* hygsmall.csv in Resources */,
 				D575725A18262BBA0071B21E /* Main_iPhone.storyboard in Resources */,
+				D55E8FE91828E0CD0076A9D7 /* equirectangular-projection-lines.png in Resources */,
+				D55E8FE71828E0C10076A9D7 /* Tycho_2048_city_reflection.png in Resources */,
 				D575725118262BBA0071B21E /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -253,8 +316,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D575728018262C5E0071B21E /* CHCSVParser.m in Sources */,
 				D575726018262BBA0071B21E /* ViewController.m in Sources */,
 				D575725718262BBA0071B21E /* AppDelegate.m in Sources */,
+				D575728A182649480071B21E /* PanoramaView.m in Sources */,
+				D5757287182649400071B21E /* Sphere.m in Sources */,
 				D575725318262BBA0071B21E /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -395,6 +461,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Space/Space-Prefix.pch";
 				INFOPLIST_FILE = "Space/Space-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -408,6 +475,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Space/Space-Prefix.pch";
 				INFOPLIST_FILE = "Space/Space-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -474,6 +542,7 @@
 				D575727A18262BBA0071B21E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		D575727B18262BBA0071B21E /* Build configuration list for PBXNativeTarget "SpaceTests" */ = {
 			isa = XCConfigurationList;
@@ -482,6 +551,7 @@
 				D575727D18262BBA0071B21E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
