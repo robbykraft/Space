@@ -37,20 +37,23 @@
 - (void)viewDidLoad{
     [super viewDidLoad];
     
-    [self getStars];
+//    [self getStars];
     
     panoramaView = [[PanoramaView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     [panoramaView setTexture:@"equirectangular-projection-lines.png"];
-    //    [panoramaView setTexture:@"park_2048.png"];
+//    [panoramaView setTexture:@"park_2048.png"];
     [panoramaView setCelestialSphere:YES];  // spinning stars background
     [panoramaView setOrientToDevice:YES];  // initialize device orientation sensors
     [panoramaView setPinchZoom:YES];  // activate touch gesture, alters field of view
     [self setView:panoramaView];
+    
+    [self performSelectorInBackground:@selector(getStars) withObject:nil];
 }
 
 -(void)getStars{
-    NSString *path = [[NSBundle mainBundle] pathForResource:@"hygsmall.csv" ofType:NULL];
+    NSString *path = [[NSBundle mainBundle] pathForResource:@"hygtiny.csv" ofType:NULL];
     NSMutableArray *array = [NSMutableArray arrayWithContentsOfCSVFile:path];
+    NSLog(@"%d",(int)array.count);
     stars = [NSMutableArray array];
     for(NSArray *a in array){
         NSMutableDictionary *star = [NSMutableDictionary dictionary];
@@ -60,15 +63,11 @@
         [star setObject:a[10] forKey:@"Mag"];
         [stars addObject:star];
     }
-    for(NSDictionary *star in stars){
-        NSLog(@"RA: %@",[star objectForKey:@"RA"]);
-    }
 }
 
 // OpenGL redraw screen
 -(void) glkView:(GLKView *)view drawInRect:(CGRect)rect{
     [panoramaView execute];
 }
-
 
 @end

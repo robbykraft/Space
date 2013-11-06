@@ -56,7 +56,6 @@
     else
         _fieldOfView = 60;
     
-    _attitudeMatrix = GLKMatrix4MakeRotation(-M_PI_2, 1.0f, 0.0f, 0.0f);
     aspectRatio = (float)[[UIScreen mainScreen] bounds].size.width / (float)[[UIScreen mainScreen] bounds].size.height;
     if([UIApplication sharedApplication].statusBarOrientation > 2)
         aspectRatio = 1/aspectRatio;
