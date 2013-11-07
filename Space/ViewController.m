@@ -25,9 +25,11 @@
 
 #import "ViewController.h"
 #import "PanoramaView.h"
+#import "PlanetariumView.h"
 
 @interface ViewController (){
     PanoramaView *panoramaView;
+    PlanetariumView *planetariumView;
     NSMutableArray *stars;
 }
 @end
@@ -36,18 +38,25 @@
 
 - (void)viewDidLoad{
     [super viewDidLoad];
-    
-//    [self getStars];
-    
     panoramaView = [[PanoramaView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     [panoramaView setTexture:@"equirectangular-projection-lines.png"];
-//    [panoramaView setTexture:@"park_2048.png"];
     [panoramaView setCelestialSphere:YES];  // spinning stars background
     [panoramaView setOrientToDevice:YES];  // initialize device orientation sensors
     [panoramaView setPinchZoom:YES];  // activate touch gesture, alters field of view
     [self setView:panoramaView];
-    
+    planetariumView = nil;
     [self performSelectorInBackground:@selector(getStars) withObject:nil];
+    
+}
+
+-(void)enterPlanetarium{
+    planetariumView = [[PlanetariumView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    [planetariumView setTexture:@"equirectangular-planetarium-lines.png"];
+    [planetariumView setOrientToDevice:YES];  // initialize device orientation sensors
+    [planetariumView setPinchZoom:YES];  // activate touch gesture, alters field of view
+    [planetariumView setTimeSpeed:.00001];
+    [self setView:planetariumView];
+    panoramaView = nil;
 }
 
 -(void)getStars{
@@ -63,11 +72,15 @@
         [star setObject:a[10] forKey:@"Mag"];
         [stars addObject:star];
     }
+//    [self performSelector:@selector(enterPlanetarium) withObject:nil afterDelay:0.2];
 }
 
 // OpenGL redraw screen
 -(void) glkView:(GLKView *)view drawInRect:(CGRect)rect{
-    [panoramaView execute];
+    if(panoramaView != nil)
+        [panoramaView execute];
+    if(planetariumView != nil)
+        [planetariumView execute];
 }
 
 @end

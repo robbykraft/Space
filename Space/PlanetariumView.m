@@ -7,26 +7,25 @@
 //
 
 #import <CoreMotion/CoreMotion.h>
-#import "PanoramaView.h"
+#import "PlanetariumView.h"
 #import "Sphere.h"
 
 #define FOV_MAX 155
 #define FOV_MIN 1
 #define SLICES 48
 
-@interface PanoramaView (){
+@interface PlanetariumView (){
     Sphere *sphere;
     Sphere *celestial;
     CGFloat aspectRatio;
     CGFloat zoom;
     CMMotionManager *motionManager;
     UIPinchGestureRecognizer *pinchGesture;
-    
-    GLKTextureInfo *m_TextureInfo;
+    NSInteger logCount;
 }
 @end
 
-@implementation PanoramaView
+@implementation PlanetariumView
 
 -(id) init{
     return [self initWithFrame:[[UIScreen mainScreen] bounds]];
@@ -47,21 +46,12 @@
     return self;
 }
 
-///  building the universe                          building the universe                              building the universe
-///   ..                                             ..                                                  ..
-
-
-///  building the universe                          building the universe                              building the universe
-///   ...................   getting your location    ...................      getting your location      ...................
-
-
-///  building the universe   ...................    building the universe      ...................     building the universe
-///   ...................   getting your location    ...................      getting your location      ...................
-
 -(void)initGL{
     EAGLContext *context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES1];
     [EAGLContext setCurrentContext:context];
     self.context = context;
+    
+    _timeSpeed = .01;
     
     if(UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         _fieldOfView = 75;
@@ -75,8 +65,6 @@
     sphere = [[Sphere alloc] init:SLICES slices:SLICES radius:10.0 squash:1.0 textureFile:nil];
     celestial = [[Sphere alloc] init:SLICES slices:SLICES radius:20.0 squash:1.0 textureFile:@"Tycho_2048_city_reflection.png"];
     
-    m_TextureInfo = [self loadTexture:@"buildingTheUniverse.png"];
-    
     // init lighting
     glShadeModel(GL_SMOOTH);
     glLightModelf(GL_LIGHT_MODEL_TWO_SIDE,0.0);
@@ -89,23 +77,21 @@
     glFrustumf(-frustum, frustum, -frustum/aspectRatio, frustum/aspectRatio, zNear, zFar);
     glViewport(0, 0, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width);
     glEnable(GL_DEPTH_TEST);
-    glEnable(GL_BLEND);
     glMatrixMode(GL_MODELVIEW);
+    glEnable(GL_BLEND);
     glLoadIdentity();
-    
 }
 
 -(void) updateFieldOfView{
-    float zNear = 0.1;
-    float zFar = 1000;
     glMatrixMode(GL_PROJECTION);
     glPushMatrix();
-        glLoadIdentity();
-        GLfloat frustum = zNear * tanf(GLKMathDegreesToRadians(_fieldOfView) / 2.0);
-        glFrustumf(-frustum, frustum, -frustum/aspectRatio, frustum/aspectRatio, zNear, zFar);
-        glMatrixMode(GL_MODELVIEW);
-        glEnable(GL_DEPTH_TEST);
-        glEnable(GL_BLEND);
+    glLoadIdentity();
+    float zNear = 0.1;
+    float zFar = 1000;
+    GLfloat frustum = zNear * tanf(GLKMathDegreesToRadians(_fieldOfView) / 2.0);
+    glFrustumf(-frustum, frustum, -frustum/aspectRatio, frustum/aspectRatio, zNear, zFar);
+    glMatrixMode(GL_MODELVIEW);
+    glEnable(GL_DEPTH_TEST);
     glPopMatrix();
 }
 
@@ -141,13 +127,28 @@
     _orientToDevice = orientToDevice;
     if(_orientToDevice){
         if(motionManager.isDeviceMotionAvailable){
-            [motionManager startDeviceMotionUpdatesToQueue:[NSOperationQueue currentQueue] withHandler:^(CMDeviceMotion *deviceMotion, NSError *error) {
+            [motionManager startDeviceMotionUpdatesUsingReferenceFrame:CMAttitudeReferenceFrameXMagneticNorthZVertical toQueue:[NSOperationQueue currentQueue] withHandler:^(CMDeviceMotion *deviceMotion, NSError *error) {
                 CMRotationMatrix a = deviceMotion.attitude.rotationMatrix;
                 _attitudeMatrix =
                 GLKMatrix4Make(a.m11, a.m21, a.m31, 0.0f,
                                a.m13, a.m23, a.m33, 0.0f,
                                -a.m12,-a.m22,-a.m32,0.0f,
                                0.0f , 0.0f , 0.0f , 1.0f);
+                
+//                GLKMatrix4 seasonDirection = GLKMatrix4MakeRotation(M_PI, 0, 1, 0);
+//                _attitudeMatrix = GLKMatrix4Multiply(_attitudeMatrix, seasonDirection);
+//                GLKMatrix4 earthTilt = GLKMatrix4MakeRotation(M_PI/180.0*23.45, 1, 0, 0);
+//                _attitudeMatrix = GLKMatrix4Multiply(_attitudeMatrix, earthTilt);
+//                GLKMatrix4 daytime = GLKMatrix4MakeRotation(2*M_PI/24.0*_timeAtGMT, 0, 1, 0);
+//                _attitudeMatrix = GLKMatrix4Multiply(_attitudeMatrix, daytime);
+//                GLKMatrix4 latitude = GLKMatrix4MakeRotation(M_PI/180.0*45.0, 0, 0, 1);
+//                _attitudeMatrix = GLKMatrix4Multiply(_attitudeMatrix, latitude);
+            
+//                CMCalibratedMagneticField mag = deviceMotion.magneticField;
+//                logCount++;
+//                if(logCount%15 == 0){
+//                    NSLog(@"(%d) (%.3f, %.3f, %.3f)",mag.accuracy,mag.field.x, mag.field.y, mag.field.z);
+//                }
             }];
         }
     }
@@ -156,75 +157,9 @@
     }
 }
 
--(GLKTextureInfo *) loadTexture:(NSString *) filename
-{
-    NSError *error;
-    GLKTextureInfo *info;
-    NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES], GLKTextureLoaderOriginBottomLeft, nil];
-    NSString *path = [[NSBundle mainBundle] pathForResource:filename ofType:NULL];
-    info=[GLKTextureLoader textureWithContentsOfFile:path options:options error:&error];
-    
-    glBindTexture(GL_TEXTURE_2D, info.name);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    return info;
-}
-
--(void)executeSquare{
-    glEnable(GL_TEXTURE_2D);
-    glEnable(GL_BLEND);
-  
-    glEnable(GL_CULL_FACE);
-    glCullFace(GL_BACK);
-    glFrontFace(GL_CW);
-
-    glEnableClientState(GL_VERTEX_ARRAY);
-    glEnableClientState(GL_NORMAL_ARRAY);
-    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-    
-    static const GLfloat vertices[] = {
-        -1.0,  1.0, -0.0,
-         1.0,  1.0, -0.0,
-        -1.0, -1.0, -0.0,
-         1.0, -1.0, -0.0
-    };
-    static const GLfloat normals[] = {
-        0.0, 0.0, 1.0,
-        0.0, 0.0, 1.0,
-        0.0, 0.0, 1.0,
-        0.0, 0.0, 1.0
-    };
-    static const GLfloat texCoords[] = {
-        0.0, 1.0,
-        1.0, 1.0,
-        0.0, 0.0,
-        1.0, 0.0
-    };
-    
-    glLoadIdentity();
-    glMultMatrixf(_attitudeMatrix.m);
-    
-    for(int i = 0; i < 4; i++){
-        GLKMatrix4 rotation = GLKMatrix4MakeRotation(M_PI*.5*i, 0.0, 1.0, 0.0);
-        glPushMatrix();
-            glMultMatrixf(rotation.m);
-            glTranslatef(0.0, 0.0, -3.0);
-            glBindTexture(GL_TEXTURE_2D, m_TextureInfo.name);
-            glVertexPointer(3, GL_FLOAT, 0, vertices);
-            glNormalPointer(GL_FLOAT, 0, normals);
-            glTexCoordPointer(2, GL_FLOAT, 0, texCoords);
-            glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-        glPopMatrix();
-    }
-    glDisableClientState(GL_VERTEX_ARRAY);
-    glDisableClientState(GL_NORMAL_ARRAY);
-    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-}
-
 -(void)execute{
     static float daytime;
-    daytime += .01;
+    daytime += _timeSpeed;
     if(daytime >= 24) daytime = 0;
     
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -233,31 +168,36 @@
     
     glMatrixMode(GL_MODELVIEW);
     glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, white);
+    glEnable(GL_BLEND);
     
-    // made-up figures to fake a spinning planet
-    GLKMatrix4 latitude = GLKMatrix4MakeRotation(M_PI/180.0*45.0, 0, 0, 1);
-    GLKMatrix4 earthTilt = GLKMatrix4MakeRotation(M_PI/180.0*23.45, 1, 0, 0);
-    GLKMatrix4 day = GLKMatrix4MakeRotation(2*M_PI/24.0*daytime, 0, 1, 0);
-    
-    glPushMatrix();
+    if(_celestialSphere){
+        glPushMatrix();
         glMultMatrixf(_attitudeMatrix.m);
+        // made-up figures to fake a spinning planet
+        GLKMatrix4 latitude = GLKMatrix4MakeRotation(M_PI/180.0*45.0, 0, 0, 1);
         glMultMatrixf(latitude.m);
+        GLKMatrix4 earthTilt = GLKMatrix4MakeRotation(M_PI/180.0*23.45, 1, 0, 0);
         glMultMatrixf(earthTilt.m);
+        GLKMatrix4 day = GLKMatrix4MakeRotation(2*M_PI/24.0*daytime, 0, 1, 0);
         glMultMatrixf(day.m);
         [self executeSphere:celestial];
-    glPopMatrix();
+        glPopMatrix();
+    }
+    
     glPushMatrix();
-        glMultMatrixf(_attitudeMatrix.m);
-        [self executeSphere:sphere];
-        [self executeSquare];
+    glMultMatrixf(_attitudeMatrix.m);
+    [self executeSphere:sphere];
     glPopMatrix();
+    
 }
 
 -(void)executeSphere:(Sphere *)s{
     GLfloat posX, posY, posZ;
+    glPushMatrix();
     [s getPositionX:&posX Y:&posY Z:&posZ];
     glTranslatef(posX, posY, posZ);
     [s execute];
+    glPopMatrix();
 }
 
 @end

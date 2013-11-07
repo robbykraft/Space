@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D524C7BF182B825000A9A454 /* PlanetariumView.m in Sources */ = {isa = PBXBuildFile; fileRef = D524C7BE182B825000A9A454 /* PlanetariumView.m */; };
+		D524C7C1182B8FE800A9A454 /* buildingTheUniverse.png in Resources */ = {isa = PBXBuildFile; fileRef = D524C7C0182B8FE800A9A454 /* buildingTheUniverse.png */; };
+		D524C7C3182B958D00A9A454 /* equirectangular-planetarium-lines.png in Resources */ = {isa = PBXBuildFile; fileRef = D524C7C2182B958D00A9A454 /* equirectangular-planetarium-lines.png */; };
 		D55E8FE71828E0C10076A9D7 /* Tycho_2048_city_reflection.png in Resources */ = {isa = PBXBuildFile; fileRef = D55E8FE61828E0C10076A9D7 /* Tycho_2048_city_reflection.png */; };
 		D55E8FE91828E0CD0076A9D7 /* equirectangular-projection-lines.png in Resources */ = {isa = PBXBuildFile; fileRef = D55E8FE81828E0CD0076A9D7 /* equirectangular-projection-lines.png */; };
 		D55E8FF41828ED800076A9D7 /* 114.png in Resources */ = {isa = PBXBuildFile; fileRef = D55E8FEB1828ED800076A9D7 /* 114.png */; };
@@ -54,6 +57,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		D524C7BD182B825000A9A454 /* PlanetariumView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlanetariumView.h; sourceTree = "<group>"; };
+		D524C7BE182B825000A9A454 /* PlanetariumView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlanetariumView.m; sourceTree = "<group>"; };
+		D524C7C0182B8FE800A9A454 /* buildingTheUniverse.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = buildingTheUniverse.png; sourceTree = "<group>"; };
+		D524C7C2182B958D00A9A454 /* equirectangular-planetarium-lines.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "equirectangular-planetarium-lines.png"; sourceTree = "<group>"; };
 		D55E8FE61828E0C10076A9D7 /* Tycho_2048_city_reflection.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Tycho_2048_city_reflection.png; sourceTree = "<group>"; };
 		D55E8FE81828E0CD0076A9D7 /* equirectangular-projection-lines.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "equirectangular-projection-lines.png"; sourceTree = "<group>"; };
 		D55E8FEB1828ED800076A9D7 /* 114.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 114.png; sourceTree = "<group>"; };
@@ -179,6 +186,8 @@
 				D575725F18262BBA0071B21E /* ViewController.m */,
 				D5757288182649480071B21E /* PanoramaView.h */,
 				D5757289182649480071B21E /* PanoramaView.m */,
+				D524C7BD182B825000A9A454 /* PlanetariumView.h */,
+				D524C7BE182B825000A9A454 /* PlanetariumView.m */,
 				D575729118264D300071B21E /* resources */,
 				D575729018264CFD0071B21E /* shapes */,
 				D575728F18264CE50071B21E /* third party */,
@@ -242,6 +251,8 @@
 				D575728118262C760071B21E /* hygfull.csv */,
 				D56628E7182A57F100EFF45D /* hygtiny.csv */,
 				D575729218264E800071B21E /* outside_2048.png */,
+				D524C7C0182B8FE800A9A454 /* buildingTheUniverse.png */,
+				D524C7C2182B958D00A9A454 /* equirectangular-planetarium-lines.png */,
 				D55E8FE81828E0CD0076A9D7 /* equirectangular-projection-lines.png */,
 				D55E8FE61828E0C10076A9D7 /* Tycho_2048_city_reflection.png */,
 				D575728D18264B180071B21E /* checker.png */,
@@ -330,10 +341,12 @@
 				D56628E8182A57F100EFF45D /* hygtiny.csv in Resources */,
 				D55E8FF41828ED800076A9D7 /* 114.png in Resources */,
 				D575726218262BBA0071B21E /* Images.xcassets in Resources */,
+				D524C7C1182B8FE800A9A454 /* buildingTheUniverse.png in Resources */,
 				D575729318264E800071B21E /* outside_2048.png in Resources */,
 				D575728E18264B180071B21E /* checker.png in Resources */,
 				D55E8FF81828ED800076A9D7 /* 57.png in Resources */,
 				D575728218262C760071B21E /* hygfull.csv in Resources */,
+				D524C7C3182B958D00A9A454 /* equirectangular-planetarium-lines.png in Resources */,
 				D55E8FF61828ED800076A9D7 /* 144.png in Resources */,
 				D575728418263B170071B21E /* hygsmall.csv in Resources */,
 				D55E8FF71828ED800076A9D7 /* 152.png in Resources */,
@@ -368,6 +381,7 @@
 				D575726018262BBA0071B21E /* ViewController.m in Sources */,
 				D575725718262BBA0071B21E /* AppDelegate.m in Sources */,
 				D575728A182649480071B21E /* PanoramaView.m in Sources */,
+				D524C7BF182B825000A9A454 /* PlanetariumView.m in Sources */,
 				D5757287182649400071B21E /* Sphere.m in Sources */,
 				D575725318262BBA0071B21E /* main.m in Sources */,
 			);
