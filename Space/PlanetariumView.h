@@ -1,5 +1,5 @@
 //
-//  PanoramaView.h
+//  PlanetariumView.h
 //  Space
 //
 //  Created by Robby Kraft on 8/24/13.

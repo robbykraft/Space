@@ -5,7 +5,6 @@
 //  Created by Robby Kraft on 11/2/13.
 //  Copyright (c) 2013 Robby Kraft. All rights reserved.
 //
-
 /*
  StarID,
  Hip,
@@ -40,23 +39,30 @@
     [super viewDidLoad];
     panoramaView = [[PanoramaView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     [panoramaView setTexture:@"equirectangular-projection-lines.png"];
-    [panoramaView setCelestialSphere:YES];  // spinning stars background
+    [panoramaView setCelestialSphere:NO];  // spinning stars background
     [panoramaView setOrientToDevice:YES];  // initialize device orientation sensors
     [panoramaView setPinchZoom:YES];  // activate touch gesture, alters field of view
+    [panoramaView setLoadingDelegate:self];
     [self setView:panoramaView];
     planetariumView = nil;
     [self performSelectorInBackground:@selector(getStars) withObject:nil];
+
     
 }
 
+-(void)starsDidLoad{
+    NSLog(@"StarsDidLoad");
+//    [self enterPlanetarium];
+}
+
 -(void)enterPlanetarium{
+    panoramaView = nil;
     planetariumView = [[PlanetariumView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     [planetariumView setTexture:@"equirectangular-planetarium-lines.png"];
     [planetariumView setOrientToDevice:YES];  // initialize device orientation sensors
     [planetariumView setPinchZoom:YES];  // activate touch gesture, alters field of view
     [planetariumView setTimeSpeed:.00001];
     [self setView:planetariumView];
-    panoramaView = nil;
 }
 
 -(void)getStars{
@@ -72,7 +78,12 @@
         [star setObject:a[10] forKey:@"Mag"];
         [stars addObject:star];
     }
-//    [self performSelector:@selector(enterPlanetarium) withObject:nil afterDelay:0.2];
+    [stars removeObjectAtIndex:0];
+    NSMutableArray *condensed = [NSMutableArray array];
+    for(int i = 1; i < array.count; i++)
+        if(i%10 == 0)
+            [condensed addObject:stars[i]];
+    [panoramaView setStars:stars];
 }
 
 // OpenGL redraw screen

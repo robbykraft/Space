@@ -1,6 +1,6 @@
 //
 //  Sphere.m
-//  360 Panorama
+//  Space
 //
 //  Created by Robby Kraft on 8/24/13.
 //  Copyright (c) 2013 Robby Kraft. All rights reserved.
@@ -203,10 +203,15 @@
     m_Pos[2] = z;
 }
 
--(GLfloat) getRotation              { return m_Angle; }
--(void) setRotation:(GLfloat)angle  { m_Angle = angle; }
--(void) incrementRotation           { m_Angle += m_RotationalIncrement; }
--(GLfloat) getRotationalIncrement   { return m_RotationalIncrement; }
--(void) setRotationalIncrement:(GLfloat)inc { m_RotationalIncrement = inc; }
+-(GLfloat) getRotation
+    { return m_Angle; }
+-(void) setRotation:(GLfloat)angle
+    { m_Angle = angle; }
+-(void) incrementRotation
+    { m_Angle += m_RotationalIncrement; }
+-(GLfloat) getRotationalIncrement
+    { return m_RotationalIncrement; }
+-(void) setRotationalIncrement:(GLfloat)inc
+    { m_RotationalIncrement = inc; }
 
 @end

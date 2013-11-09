@@ -9,7 +9,8 @@
 #import <UIKit/UIKit.h>
 #import <GLKit/GLKit.h>
 #import "CHCSVParser.h"
+#import "PanoramaView.h"
 
-@interface ViewController : GLKViewController <CHCSVParserDelegate>
+@interface ViewController : GLKViewController <CHCSVParserDelegate, LoadingDelegate>
 
 @end

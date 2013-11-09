@@ -1,6 +1,6 @@
 //
 //  PanoramaView.m
-//  Spherical
+//  Space
 //
 //  Created by Robby Kraft on 8/24/13.
 //  Copyright (c) 2013 Robby Kraft. All rights reserved.
@@ -21,12 +21,14 @@
     CGFloat zoom;
     CMMotionManager *motionManager;
     UIPinchGestureRecognizer *pinchGesture;
-    
-    GLKTextureInfo *m_TextureInfo;
+    GLKTextureInfo *buildingTexture;
+    GLfloat *RAAndDec;
 }
 @end
 
 @implementation PanoramaView
+
+@synthesize loadingDelegate;
 
 -(id) init{
     return [self initWithFrame:[[UIScreen mainScreen] bounds]];
@@ -47,17 +49,6 @@
     return self;
 }
 
-///  building the universe                          building the universe                              building the universe
-///   ..                                             ..                                                  ..
-
-
-///  building the universe                          building the universe                              building the universe
-///   ...................   getting your location    ...................      getting your location      ...................
-
-
-///  building the universe   ...................    building the universe      ...................     building the universe
-///   ...................   getting your location    ...................      getting your location      ...................
-
 -(void)initGL{
     EAGLContext *context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES1];
     [EAGLContext setCurrentContext:context];
@@ -75,7 +66,7 @@
     sphere = [[Sphere alloc] init:SLICES slices:SLICES radius:10.0 squash:1.0 textureFile:nil];
     celestial = [[Sphere alloc] init:SLICES slices:SLICES radius:20.0 squash:1.0 textureFile:@"Tycho_2048_city_reflection.png"];
     
-    m_TextureInfo = [self loadTexture:@"buildingTheUniverse.png"];
+    buildingTexture = [self loadTexture:@"buildingTheUniverse.png"];
     
     // init lighting
     glShadeModel(GL_SMOOTH);
@@ -84,7 +75,7 @@
     glMatrixMode(GL_PROJECTION);    // the frustum affects the projection matrix
     glLoadIdentity();               // not the model matrix
     float zNear = 0.1;
-    float zFar = 1000;
+    float zFar = 50;
     GLfloat frustum = zNear * tanf(GLKMathDegreesToRadians(_fieldOfView) / 2.0);
     glFrustumf(-frustum, frustum, -frustum/aspectRatio, frustum/aspectRatio, zNear, zFar);
     glViewport(0, 0, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width);
@@ -92,12 +83,11 @@
     glEnable(GL_BLEND);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    
 }
 
 -(void) updateFieldOfView{
     float zNear = 0.1;
-    float zFar = 1000;
+    float zFar = 50;
     glMatrixMode(GL_PROJECTION);
     glPushMatrix();
         glLoadIdentity();
@@ -124,6 +114,19 @@
         [pinchGesture setEnabled:YES];
     else
         [pinchGesture setEnabled:NO];
+}
+
+-(void) setStars:(NSArray *)stars{
+    RAAndDec = malloc(sizeof(GLfloat)*stars.count*2);
+    for(int i = 0; i < stars.count; i++){
+        RAAndDec[i*2] = [[[stars objectAtIndex:i] objectForKey:@"RA"] floatValue];
+        RAAndDec[i*2+1] = [[[stars objectAtIndex:i] objectForKey:@"Dec"] floatValue];
+    }
+    
+    NSDictionary *oneStar = [stars objectAtIndex:1];
+    NSLog(@"Example star:%@",oneStar);
+    _stars = stars;
+    [loadingDelegate starsDidLoad];
 }
 
 -(void)pinchHandler:(UIPinchGestureRecognizer*)sender{
@@ -183,19 +186,19 @@
     glEnableClientState(GL_NORMAL_ARRAY);
     glEnableClientState(GL_TEXTURE_COORD_ARRAY);
     
-    static const GLfloat vertices[] = {
+    static const GLfloat quadVertices[] = {
         -1.0,  1.0, -0.0,
          1.0,  1.0, -0.0,
         -1.0, -1.0, -0.0,
          1.0, -1.0, -0.0
     };
-    static const GLfloat normals[] = {
+    static const GLfloat quadNormals[] = {
         0.0, 0.0, 1.0,
         0.0, 0.0, 1.0,
         0.0, 0.0, 1.0,
         0.0, 0.0, 1.0
     };
-    static const GLfloat texCoords[] = {
+    static const GLfloat quadTextureCoords[] = {
         0.0, 1.0,
         1.0, 1.0,
         0.0, 0.0,
@@ -210,10 +213,10 @@
         glPushMatrix();
             glMultMatrixf(rotation.m);
             glTranslatef(0.0, 0.0, -3.0);
-            glBindTexture(GL_TEXTURE_2D, m_TextureInfo.name);
-            glVertexPointer(3, GL_FLOAT, 0, vertices);
-            glNormalPointer(GL_FLOAT, 0, normals);
-            glTexCoordPointer(2, GL_FLOAT, 0, texCoords);
+            glBindTexture(GL_TEXTURE_2D, buildingTexture.name);
+            glVertexPointer(3, GL_FLOAT, 0, quadVertices);
+            glNormalPointer(GL_FLOAT, 0, quadNormals);
+            glTexCoordPointer(2, GL_FLOAT, 0, quadTextureCoords);
             glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
         glPopMatrix();
     }
@@ -238,18 +241,46 @@
     GLKMatrix4 latitude = GLKMatrix4MakeRotation(M_PI/180.0*45.0, 0, 0, 1);
     GLKMatrix4 earthTilt = GLKMatrix4MakeRotation(M_PI/180.0*23.45, 1, 0, 0);
     GLKMatrix4 day = GLKMatrix4MakeRotation(2*M_PI/24.0*daytime, 0, 1, 0);
+ 
+    glPushMatrix();
+        glMultMatrixf(_attitudeMatrix.m);
+    if(_celestialSphere){
+        glPushMatrix();
+            glMultMatrixf(latitude.m);
+            glMultMatrixf(earthTilt.m);
+            glMultMatrixf(day.m);
+            [self executeSphere:celestial];
+        glPopMatrix();
+    }
+        glPushMatrix();
+            [self executeSphere:sphere];
+            [self executeSquare];
+        glPopMatrix();
     
-    glPushMatrix();
-        glMultMatrixf(_attitudeMatrix.m);
-        glMultMatrixf(latitude.m);
-        glMultMatrixf(earthTilt.m);
-        glMultMatrixf(day.m);
-        [self executeSphere:celestial];
-    glPopMatrix();
-    glPushMatrix();
-        glMultMatrixf(_attitudeMatrix.m);
-        [self executeSphere:sphere];
-        [self executeSquare];
+        if(_stars != nil){
+            static const GLfloat quadVertices[] = {
+                -.001,  .001, -0.0,
+                .001,  .001, -0.0,
+                -.001, -.001, -0.0,
+                .001, -.001, -0.0
+            };
+            glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+            glDisable(GL_TEXTURE_2D);
+            glEnableClientState(GL_VERTEX_ARRAY);
+            for(int i = 0; i < _stars.count; i++){
+                glPushMatrix();
+                    GLKMatrix4 ra = GLKMatrix4MakeRotation(RAAndDec[i*2], 0.0, 1.0, 0.0);
+                    glMultMatrixf(ra.m);
+                    GLKMatrix4 dec = GLKMatrix4MakeRotation(RAAndDec[i*2+1], 1.0, 0.0, 0.0);
+                    glMultMatrixf(dec.m);
+                    glTranslatef(0.0, 0.0, -1.0);
+                    glColor4f(1.0, 1.0, 1.0, 1.0);
+                    glVertexPointer(3, GL_FLOAT, 0, quadVertices);
+                    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+                glPopMatrix();
+            }
+            glDisableClientState(GL_VERTEX_ARRAY);
+        }
     glPopMatrix();
 }
 

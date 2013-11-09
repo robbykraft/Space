@@ -9,6 +9,13 @@
 #import <Foundation/Foundation.h>
 #import <GLKit/GLKit.h>
 
+@protocol LoadingDelegate <NSObject>
+
+@optional
+-(void)starsDidLoad;
+
+@end
+
 @interface PanoramaView : GLKView
 
 @property (nonatomic) float fieldOfView;  // 60-90 is average
@@ -16,6 +23,8 @@
 @property (nonatomic) BOOL orientToDevice;
 @property (nonatomic) GLKMatrix4 attitudeMatrix;
 @property BOOL celestialSphere;  // bonus: rotating stars
+@property (nonatomic,strong) NSArray *stars;
+@property id <LoadingDelegate> loadingDelegate;
 
 -(void) execute;  // draw screen
 -(void) setTexture:(NSString*)fileName;
