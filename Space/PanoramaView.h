@@ -25,6 +25,7 @@
 @property BOOL celestialSphere;  // bonus: rotating stars
 @property (nonatomic,strong) NSArray *stars;
 @property id <LoadingDelegate> loadingDelegate;
+@property float time;
 
 -(void) execute;  // draw screen
 -(void) setTexture:(NSString*)fileName;

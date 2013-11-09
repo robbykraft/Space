@@ -43,6 +43,10 @@
 		D575728A182649480071B21E /* PanoramaView.m in Sources */ = {isa = PBXBuildFile; fileRef = D5757289182649480071B21E /* PanoramaView.m */; };
 		D575728E18264B180071B21E /* checker.png in Resources */ = {isa = PBXBuildFile; fileRef = D575728D18264B180071B21E /* checker.png */; };
 		D5C3E412182E4524003817D8 /* hyg.csv in Resources */ = {isa = PBXBuildFile; fileRef = D5C3E411182E4524003817D8 /* hyg.csv */; };
+		D5C3E414182EDEC6003817D8 /* hyg5.csv in Resources */ = {isa = PBXBuildFile; fileRef = D5C3E413182EDEC6003817D8 /* hyg5.csv */; };
+		D5C3E416182EE2BC003817D8 /* hyg4.csv in Resources */ = {isa = PBXBuildFile; fileRef = D5C3E415182EE2BC003817D8 /* hyg4.csv */; };
+		D5C3E418182EE578003817D8 /* Tycho_2048_reflection.png in Resources */ = {isa = PBXBuildFile; fileRef = D5C3E417182EE578003817D8 /* Tycho_2048_reflection.png */; };
+		D5C3E41C182EEA91003817D8 /* Hipparcos_2048_dark_reflection.png in Resources */ = {isa = PBXBuildFile; fileRef = D5C3E41B182EEA91003817D8 /* Hipparcos_2048_dark_reflection.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -101,6 +105,10 @@
 		D5757289182649480071B21E /* PanoramaView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PanoramaView.m; sourceTree = "<group>"; };
 		D575728D18264B180071B21E /* checker.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = checker.png; sourceTree = "<group>"; };
 		D5C3E411182E4524003817D8 /* hyg.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = hyg.csv; sourceTree = "<group>"; };
+		D5C3E413182EDEC6003817D8 /* hyg5.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = hyg5.csv; sourceTree = "<group>"; };
+		D5C3E415182EE2BC003817D8 /* hyg4.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = hyg4.csv; sourceTree = "<group>"; };
+		D5C3E417182EE578003817D8 /* Tycho_2048_reflection.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Tycho_2048_reflection.png; sourceTree = "<group>"; };
+		D5C3E41B182EEA91003817D8 /* Hipparcos_2048_dark_reflection.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Hipparcos_2048_dark_reflection.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -248,9 +256,13 @@
 				D5C3E411182E4524003817D8 /* hyg.csv */,
 				D575728318263B170071B21E /* hygsmall.csv */,
 				D56628E7182A57F100EFF45D /* hygtiny.csv */,
+				D5C3E415182EE2BC003817D8 /* hyg4.csv */,
+				D5C3E413182EDEC6003817D8 /* hyg5.csv */,
 				D524C7C0182B8FE800A9A454 /* buildingTheUniverse.png */,
 				D524C7C2182B958D00A9A454 /* equirectangular-planetarium-lines.png */,
+				D5C3E41B182EEA91003817D8 /* Hipparcos_2048_dark_reflection.png */,
 				D55E8FE81828E0CD0076A9D7 /* equirectangular-projection-lines.png */,
+				D5C3E417182EE578003817D8 /* Tycho_2048_reflection.png */,
 				D55E8FE61828E0C10076A9D7 /* Tycho_2048_city_reflection.png */,
 				D575728D18264B180071B21E /* checker.png */,
 				D55E8FEA1828ED800076A9D7 /* icons */,
@@ -342,14 +354,18 @@
 				D524C7C1182B8FE800A9A454 /* buildingTheUniverse.png in Resources */,
 				D575728E18264B180071B21E /* checker.png in Resources */,
 				D55E8FF81828ED800076A9D7 /* 57.png in Resources */,
+				D5C3E418182EE578003817D8 /* Tycho_2048_reflection.png in Resources */,
 				D524C7C3182B958D00A9A454 /* equirectangular-planetarium-lines.png in Resources */,
 				D55E8FF61828ED800076A9D7 /* 144.png in Resources */,
 				D575728418263B170071B21E /* hygsmall.csv in Resources */,
 				D55E8FF71828ED800076A9D7 /* 152.png in Resources */,
 				D575725A18262BBA0071B21E /* Main_iPhone.storyboard in Resources */,
+				D5C3E416182EE2BC003817D8 /* hyg4.csv in Resources */,
+				D5C3E414182EDEC6003817D8 /* hyg5.csv in Resources */,
 				D55E8FE91828E0CD0076A9D7 /* equirectangular-projection-lines.png in Resources */,
 				D55E8FFC1828ED800076A9D7 /* icon.png in Resources */,
 				D55E8FFA1828ED800076A9D7 /* 72.png in Resources */,
+				D5C3E41C182EEA91003817D8 /* Hipparcos_2048_dark_reflection.png in Resources */,
 				D55E8FF51828ED800076A9D7 /* 120.png in Resources */,
 				D55E8FFB1828ED800076A9D7 /* 76.png in Resources */,
 				D55E8FE71828E0C10076A9D7 /* Tycho_2048_city_reflection.png in Resources */,

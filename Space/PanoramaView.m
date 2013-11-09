@@ -23,6 +23,7 @@
     UIPinchGestureRecognizer *pinchGesture;
     GLKTextureInfo *buildingTexture;
     GLfloat *RAAndDec;
+    BOOL starsHidden;
 }
 @end
 
@@ -40,11 +41,15 @@
     self = [super initWithFrame:frame];
     if (self) {
         motionManager = [[CMMotionManager alloc] init];
-        motionManager.deviceMotionUpdateInterval = 1.0/45.0; // this will exhaust the battery!
+        motionManager.deviceMotionUpdateInterval = 1.0/45.0;
         pinchGesture = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(pinchHandler:)];
         [pinchGesture setEnabled:NO];
         [self addGestureRecognizer:pinchGesture];
+        UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panHandler:)];
+        [self addGestureRecognizer:pan];
         [self initGL];
+        
+        _time = 0;
     }
     return self;
 }
@@ -64,7 +69,7 @@
         aspectRatio = 1/aspectRatio;
     
     sphere = [[Sphere alloc] init:SLICES slices:SLICES radius:10.0 squash:1.0 textureFile:nil];
-    celestial = [[Sphere alloc] init:SLICES slices:SLICES radius:20.0 squash:1.0 textureFile:@"Tycho_2048_city_reflection.png"];
+    celestial = [[Sphere alloc] init:SLICES slices:SLICES radius:20.0 squash:1.0 textureFile:@"Hipparcos_2048_dark_reflection.png"];//@"Tycho_2048_reflection.png"];
     
     buildingTexture = [self loadTexture:@"buildingTheUniverse.png"];
     
@@ -119,8 +124,14 @@
 -(void) setStars:(NSArray *)stars{
     RAAndDec = malloc(sizeof(GLfloat)*stars.count*2);
     for(int i = 0; i < stars.count; i++){
-        RAAndDec[i*2] = [[[stars objectAtIndex:i] objectForKey:@"RA"] floatValue];
-        RAAndDec[i*2+1] = [[[stars objectAtIndex:i] objectForKey:@"Dec"] floatValue];
+        if(i == 144){
+            NSLog(@"SIRIUS: RA:%f, DEC:%f",[[[stars objectAtIndex:i] objectForKey:@"RA"] floatValue], [[[stars objectAtIndex:i] objectForKey:@"Dec"] floatValue]);
+        }
+        RAAndDec[i*2] = [[[stars objectAtIndex:i] objectForKey:@"RA"] floatValue] / 24.0 * 2 * M_PI;
+        RAAndDec[i*2+1] = [[[stars objectAtIndex:i] objectForKey:@"Dec"] floatValue] /180*(M_PI);
+        if(i == 144){
+            NSLog(@"SIRIUS (in RADIANS): RA:%f, DEC:%f",RAAndDec[i*2], RAAndDec[i*2+1]);
+        }
     }
     
     NSDictionary *oneStar = [stars objectAtIndex:1];
@@ -137,6 +148,17 @@
         if(newFOV < FOV_MIN) newFOV = FOV_MIN;
         else if(newFOV > FOV_MAX) newFOV = FOV_MAX;
         [self setFieldOfView:newFOV];
+    }
+}
+
+-(void)panHandler:(UIPanGestureRecognizer*)sender{
+    static float panX;
+    if([sender state] == 1){
+        panX = _time;
+    }
+    if([sender state] == 2){
+        _time = panX - [sender translationInView:sender.view].x/100.0;
+        NSLog(@"%f",_time);
     }
 }
 
@@ -224,10 +246,15 @@
     glDisableClientState(GL_NORMAL_ARRAY);
     glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 }
-
+-(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
+    starsHidden = YES;
+}
+-(void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event{
+    starsHidden = NO;
+}
 -(void)execute{
     static float daytime;
-    daytime += .01;
+//    daytime += dayIncrement;
     if(daytime >= 24) daytime = 0;
     
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -238,26 +265,29 @@
     glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, white);
     
     // made-up figures to fake a spinning planet
-    GLKMatrix4 latitude = GLKMatrix4MakeRotation(M_PI/180.0*45.0, 0, 0, 1);
-    GLKMatrix4 earthTilt = GLKMatrix4MakeRotation(M_PI/180.0*23.45, 1, 0, 0);
-    GLKMatrix4 day = GLKMatrix4MakeRotation(2*M_PI/24.0*daytime, 0, 1, 0);
+//    GLKMatrix4 latitude = GLKMatrix4MakeRotation(M_PI/180.0*45.0, 0, 0, 1);
+//    GLKMatrix4 earthTilt = GLKMatrix4MakeRotation(M_PI/180.0*23.45, 1, 0, 0);
+//    GLKMatrix4 day = GLKMatrix4MakeRotation(2*M_PI/24.0*daytime, 0, 1, 0);
+    GLKMatrix4 day = GLKMatrix4MakeRotation(_time, 0, 1, 0);
  
     glPushMatrix();
         glMultMatrixf(_attitudeMatrix.m);
     if(_celestialSphere){
         glPushMatrix();
-            glMultMatrixf(latitude.m);
-            glMultMatrixf(earthTilt.m);
+//            glMultMatrixf(latitude.m);
+//            glMultMatrixf(earthTilt.m);
             glMultMatrixf(day.m);
+            glMultMatrixf(GLKMatrix4MakeRotation(M_PI/2.0, 0, 1, 0).m);
+
             [self executeSphere:celestial];
         glPopMatrix();
     }
         glPushMatrix();
             [self executeSphere:sphere];
-            [self executeSquare];
+//            [self executeSquare];
         glPopMatrix();
     
-        if(_stars != nil){
+        if(_stars != nil){// && !starsHidden){
             static const GLfloat quadVertices[] = {
                 -.001,  .001, -0.0,
                 .001,  .001, -0.0,
@@ -267,6 +297,21 @@
             glDisableClientState(GL_TEXTURE_COORD_ARRAY);
             glDisable(GL_TEXTURE_2D);
             glEnableClientState(GL_VERTEX_ARRAY);
+            glEnable(GL_CULL_FACE);
+            glCullFace(GL_BACK);
+            glFrontFace(GL_CW);
+            glPushMatrix();
+//                GLKMatrix4 ra = GLKMatrix4MakeRotation(RAAndDec[i*2], 0.0, 1.0, 0.0);
+//                glMultMatrixf(ra.m);
+//                GLKMatrix4 dec = GLKMatrix4MakeRotation(RAAndDec[i*2+1], 1.0, 0.0, 0.0);
+//                glMultMatrixf(dec.m);
+                glTranslatef(0.0, 0.0, -1.0);
+            glScalef(10.0, 10.0, 10.0);
+                glColor4f(1.0, 1.0, 1.0, 1.0);
+                glVertexPointer(3, GL_FLOAT, 0, quadVertices);
+                glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+            glPopMatrix();
+
             for(int i = 0; i < _stars.count; i++){
                 glPushMatrix();
                     GLKMatrix4 ra = GLKMatrix4MakeRotation(RAAndDec[i*2], 0.0, 1.0, 0.0);
@@ -275,6 +320,10 @@
                     glMultMatrixf(dec.m);
                     glTranslatef(0.0, 0.0, -1.0);
                     glColor4f(1.0, 1.0, 1.0, 1.0);
+                if(i == 144){
+                    glScalef(10.0, 10.0, 10.0);
+                    glColor4f(1.0, 0.2, 0.2, 1.0);
+                }
                     glVertexPointer(3, GL_FLOAT, 0, quadVertices);
                     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
                 glPopMatrix();

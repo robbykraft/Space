@@ -39,15 +39,13 @@
     [super viewDidLoad];
     panoramaView = [[PanoramaView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     [panoramaView setTexture:@"equirectangular-projection-lines.png"];
-    [panoramaView setCelestialSphere:NO];  // spinning stars background
+    [panoramaView setCelestialSphere:YES];  // spinning stars background
     [panoramaView setOrientToDevice:YES];  // initialize device orientation sensors
     [panoramaView setPinchZoom:YES];  // activate touch gesture, alters field of view
     [panoramaView setLoadingDelegate:self];
     [self setView:panoramaView];
     planetariumView = nil;
     [self performSelectorInBackground:@selector(getStars) withObject:nil];
-
-    
 }
 
 -(void)starsDidLoad{
@@ -66,8 +64,9 @@
 }
 
 -(void)getStars{
-    NSString *path = [[NSBundle mainBundle] pathForResource:@"hygtiny.csv" ofType:NULL];
+    NSString *path = [[NSBundle mainBundle] pathForResource:@"hyg4.csv" ofType:NULL];
     NSMutableArray *array = [NSMutableArray arrayWithContentsOfCSVFile:path];
+    [array removeObjectAtIndex:0];
     NSLog(@"%d",(int)array.count);
     stars = [NSMutableArray array];
     for(NSArray *a in array){
@@ -78,11 +77,6 @@
         [star setObject:a[10] forKey:@"Mag"];
         [stars addObject:star];
     }
-    [stars removeObjectAtIndex:0];
-    NSMutableArray *condensed = [NSMutableArray array];
-    for(int i = 1; i < array.count; i++)
-        if(i%10 == 0)
-            [condensed addObject:stars[i]];
     [panoramaView setStars:stars];
 }
 
