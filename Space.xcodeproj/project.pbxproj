@@ -38,12 +38,11 @@
 		D575727318262BBA0071B21E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = D575727118262BBA0071B21E /* InfoPlist.strings */; };
 		D575727518262BBA0071B21E /* SpaceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D575727418262BBA0071B21E /* SpaceTests.m */; };
 		D575728018262C5E0071B21E /* CHCSVParser.m in Sources */ = {isa = PBXBuildFile; fileRef = D575727F18262C5E0071B21E /* CHCSVParser.m */; };
-		D575728218262C760071B21E /* hygfull.csv in Resources */ = {isa = PBXBuildFile; fileRef = D575728118262C760071B21E /* hygfull.csv */; };
 		D575728418263B170071B21E /* hygsmall.csv in Resources */ = {isa = PBXBuildFile; fileRef = D575728318263B170071B21E /* hygsmall.csv */; };
 		D5757287182649400071B21E /* Sphere.m in Sources */ = {isa = PBXBuildFile; fileRef = D5757286182649400071B21E /* Sphere.m */; };
 		D575728A182649480071B21E /* PanoramaView.m in Sources */ = {isa = PBXBuildFile; fileRef = D5757289182649480071B21E /* PanoramaView.m */; };
 		D575728E18264B180071B21E /* checker.png in Resources */ = {isa = PBXBuildFile; fileRef = D575728D18264B180071B21E /* checker.png */; };
-		D575729318264E800071B21E /* outside_2048.png in Resources */ = {isa = PBXBuildFile; fileRef = D575729218264E800071B21E /* outside_2048.png */; };
+		D5C3E412182E4524003817D8 /* hyg.csv in Resources */ = {isa = PBXBuildFile; fileRef = D5C3E411182E4524003817D8 /* hyg.csv */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -95,14 +94,13 @@
 		D575727418262BBA0071B21E /* SpaceTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SpaceTests.m; sourceTree = "<group>"; };
 		D575727E18262C5E0071B21E /* CHCSVParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CHCSVParser.h; sourceTree = "<group>"; };
 		D575727F18262C5E0071B21E /* CHCSVParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CHCSVParser.m; sourceTree = "<group>"; };
-		D575728118262C760071B21E /* hygfull.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = hygfull.csv; sourceTree = "<group>"; };
 		D575728318263B170071B21E /* hygsmall.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = hygsmall.csv; sourceTree = "<group>"; };
 		D5757285182649400071B21E /* Sphere.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Sphere.h; sourceTree = "<group>"; };
 		D5757286182649400071B21E /* Sphere.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Sphere.m; sourceTree = "<group>"; };
 		D5757288182649480071B21E /* PanoramaView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PanoramaView.h; sourceTree = "<group>"; };
 		D5757289182649480071B21E /* PanoramaView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PanoramaView.m; sourceTree = "<group>"; };
 		D575728D18264B180071B21E /* checker.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = checker.png; sourceTree = "<group>"; };
-		D575729218264E800071B21E /* outside_2048.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = outside_2048.png; sourceTree = "<group>"; };
+		D5C3E411182E4524003817D8 /* hyg.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = hyg.csv; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -247,10 +245,9 @@
 		D575729118264D300071B21E /* resources */ = {
 			isa = PBXGroup;
 			children = (
+				D5C3E411182E4524003817D8 /* hyg.csv */,
 				D575728318263B170071B21E /* hygsmall.csv */,
-				D575728118262C760071B21E /* hygfull.csv */,
 				D56628E7182A57F100EFF45D /* hygtiny.csv */,
-				D575729218264E800071B21E /* outside_2048.png */,
 				D524C7C0182B8FE800A9A454 /* buildingTheUniverse.png */,
 				D524C7C2182B958D00A9A454 /* equirectangular-planetarium-lines.png */,
 				D55E8FE81828E0CD0076A9D7 /* equirectangular-projection-lines.png */,
@@ -340,12 +337,11 @@
 				D575725D18262BBA0071B21E /* Main_iPad.storyboard in Resources */,
 				D56628E8182A57F100EFF45D /* hygtiny.csv in Resources */,
 				D55E8FF41828ED800076A9D7 /* 114.png in Resources */,
+				D5C3E412182E4524003817D8 /* hyg.csv in Resources */,
 				D575726218262BBA0071B21E /* Images.xcassets in Resources */,
 				D524C7C1182B8FE800A9A454 /* buildingTheUniverse.png in Resources */,
-				D575729318264E800071B21E /* outside_2048.png in Resources */,
 				D575728E18264B180071B21E /* checker.png in Resources */,
 				D55E8FF81828ED800076A9D7 /* 57.png in Resources */,
-				D575728218262C760071B21E /* hygfull.csv in Resources */,
 				D524C7C3182B958D00A9A454 /* equirectangular-planetarium-lines.png in Resources */,
 				D55E8FF61828ED800076A9D7 /* 144.png in Resources */,
 				D575728418263B170071B21E /* hygsmall.csv in Resources */,
