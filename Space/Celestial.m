@@ -9,6 +9,7 @@
 #import <CoreMotion/CoreMotion.h>
 #import "Celestial.h"
 #import "Sphere.h"
+#import "LoadingStage.h"
 
 #define FOV_MAX 155
 #define FOV_MIN 1
@@ -17,6 +18,7 @@
 @interface Celestial (){
     Sphere *sphere;
     Sphere *celestial;
+    LoadingStage *loadingStage;
     CGFloat aspectRatio;
     CGFloat zoom;
     CMMotionManager *motionManager;
@@ -44,6 +46,7 @@
         pinchGesture = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(pinchHandler:)];
         [pinchGesture setEnabled:NO];
         [self addGestureRecognizer:pinchGesture];
+        loadingStage = [[LoadingStage alloc] init];
         [self initGL];
         _time = 0;
     }
@@ -64,8 +67,8 @@
     if([UIApplication sharedApplication].statusBarOrientation > 2)
         aspectRatio = 1/aspectRatio;
     
-    sphere = [[Sphere alloc] init:SLICES slices:SLICES radius:10.0 squash:1.0 textureFile:nil];
-    celestial = [[Sphere alloc] init:SLICES slices:SLICES radius:20.0 squash:1.0 textureFile:@"Hipparcos_2048_B&W_reflection.png"];//@"Tycho_2048_reflection.png"];
+    sphere = [[Sphere alloc] init:SLICES slices:SLICES radius:20.0 squash:1.0 textureFile:nil];
+    celestial = [[Sphere alloc] init:SLICES slices:SLICES radius:30.0 squash:1.0 textureFile:@"Hipparcos_2048_B&W_reflection.png"];//@"Tycho_2048_city_reflection.png"];
     
     buildingTexture = [self loadTexture:@"buildingTheUniverse.png"];
     
@@ -76,7 +79,7 @@
     glMatrixMode(GL_PROJECTION);    // the frustum affects the projection matrix
     glLoadIdentity();               // not the model matrix
     float zNear = 0.1;
-    float zFar = 50;
+    float zFar = 1000;
     GLfloat frustum = zNear * tanf(GLKMathDegreesToRadians(_fieldOfView) / 2.0);
     glFrustumf(-frustum, frustum, -frustum/aspectRatio, frustum/aspectRatio, zNear, zFar);
     glViewport(0, 0, [[UIScreen mainScreen] bounds].size.height, [[UIScreen mainScreen] bounds].size.width);
@@ -88,7 +91,7 @@
 
 -(void) updateFieldOfView{
     float zNear = 0.1;
-    float zFar = 50;
+    float zFar = 1000;
     glMatrixMode(GL_PROJECTION);
     glPushMatrix();
         glLoadIdentity();
@@ -102,6 +105,10 @@
 
 -(void) setTexture:(NSString*)fileName{
     [sphere swapTexture:fileName];
+}
+
+-(void) setCelestialTexture:(NSString*)fileName{
+    [celestial swapTexture:fileName];
 }
 
 -(void)setFieldOfView:(float)fieldOfView{
@@ -129,10 +136,10 @@
             NSLog(@"SIRIUS (in RADIANS): RA:%f, DEC:%f",RAAndDec[i*2], RAAndDec[i*2+1]);
         }
     }
-    
     NSDictionary *oneStar = [stars objectAtIndex:1];
     NSLog(@"Example star:%@",oneStar);
     _stars = stars;
+    
     [loadingDelegate starsDidLoad];
 }
 
@@ -181,61 +188,41 @@
     return info;
 }
 
--(void)executeSquare{
-    glEnable(GL_TEXTURE_2D);
-    glEnable(GL_BLEND);
-  
-    glEnable(GL_CULL_FACE);
-    glCullFace(GL_BACK);
-    glFrontFace(GL_CW);
-
-    glEnableClientState(GL_VERTEX_ARRAY);
-    glEnableClientState(GL_NORMAL_ARRAY);
-    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-    
-    static const GLfloat quadVertices[] = {
-        -1.0,  1.0, -0.0,
-         1.0,  1.0, -0.0,
-        -1.0, -1.0, -0.0,
-         1.0, -1.0, -0.0
-    };
-    static const GLfloat quadNormals[] = {
-        0.0, 0.0, 1.0,
-        0.0, 0.0, 1.0,
-        0.0, 0.0, 1.0,
-        0.0, 0.0, 1.0
-    };
-    static const GLfloat quadTextureCoords[] = {
-        0.0, 1.0,
-        1.0, 1.0,
-        0.0, 0.0,
-        1.0, 0.0
-    };
-    
-    glLoadIdentity();
-    glMultMatrixf(_attitudeMatrix.m);
-    
-    for(int i = 0; i < 4; i++){
-        GLKMatrix4 rotation = GLKMatrix4MakeRotation(M_PI*.5*i, 0.0, 1.0, 0.0);
-        glPushMatrix();
-            glMultMatrixf(rotation.m);
-            glTranslatef(0.0, 0.0, -3.0);
-            glBindTexture(GL_TEXTURE_2D, buildingTexture.name);
-            glVertexPointer(3, GL_FLOAT, 0, quadVertices);
-            glNormalPointer(GL_FLOAT, 0, quadNormals);
-            glTexCoordPointer(2, GL_FLOAT, 0, quadTextureCoords);
-            glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-        glPopMatrix();
-    }
-    glDisableClientState(GL_VERTEX_ARRAY);
-    glDisableClientState(GL_NORMAL_ARRAY);
-    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-}
-
 -(void)execute{
-    static float daytime;
-//    daytime += dayIncrement;
-    if(daytime >= 24) daytime = 0;
+//    if(_stars == nil){
+//        static float daytime;
+//        daytime += .01;
+//        if(daytime >= 24) daytime = 0;
+//        
+//        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+//        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+//        GLfloat white[] = {1.0,1.0,1.0,1.0};
+//        
+//        glMatrixMode(GL_MODELVIEW);
+//        glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, white);
+//        
+//        // made-up figures to fake a spinning planet
+//        GLKMatrix4 latitude = GLKMatrix4MakeRotation(M_PI/180.0*45.0, 0, 0, 1);
+//        GLKMatrix4 earthTilt = GLKMatrix4MakeRotation(M_PI/180.0*23.45, 1, 0, 0);
+//        GLKMatrix4 day = GLKMatrix4MakeRotation(2*M_PI/24.0*daytime, 0, 1, 0);
+//        
+//        glPushMatrix();
+//            glMultMatrixf(_attitudeMatrix.m);
+//            glPushMatrix();
+//                glMultMatrixf(latitude.m);
+//                glMultMatrixf(earthTilt.m);
+//                glMultMatrixf(day.m);            
+////                glMultMatrixf(GLKMatrix4MakeRotation(M_PI/2.0, 0, 1, 0).m);  // for Hipparcos maps where RA 0 is at the edge
+////                glMultMatrixf(GLKMatrix4MakeRotation(-M_PI/2.0, 0, 1, 0).m); // for Tycho where RA 0 is at the center
+//                [self executeSphere:celestial];
+//            glPopMatrix();
+//            glPushMatrix();
+//                [self executeSphere:sphere];
+//                [self executeSquare];
+//            glPopMatrix();
+//        glPopMatrix();
+//        return;
+//    }
     
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -243,28 +230,18 @@
     
     glMatrixMode(GL_MODELVIEW);
     glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, white);
-    
-    // made-up figures to fake a spinning planet
-//    GLKMatrix4 latitude = GLKMatrix4MakeRotation(M_PI/180.0*45.0, 0, 0, 1);
-//    GLKMatrix4 earthTilt = GLKMatrix4MakeRotation(M_PI/180.0*23.45, 1, 0, 0);
-//    GLKMatrix4 day = GLKMatrix4MakeRotation(2*M_PI/24.0*daytime, 0, 1, 0);
  
     glPushMatrix();
         glMultMatrixf(_attitudeMatrix.m);
-    if(_celestialSphere){
-        glPushMatrix();
-//            glMultMatrixf(latitude.m);
-//            glMultMatrixf(earthTilt.m);
-//            glMultMatrixf(day.m);
-
+        if(_celestialSphere){
+            glPushMatrix();
             glMultMatrixf(GLKMatrix4MakeRotation(M_PI/2.0, 0, 1, 0).m);  // for Hipparcos maps where RA 0 is at the edge
 //            glMultMatrixf(GLKMatrix4MakeRotation(-M_PI/2.0, 0, 1, 0).m); // for Tycho where RA 0 is at the center
             [self executeSphere:celestial];
-        glPopMatrix();
-    }
+            glPopMatrix();
+        }
         glPushMatrix();
             [self executeSphere:sphere];
-//            [self executeSquare];
         glPopMatrix();
     
         if(_stars != nil){
@@ -280,8 +257,8 @@
             glEnable(GL_CULL_FACE);
             glCullFace(GL_BACK);
             glFrontFace(GL_CW);
+            // RA anchor point
             glPushMatrix();
-                // RA anchor point
                 glTranslatef(0.0, 0.0, -1.0);
                 glScalef(10.0, 10.0, 10.0);
                 glColor4f(1.0, 1.0, 1.0, 1.0);
@@ -297,16 +274,21 @@
                     glMultMatrixf(dec.m);
                     glTranslatef(0.0, 0.0, -1.0);
                     glColor4f(1.0, 1.0, 1.0, 1.0);
-                if(i == 144){
-                    glScalef(10.0, 10.0, 10.0);
-                    glColor4f(1.0, 0.2, 0.2, 1.0);
-                }
+                    if(i == 144){
+                        glScalef(10.0, 10.0, 10.0);
+                        glColor4f(1.0, 0.2, 0.2, 1.0);
+                    }
                     glVertexPointer(3, GL_FLOAT, 0, quadVertices);
                     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
                 glPopMatrix();
             }
             glDisableClientState(GL_VERTEX_ARRAY);
         }
+    if(_stars == nil){
+        glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+        glEnable(GL_TEXTURE_2D);
+       [loadingStage execute];
+    }
     glPopMatrix();
 }
 

@@ -23,11 +23,9 @@
  */
 
 #import "ViewController.h"
-#import "LoadingStage.h"
 #import "Celestial.h"
 
 @interface ViewController (){
-    LoadingStage *loadingStage;
     Celestial *celestialView;
     NSMutableArray *stars;
 }
@@ -45,18 +43,7 @@
     NSLog(@"StarsDidLoad");
 }
 
--(void)enterLoadingStage{
-    celestialView = nil;
-    loadingStage = [[LoadingStage alloc] init];
-    [loadingStage setTexture:@"equirectangular-projection-lines.png"];
-    [loadingStage setCelestialSphere:YES];
-    [loadingStage setOrientToDevice:YES];
-    [loadingStage setPinchZoom:YES];
-    [self setView:loadingStage];
-}
-
 -(void)enterPlanetarium{
-    loadingStage = nil;
     celestialView = [[Celestial alloc] init];
     [celestialView setTexture:@"equirectangular-projection-lines.png"];
     [celestialView setCelestialSphere:YES];
@@ -85,10 +72,7 @@
 
 // OpenGL redraw screen
 -(void) glkView:(GLKView *)view drawInRect:(CGRect)rect{
-    if(loadingStage != nil)
-        [loadingStage execute];
-    if(celestialView != nil)
-        [celestialView execute];
+    [celestialView execute];
 }
 
 @end

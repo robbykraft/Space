@@ -28,5 +28,6 @@
 
 -(void) execute;  // draw screen
 -(void) setTexture:(NSString*)fileName;
+-(void) setCelestialTexture:(NSString*)fileName;
 
 @end
