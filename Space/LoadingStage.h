@@ -11,5 +11,5 @@
 #import "CelestialObject.h"
 
 @interface LoadingStage : CelestialObject
--(void) execute;
+-(void) executeLoadingStage;
 @end

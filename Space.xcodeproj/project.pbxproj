@@ -45,6 +45,7 @@
 		D5C3E416182EE2BC003817D8 /* hyg4.csv in Resources */ = {isa = PBXBuildFile; fileRef = D5C3E415182EE2BC003817D8 /* hyg4.csv */; };
 		D5C3E41F182F0172003817D8 /* Celestial.m in Sources */ = {isa = PBXBuildFile; fileRef = D5C3E41E182F0172003817D8 /* Celestial.m */; };
 		D5C3E421182F2436003817D8 /* Hipparcos_2048_B&W_reflection.png in Resources */ = {isa = PBXBuildFile; fileRef = D5C3E420182F2436003817D8 /* Hipparcos_2048_B&W_reflection.png */; };
+		D5EF4CE018304267001DB0AF /* Stars.m in Sources */ = {isa = PBXBuildFile; fileRef = D5EF4CDF18304267001DB0AF /* Stars.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -106,6 +107,8 @@
 		D5C3E41D182F0172003817D8 /* Celestial.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Celestial.h; sourceTree = "<group>"; };
 		D5C3E41E182F0172003817D8 /* Celestial.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Celestial.m; sourceTree = "<group>"; };
 		D5C3E420182F2436003817D8 /* Hipparcos_2048_B&W_reflection.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Hipparcos_2048_B&W_reflection.png"; sourceTree = "<group>"; };
+		D5EF4CDE18304267001DB0AF /* Stars.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Stars.h; sourceTree = "<group>"; };
+		D5EF4CDF18304267001DB0AF /* Stars.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Stars.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -189,8 +192,7 @@
 				D575725F18262BBA0071B21E /* ViewController.m */,
 				D5C3E41D182F0172003817D8 /* Celestial.h */,
 				D5C3E41E182F0172003817D8 /* Celestial.m */,
-				D5757288182649480071B21E /* LoadingStage.h */,
-				D5757289182649480071B21E /* LoadingStage.m */,
+				D5EF4CE118304271001DB0AF /* celestial spheres */,
 				D51EBD72182F920E00BF8E00 /* CelestialObject.h */,
 				D51EBD73182F920E00BF8E00 /* CelestialObject.m */,
 				D575729018264CFD0071B21E /* shapes */,
@@ -264,6 +266,17 @@
 				D55E8FEA1828ED800076A9D7 /* icons */,
 			);
 			name = resources;
+			sourceTree = "<group>";
+		};
+		D5EF4CE118304271001DB0AF /* celestial spheres */ = {
+			isa = PBXGroup;
+			children = (
+				D5EF4CDE18304267001DB0AF /* Stars.h */,
+				D5EF4CDF18304267001DB0AF /* Stars.m */,
+				D5757288182649480071B21E /* LoadingStage.h */,
+				D5757289182649480071B21E /* LoadingStage.m */,
+			);
+			name = "celestial spheres";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -388,6 +401,7 @@
 				D575725718262BBA0071B21E /* AppDelegate.m in Sources */,
 				D575728A182649480071B21E /* LoadingStage.m in Sources */,
 				D5C3E41F182F0172003817D8 /* Celestial.m in Sources */,
+				D5EF4CE018304267001DB0AF /* Stars.m in Sources */,
 				D5757287182649400071B21E /* Sphere.m in Sources */,
 				D575725318262BBA0071B21E /* main.m in Sources */,
 			);

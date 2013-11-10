@@ -23,7 +23,6 @@
     CGFloat zoom;
     CMMotionManager *motionManager;
     UIPinchGestureRecognizer *pinchGesture;
-    GLKTextureInfo *buildingTexture;
     GLfloat *RAAndDec;
 }
 @end
@@ -46,8 +45,8 @@
         pinchGesture = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(pinchHandler:)];
         [pinchGesture setEnabled:NO];
         [self addGestureRecognizer:pinchGesture];
-        loadingStage = [[LoadingStage alloc] init];
         [self initGL];
+        loadingStage = [[LoadingStage alloc] init];
         _time = 0;
     }
     return self;
@@ -68,10 +67,8 @@
         aspectRatio = 1/aspectRatio;
     
     sphere = [[Sphere alloc] init:SLICES slices:SLICES radius:20.0 squash:1.0 textureFile:nil];
-    celestial = [[Sphere alloc] init:SLICES slices:SLICES radius:30.0 squash:1.0 textureFile:@"Hipparcos_2048_B&W_reflection.png"];//@"Tycho_2048_city_reflection.png"];
-    
-    buildingTexture = [self loadTexture:@"buildingTheUniverse.png"];
-    
+    celestial = [[Sphere alloc] init:SLICES slices:SLICES radius:30.0 squash:1.0 textureFile:@"Hipparcos_2048_B&W_reflection.png"];
+
     // init lighting
     glShadeModel(GL_SMOOTH);
     glLightModelf(GL_LIGHT_MODEL_TWO_SIDE,0.0);
@@ -170,20 +167,6 @@
     }
 }
 
--(GLKTextureInfo *) loadTexture:(NSString *) filename
-{
-    NSError *error;
-    GLKTextureInfo *info;
-    NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES], GLKTextureLoaderOriginBottomLeft, nil];
-    NSString *path = [[NSBundle mainBundle] pathForResource:filename ofType:NULL];
-    info=[GLKTextureLoader textureWithContentsOfFile:path options:options error:&error];
-    glBindTexture(GL_TEXTURE_2D, info.name);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    return info;
-}
-
 -(void)execute{
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -245,11 +228,11 @@
             }
             glDisableClientState(GL_VERTEX_ARRAY);
         }
-    if(_stars == nil){
-        glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-        glEnable(GL_TEXTURE_2D);
-       [loadingStage execute];
-    }
+        if(_stars == nil){
+            glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+            glEnable(GL_TEXTURE_2D);
+            [loadingStage executeLoadingStage];
+        }
     glPopMatrix();
 }
 

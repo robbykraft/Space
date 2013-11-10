@@ -13,8 +13,8 @@
 #define SLICES 48
 
 @interface LoadingStage (){
-    Sphere *sphere;
-    Sphere *celestial;
+    Sphere *lines;
+    Sphere *tychoStars;
     GLKTextureInfo *messageTextureInfo;
 }
 @end
@@ -25,28 +25,12 @@
     self = [super init];
     if (self) {
         NSLog(@"successful init");
-        sphere = [[Sphere alloc] init:SLICES slices:SLICES radius:5.0 squash:1.0 textureFile:@"equirectangular-projection-lines.png"];
-        celestial = [[Sphere alloc] init:SLICES slices:SLICES radius:7.0 squash:1.0 textureFile:@"Tycho_2048_city_reflection.png"];
+        lines = [[Sphere alloc] init:SLICES slices:SLICES radius:5.0 squash:1.0 textureFile:@"equirectangular-projection-lines.png"];
+        tychoStars = [[Sphere alloc] init:SLICES slices:SLICES radius:7.0 squash:1.0 textureFile:@"Tycho_2048_city_reflection.png"];
         messageTextureInfo = [self loadTexture:@"buildingTheUniverse.png"];
     }
     return self;
 }
-
--(GLKTextureInfo *) loadTexture:(NSString *) filename
-{
-    NSError *error;
-    GLKTextureInfo *info;
-    NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES], GLKTextureLoaderOriginBottomLeft, nil];
-    NSString *path = [[NSBundle mainBundle] pathForResource:filename ofType:NULL];
-    info=[GLKTextureLoader textureWithContentsOfFile:path options:options error:&error];
-    
-    glBindTexture(GL_TEXTURE_2D, info.name);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    return info;
-}
-
 -(void)executeSquare{
     static const GLfloat quadVertices[] = {
         -1.0,  1.0, -0.0,
@@ -66,13 +50,13 @@
         0.0, 0.0,
         1.0, 0.0
     };
-
+    
     glEnable(GL_TEXTURE_2D);
     glEnable(GL_BLEND);
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
     glFrontFace(GL_CW);
-
+    
     glEnableClientState(GL_VERTEX_ARRAY);
     glEnableClientState(GL_NORMAL_ARRAY);
     glEnableClientState(GL_TEXTURE_COORD_ARRAY);
@@ -80,13 +64,13 @@
     for(int i = 0; i < 4; i++){
         GLKMatrix4 rotation = GLKMatrix4MakeRotation(M_PI*.5*i, 0.0, 1.0, 0.0);
         glPushMatrix();
-            glMultMatrixf(rotation.m);
-            glTranslatef(0.0, 0.0, -2.0);
-            glBindTexture(GL_TEXTURE_2D, messageTextureInfo.name);
-            glVertexPointer(3, GL_FLOAT, 0, quadVertices);
-            glNormalPointer(GL_FLOAT, 0, quadNormals);
-            glTexCoordPointer(2, GL_FLOAT, 0, quadTextureCoords);
-            glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+        glMultMatrixf(rotation.m);
+        glTranslatef(0.0, 0.0, -2.0);
+        glBindTexture(GL_TEXTURE_2D, messageTextureInfo.name);
+        glVertexPointer(3, GL_FLOAT, 0, quadVertices);
+        glNormalPointer(GL_FLOAT, 0, quadNormals);
+        glTexCoordPointer(2, GL_FLOAT, 0, quadTextureCoords);
+        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
         glPopMatrix();
     }
     glDisableClientState(GL_VERTEX_ARRAY);
@@ -94,7 +78,21 @@
     glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 }
 
--(void)execute{
+-(GLKTextureInfo *) loadTexture:(NSString *) filename
+{
+    NSError *error;
+    GLKTextureInfo *info;
+    NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES], GLKTextureLoaderOriginBottomLeft, nil];
+    NSString *path = [[NSBundle mainBundle] pathForResource:filename ofType:NULL];
+    info=[GLKTextureLoader textureWithContentsOfFile:path options:options error:&error];
+    glBindTexture(GL_TEXTURE_2D, info.name);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    return info;
+}
+
+-(void)executeLoadingStage{
     static float daytime;
     daytime += .01;
     if(daytime >= 24) daytime = 0;
@@ -103,17 +101,17 @@
     GLKMatrix4 latitude = GLKMatrix4MakeRotation(M_PI/180.0*45.0, 0, 0, 1);
     GLKMatrix4 earthTilt = GLKMatrix4MakeRotation(M_PI/180.0*23.45, 1, 0, 0);
     GLKMatrix4 day = GLKMatrix4MakeRotation(2*M_PI/24.0*daytime, 0, 1, 0);
- 
+    
     glPushMatrix();
-        glMultMatrixf(latitude.m);
-        glMultMatrixf(earthTilt.m);
-        glMultMatrixf(day.m);
-//        glMultMatrixf(GLKMatrix4MakeRotation(M_PI/2.0, 0, 1, 0).m);
-        [self executeSphere:celestial];
+    glMultMatrixf(latitude.m);
+    glMultMatrixf(earthTilt.m);
+    glMultMatrixf(day.m);
+    //        glMultMatrixf(GLKMatrix4MakeRotation(M_PI/2.0, 0, 1, 0).m);
+    [self executeSphere:tychoStars];
     glPopMatrix();
     glPushMatrix();
-        [self executeSphere:sphere];
-        [self executeSquare];
+    [self executeSphere:lines];
+    [self executeSquare];
     glPopMatrix();
 }
 
@@ -123,5 +121,6 @@
     glTranslatef(posX, posY, posZ);
     [s execute];
 }
+
 
 @end
