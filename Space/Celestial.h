@@ -13,10 +13,9 @@
 
 @optional
 -(void)starsDidLoad;
-
 @end
 
-@interface PanoramaView : GLKView
+@interface Celestial : GLKView
 
 @property (nonatomic) float fieldOfView;  // 60-90 is average
 @property (nonatomic) BOOL pinchZoom;

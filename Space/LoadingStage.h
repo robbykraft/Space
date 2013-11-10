@@ -1,5 +1,5 @@
 //
-//  PlanetariumView.h
+//  PanoramaView.h
 //  Space
 //
 //  Created by Robby Kraft on 8/24/13.
@@ -9,14 +9,14 @@
 #import <Foundation/Foundation.h>
 #import <GLKit/GLKit.h>
 
-@interface PlanetariumView : GLKView
+@interface LoadingStage : GLKView
 
 @property (nonatomic) float fieldOfView;  // 60-90 is average
 @property (nonatomic) BOOL pinchZoom;
 @property (nonatomic) BOOL orientToDevice;
 @property (nonatomic) GLKMatrix4 attitudeMatrix;
 @property BOOL celestialSphere;  // bonus: rotating stars
-@property float timeSpeed;
+@property float time;
 
 -(void) execute;  // draw screen
 -(void) setTexture:(NSString*)fileName;

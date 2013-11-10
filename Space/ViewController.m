@@ -23,12 +23,12 @@
  */
 
 #import "ViewController.h"
-#import "PanoramaView.h"
-#import "PlanetariumView.h"
+#import "LoadingStage.h"
+#import "Celestial.h"
 
 @interface ViewController (){
-    PanoramaView *panoramaView;
-    PlanetariumView *planetariumView;
+    LoadingStage *loadingStage;
+    Celestial *celestialView;
     NSMutableArray *stars;
 }
 @end
@@ -37,30 +37,33 @@
 
 - (void)viewDidLoad{
     [super viewDidLoad];
-    panoramaView = [[PanoramaView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    [panoramaView setTexture:@"equirectangular-projection-lines.png"];
-    [panoramaView setCelestialSphere:YES];  // spinning stars background
-    [panoramaView setOrientToDevice:YES];  // initialize device orientation sensors
-    [panoramaView setPinchZoom:YES];  // activate touch gesture, alters field of view
-    [panoramaView setLoadingDelegate:self];
-    [self setView:panoramaView];
-    planetariumView = nil;
+    [self enterPlanetarium];
     [self performSelectorInBackground:@selector(getStars) withObject:nil];
 }
 
 -(void)starsDidLoad{
     NSLog(@"StarsDidLoad");
-//    [self enterPlanetarium];
+}
+
+-(void)enterLoadingStage{
+    celestialView = nil;
+    loadingStage = [[LoadingStage alloc] init];
+    [loadingStage setTexture:@"equirectangular-projection-lines.png"];
+    [loadingStage setCelestialSphere:YES];
+    [loadingStage setOrientToDevice:YES];
+    [loadingStage setPinchZoom:YES];
+    [self setView:loadingStage];
 }
 
 -(void)enterPlanetarium{
-    panoramaView = nil;
-    planetariumView = [[PlanetariumView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    [planetariumView setTexture:@"equirectangular-planetarium-lines.png"];
-    [planetariumView setOrientToDevice:YES];  // initialize device orientation sensors
-    [planetariumView setPinchZoom:YES];  // activate touch gesture, alters field of view
-    [planetariumView setTimeSpeed:.00001];
-    [self setView:planetariumView];
+    loadingStage = nil;
+    celestialView = [[Celestial alloc] init];
+    [celestialView setTexture:@"equirectangular-projection-lines.png"];
+    [celestialView setCelestialSphere:YES];
+    [celestialView setOrientToDevice:YES];
+    [celestialView setPinchZoom:YES];
+    [celestialView setLoadingDelegate:self];
+    [self setView:celestialView];
 }
 
 -(void)getStars{
@@ -77,15 +80,15 @@
         [star setObject:a[10] forKey:@"Mag"];
         [stars addObject:star];
     }
-    [panoramaView setStars:stars];
+    [celestialView setStars:stars];
 }
 
 // OpenGL redraw screen
 -(void) glkView:(GLKView *)view drawInRect:(CGRect)rect{
-    if(panoramaView != nil)
-        [panoramaView execute];
-    if(planetariumView != nil)
-        [planetariumView execute];
+    if(loadingStage != nil)
+        [loadingStage execute];
+    if(celestialView != nil)
+        [celestialView execute];
 }
 
 @end

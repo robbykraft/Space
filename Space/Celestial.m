@@ -7,14 +7,14 @@
 //
 
 #import <CoreMotion/CoreMotion.h>
-#import "PanoramaView.h"
+#import "Celestial.h"
 #import "Sphere.h"
 
 #define FOV_MAX 155
 #define FOV_MIN 1
 #define SLICES 48
 
-@interface PanoramaView (){
+@interface Celestial (){
     Sphere *sphere;
     Sphere *celestial;
     CGFloat aspectRatio;
@@ -23,11 +23,10 @@
     UIPinchGestureRecognizer *pinchGesture;
     GLKTextureInfo *buildingTexture;
     GLfloat *RAAndDec;
-    BOOL starsHidden;
 }
 @end
 
-@implementation PanoramaView
+@implementation Celestial
 
 @synthesize loadingDelegate;
 
@@ -45,10 +44,7 @@
         pinchGesture = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(pinchHandler:)];
         [pinchGesture setEnabled:NO];
         [self addGestureRecognizer:pinchGesture];
-        UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panHandler:)];
-        [self addGestureRecognizer:pan];
         [self initGL];
-        
         _time = 0;
     }
     return self;
@@ -69,7 +65,7 @@
         aspectRatio = 1/aspectRatio;
     
     sphere = [[Sphere alloc] init:SLICES slices:SLICES radius:10.0 squash:1.0 textureFile:nil];
-    celestial = [[Sphere alloc] init:SLICES slices:SLICES radius:20.0 squash:1.0 textureFile:@"Hipparcos_2048_dark_reflection.png"];//@"Tycho_2048_reflection.png"];
+    celestial = [[Sphere alloc] init:SLICES slices:SLICES radius:20.0 squash:1.0 textureFile:@"Hipparcos_2048_B&W_reflection.png"];//@"Tycho_2048_reflection.png"];
     
     buildingTexture = [self loadTexture:@"buildingTheUniverse.png"];
     
@@ -148,17 +144,6 @@
         if(newFOV < FOV_MIN) newFOV = FOV_MIN;
         else if(newFOV > FOV_MAX) newFOV = FOV_MAX;
         [self setFieldOfView:newFOV];
-    }
-}
-
--(void)panHandler:(UIPanGestureRecognizer*)sender{
-    static float panX;
-    if([sender state] == 1){
-        panX = _time;
-    }
-    if([sender state] == 2){
-        _time = panX - [sender translationInView:sender.view].x/100.0;
-        NSLog(@"%f",_time);
     }
 }
 
@@ -246,12 +231,7 @@
     glDisableClientState(GL_NORMAL_ARRAY);
     glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 }
--(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
-    starsHidden = YES;
-}
--(void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event{
-    starsHidden = NO;
-}
+
 -(void)execute{
     static float daytime;
 //    daytime += dayIncrement;
@@ -268,7 +248,6 @@
 //    GLKMatrix4 latitude = GLKMatrix4MakeRotation(M_PI/180.0*45.0, 0, 0, 1);
 //    GLKMatrix4 earthTilt = GLKMatrix4MakeRotation(M_PI/180.0*23.45, 1, 0, 0);
 //    GLKMatrix4 day = GLKMatrix4MakeRotation(2*M_PI/24.0*daytime, 0, 1, 0);
-    GLKMatrix4 day = GLKMatrix4MakeRotation(_time, 0, 1, 0);
  
     glPushMatrix();
         glMultMatrixf(_attitudeMatrix.m);
@@ -276,9 +255,10 @@
         glPushMatrix();
 //            glMultMatrixf(latitude.m);
 //            glMultMatrixf(earthTilt.m);
-            glMultMatrixf(day.m);
-            glMultMatrixf(GLKMatrix4MakeRotation(M_PI/2.0, 0, 1, 0).m);
+//            glMultMatrixf(day.m);
 
+            glMultMatrixf(GLKMatrix4MakeRotation(M_PI/2.0, 0, 1, 0).m);  // for Hipparcos maps where RA 0 is at the edge
+//            glMultMatrixf(GLKMatrix4MakeRotation(-M_PI/2.0, 0, 1, 0).m); // for Tycho where RA 0 is at the center
             [self executeSphere:celestial];
         glPopMatrix();
     }
@@ -287,7 +267,7 @@
 //            [self executeSquare];
         glPopMatrix();
     
-        if(_stars != nil){// && !starsHidden){
+        if(_stars != nil){
             static const GLfloat quadVertices[] = {
                 -.001,  .001, -0.0,
                 .001,  .001, -0.0,
@@ -301,12 +281,9 @@
             glCullFace(GL_BACK);
             glFrontFace(GL_CW);
             glPushMatrix();
-//                GLKMatrix4 ra = GLKMatrix4MakeRotation(RAAndDec[i*2], 0.0, 1.0, 0.0);
-//                glMultMatrixf(ra.m);
-//                GLKMatrix4 dec = GLKMatrix4MakeRotation(RAAndDec[i*2+1], 1.0, 0.0, 0.0);
-//                glMultMatrixf(dec.m);
+                // RA anchor point
                 glTranslatef(0.0, 0.0, -1.0);
-            glScalef(10.0, 10.0, 10.0);
+                glScalef(10.0, 10.0, 10.0);
                 glColor4f(1.0, 1.0, 1.0, 1.0);
                 glVertexPointer(3, GL_FLOAT, 0, quadVertices);
                 glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
