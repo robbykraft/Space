@@ -5,29 +5,12 @@
 //  Created by Robby Kraft on 11/2/13.
 //  Copyright (c) 2013 Robby Kraft. All rights reserved.
 //
-/*
- StarID,
- Hip,
- HD,
- HR,
- Gliese,
- BayerFlamsteed,
- ProperName,
- RA,
- Dec,
- Distance,
- Mag,
- AbsMag,
- Spectrum,
- ColorIndex
- */
 
 #import "ViewController.h"
 #import "Celestial.h"
 
 @interface ViewController (){
     Celestial *celestialView;
-    NSMutableArray *stars;
 }
 @end
 
@@ -37,10 +20,6 @@
     [super viewDidLoad];
     [self enterPlanetarium];
     [self performSelectorInBackground:@selector(getStars) withObject:nil];
-}
-
--(void)starsDidLoad{
-    NSLog(@"StarsDidLoad");
 }
 
 -(void)enterPlanetarium{
@@ -57,10 +36,11 @@
     NSString *path = [[NSBundle mainBundle] pathForResource:@"hyg4.csv" ofType:NULL];
     NSMutableArray *array = [NSMutableArray arrayWithContentsOfCSVFile:path];
     [array removeObjectAtIndex:0];
-    NSLog(@"%d",(int)array.count);
-    stars = [NSMutableArray array];
+    NSLog(@"%d stars loaded",(int)array.count);
+    NSMutableArray *stars = [NSMutableArray array];
     for(NSArray *a in array){
         NSMutableDictionary *star = [NSMutableDictionary dictionary];
+        // StarID, Hip, HD, HR, Gliese, BayerFlamsteed, ProperName, RA, Dec, Distance, Mag, AbsMag, Spectrum, ColorIndex
         [star setObject:a[7] forKey:@"RA"];
         [star setObject:a[8] forKey:@"Dec"];
         [star setObject:a[9] forKey:@"Distance"];
@@ -68,6 +48,8 @@
         [stars addObject:star];
     }
     [celestialView setStars:stars];
+}
+-(void)starsDidLoad{
 }
 
 // OpenGL redraw screen

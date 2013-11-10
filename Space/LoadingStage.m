@@ -10,8 +10,6 @@
 #import "LoadingStage.h"
 #import "Sphere.h"
 
-#define FOV_MAX 155
-#define FOV_MIN 1
 #define SLICES 48
 
 @interface LoadingStage (){
@@ -26,6 +24,7 @@
 -(id) init{
     self = [super init];
     if (self) {
+        NSLog(@"successful init");
         sphere = [[Sphere alloc] init:SLICES slices:SLICES radius:5.0 squash:1.0 textureFile:@"equirectangular-projection-lines.png"];
         celestial = [[Sphere alloc] init:SLICES slices:SLICES radius:7.0 squash:1.0 textureFile:@"Tycho_2048_city_reflection.png"];
         messageTextureInfo = [self loadTexture:@"buildingTheUniverse.png"];
@@ -109,7 +108,7 @@
         glMultMatrixf(latitude.m);
         glMultMatrixf(earthTilt.m);
         glMultMatrixf(day.m);
-        glMultMatrixf(GLKMatrix4MakeRotation(M_PI/2.0, 0, 1, 0).m);
+//        glMultMatrixf(GLKMatrix4MakeRotation(M_PI/2.0, 0, 1, 0).m);
         [self executeSphere:celestial];
     glPopMatrix();
     glPushMatrix();

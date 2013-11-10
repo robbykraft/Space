@@ -127,17 +127,14 @@
 -(void) setStars:(NSArray *)stars{
     RAAndDec = malloc(sizeof(GLfloat)*stars.count*2);
     for(int i = 0; i < stars.count; i++){
-        if(i == 144){
-            NSLog(@"SIRIUS: RA:%f, DEC:%f",[[[stars objectAtIndex:i] objectForKey:@"RA"] floatValue], [[[stars objectAtIndex:i] objectForKey:@"Dec"] floatValue]);
-        }
         RAAndDec[i*2] = [[[stars objectAtIndex:i] objectForKey:@"RA"] floatValue] / 24.0 * 2 * M_PI;
         RAAndDec[i*2+1] = [[[stars objectAtIndex:i] objectForKey:@"Dec"] floatValue] /180*(M_PI);
         if(i == 144){
+            NSLog(@"SIRIUS: RA:%f, DEC:%f",[[[stars objectAtIndex:i] objectForKey:@"RA"] floatValue], [[[stars objectAtIndex:i] objectForKey:@"Dec"] floatValue]);
             NSLog(@"SIRIUS (in RADIANS): RA:%f, DEC:%f",RAAndDec[i*2], RAAndDec[i*2+1]);
         }
     }
-    NSDictionary *oneStar = [stars objectAtIndex:1];
-    NSLog(@"Example star:%@",oneStar);
+    NSLog(@"Example star:%@",[stars objectAtIndex:1]);
     _stars = stars;
     
     [loadingDelegate starsDidLoad];
@@ -180,7 +177,6 @@
     NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES], GLKTextureLoaderOriginBottomLeft, nil];
     NSString *path = [[NSBundle mainBundle] pathForResource:filename ofType:NULL];
     info=[GLKTextureLoader textureWithContentsOfFile:path options:options error:&error];
-    
     glBindTexture(GL_TEXTURE_2D, info.name);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -189,41 +185,6 @@
 }
 
 -(void)execute{
-//    if(_stars == nil){
-//        static float daytime;
-//        daytime += .01;
-//        if(daytime >= 24) daytime = 0;
-//        
-//        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-//        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-//        GLfloat white[] = {1.0,1.0,1.0,1.0};
-//        
-//        glMatrixMode(GL_MODELVIEW);
-//        glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, white);
-//        
-//        // made-up figures to fake a spinning planet
-//        GLKMatrix4 latitude = GLKMatrix4MakeRotation(M_PI/180.0*45.0, 0, 0, 1);
-//        GLKMatrix4 earthTilt = GLKMatrix4MakeRotation(M_PI/180.0*23.45, 1, 0, 0);
-//        GLKMatrix4 day = GLKMatrix4MakeRotation(2*M_PI/24.0*daytime, 0, 1, 0);
-//        
-//        glPushMatrix();
-//            glMultMatrixf(_attitudeMatrix.m);
-//            glPushMatrix();
-//                glMultMatrixf(latitude.m);
-//                glMultMatrixf(earthTilt.m);
-//                glMultMatrixf(day.m);            
-////                glMultMatrixf(GLKMatrix4MakeRotation(M_PI/2.0, 0, 1, 0).m);  // for Hipparcos maps where RA 0 is at the edge
-////                glMultMatrixf(GLKMatrix4MakeRotation(-M_PI/2.0, 0, 1, 0).m); // for Tycho where RA 0 is at the center
-//                [self executeSphere:celestial];
-//            glPopMatrix();
-//            glPushMatrix();
-//                [self executeSphere:sphere];
-//                [self executeSquare];
-//            glPopMatrix();
-//        glPopMatrix();
-//        return;
-//    }
-    
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     GLfloat white[] = {1.0,1.0,1.0,1.0};
