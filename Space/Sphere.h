@@ -37,5 +37,6 @@
 -(void) setRotationalIncrement:(GLfloat)inc;
 -(void) incrementRotation;
 -(void) swapTexture:(NSString*)textureFile;
+-(void) deleteTexture;
 
 @end

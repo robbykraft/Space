@@ -113,4 +113,15 @@
     glPopMatrix();
 }
 
+- (void)dealloc{
+    NSLog(@"dealloc LoadingStage");
+    [lines deleteTexture];
+    lines = nil;
+    [tychoStars deleteTexture];
+    tychoStars = nil;
+    
+//    free(rotationRates);
+}
+
+
 @end

@@ -11,7 +11,7 @@
 #import "Stars.h"
 #import "LoadingStage.h"
 
-@interface Celestial : GLKView
+@interface Celestial : GLKView <StarsDelegate>
 
 // device
 @property (nonatomic) float fieldOfView;  // 60-90 is average

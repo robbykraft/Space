@@ -185,6 +185,12 @@
     return info;
 }
 
+-(void) deleteTexture{
+    NSLog(@"delete Texture");
+    GLuint name = m_TextureInfo.name;
+    glDeleteTextures(1, &name);
+}
+
 -(void)swapTexture:(NSString*)textureFile{
     GLuint name = m_TextureInfo.name;
     glDeleteTextures(1, &name);

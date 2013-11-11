@@ -21,6 +21,8 @@
     GLfloat *positions;
 }
 
+@synthesize delegate;
+
 -(id) init{
     self = [super init];
     if (self) {     
@@ -37,12 +39,13 @@
         positions[i*3+DISTANCE] = [[[starCatalog objectAtIndex:i] objectForKey:@"Distance"] floatValue] /180*(M_PI);
     }
     _starCatalog = starCatalog;
+    [delegate starsDidLoad];
 }
 -(void)execute{
     glPushMatrix();
         glMultMatrixf(GLKMatrix4MakeRotation(M_PI/2.0, 0, 1, 0).m);  // for Hipparcos maps where RA 0 is at the edge
 //        glMultMatrixf(GLKMatrix4MakeRotation(-M_PI/2.0, 0, 1, 0).m); // for Tycho where RA 0 is at the center
-        [constellations execute];
+//        [constellations execute];
     glPopMatrix();
 //    glPushMatrix();
 //        [lines execute];

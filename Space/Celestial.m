@@ -20,6 +20,9 @@
     UIPinchGestureRecognizer *pinchGesture;
     GLfloat *position;
     NSTimer *travelTimer;
+    GLKVector3 _eyeVector;
+    GLKVector3 travelVector;
+    unsigned int travelIncrements;
 }
 
 -(void) initDevice;    // boot hardware
@@ -44,6 +47,7 @@
         [self initGL];
         _loadingStage = [[LoadingStage alloc] init];
         _stars = [[Stars alloc] init];
+        [_stars setDelegate:self];
     }
     return self;
 }
@@ -54,8 +58,6 @@
     pinchGesture = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(pinchHandler:)];
     [pinchGesture setEnabled:NO];
     [self addGestureRecognizer:pinchGesture];
-    UITapGestureRecognizer *doubleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapHandler:)];
-    [self addGestureRecognizer:doubleTap];
     if(UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         _fieldOfView = 75;
     else
@@ -102,7 +104,7 @@
         glMultMatrixf(_attitudeMatrix.m);
         glTranslatef(position[0], position[1], position[2]);
         [_stars execute];
-        if(_stars.starCatalog == nil){
+        if(_loadingStage != nil){
             glEnableClientState(GL_TEXTURE_COORD_ARRAY);
             glEnable(GL_TEXTURE_2D);
             [_loadingStage execute];
@@ -122,25 +124,32 @@
     }
 }
 
--(void)tapHandler:(UITapGestureRecognizer*)sender{
-    if(travelTimer == nil)
-        travelTimer = [NSTimer scheduledTimerWithTimeInterval:1.0f/45
-                                                   target:self selector:@selector(beginTrip) userInfo:nil repeats:YES];
+-(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
+    travelVector = _eyeVector;
+    travelIncrements = 0;
+    if(travelTimer == nil){
+        travelTimer = [NSTimer scheduledTimerWithTimeInterval:1.0f/45 target:self selector:@selector(departingTrip) userInfo:nil repeats:YES];
+    }
+}
+-(void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event{
+    [travelTimer invalidate];
+    travelTimer = [NSTimer scheduledTimerWithTimeInterval:1.0f/45 target:self selector:@selector(returnTrip) userInfo:nil repeats:YES];
 }
 
--(void) beginTrip{
-    position[0] += .01;
-    if (position[0] > 1.0) {
-        [travelTimer invalidate];
-        travelTimer = [NSTimer scheduledTimerWithTimeInterval:1.0f/45
-                                                       target:self selector:@selector(returnTrip) userInfo:nil repeats:YES];
-    }
+-(void) departingTrip{
+    position[0]+= travelVector.x/100.0;
+    position[1]+= travelVector.y/100.0;
+    position[2]+= travelVector.z/100.0;
+    travelIncrements++;
 }
 
 -(void) returnTrip{
-    position[0] -= .01;
-    if (position[0] < 0.0) {
-        position[0] = 0.0;
+    position[0]-= travelVector.x/100.0;
+    position[1]-= travelVector.y/100.0;
+    position[2]-= travelVector.z/100.0;
+    travelIncrements--;
+    if (travelIncrements <= 0) {
+        position[0] = position[1] = position[2] = 0.0;
         [travelTimer invalidate];
         travelTimer = nil;
     }
@@ -154,11 +163,13 @@
         if(motionManager.isDeviceMotionAvailable){
             [motionManager startDeviceMotionUpdatesToQueue:[NSOperationQueue currentQueue] withHandler:^(CMDeviceMotion *deviceMotion, NSError *error) {
                 CMRotationMatrix a = deviceMotion.attitude.rotationMatrix;
-                _attitudeMatrix =
-                GLKMatrix4Make(a.m11, a.m21, a.m31, 0.0f,
-                               a.m13, a.m23, a.m33, 0.0f,
-                               -a.m12,-a.m22,-a.m32,0.0f,
-                               0.0f , 0.0f , 0.0f , 1.0f);
+                _attitudeMatrix = GLKMatrix4Make(a.m11, a.m21, a.m31, 0.0f,
+                                                 a.m13, a.m23, a.m33, 0.0f,
+                                                 -a.m12,-a.m22,-a.m32,0.0f,
+                                                 0.0f , 0.0f , 0.0f , 1.0f);
+                _eyeVector = GLKVector3Make(_attitudeMatrix.m02,
+                                            _attitudeMatrix.m12,
+                                            _attitudeMatrix.m22);
             }];
         }
     }
@@ -173,6 +184,12 @@
         [pinchGesture setEnabled:YES];
     else
         [pinchGesture setEnabled:NO];
+}
+
+#pragma mark- DELEGATES
+
+-(void) starsDidLoad{
+    _loadingStage = nil;
 }
 
 @end
