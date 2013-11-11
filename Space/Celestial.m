@@ -18,6 +18,8 @@
     float _aspectRatio;
     CMMotionManager *motionManager;
     UIPinchGestureRecognizer *pinchGesture;
+    GLfloat *position;
+    NSTimer *travelTimer;
 }
 
 -(void) initDevice;    // boot hardware
@@ -52,6 +54,8 @@
     pinchGesture = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(pinchHandler:)];
     [pinchGesture setEnabled:NO];
     [self addGestureRecognizer:pinchGesture];
+    UITapGestureRecognizer *doubleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapHandler:)];
+    [self addGestureRecognizer:doubleTap];
     if(UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         _fieldOfView = 75;
     else
@@ -59,6 +63,8 @@
     _aspectRatio = (float)[[UIScreen mainScreen] bounds].size.width / (float)[[UIScreen mainScreen] bounds].size.height;
     if([UIApplication sharedApplication].statusBarOrientation > 2)
         _aspectRatio = 1/_aspectRatio;
+    position = malloc(sizeof(GLfloat)*3);
+    position[0] = position[1] = position[2] = 0.0f;
 }
 
 -(void)initGL{
@@ -93,13 +99,14 @@
     glMatrixMode(GL_MODELVIEW);
     glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, white);
     glPushMatrix();
-    glMultMatrixf(_attitudeMatrix.m);
-    [_stars execute];
-    if(_stars.starCatalog == nil){
-        glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-        glEnable(GL_TEXTURE_2D);
-        [_loadingStage execute];
-    }
+        glMultMatrixf(_attitudeMatrix.m);
+        glTranslatef(position[0], position[1], position[2]);
+        [_stars execute];
+        if(_stars.starCatalog == nil){
+            glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+            glEnable(GL_TEXTURE_2D);
+            [_loadingStage execute];
+        }
     glPopMatrix();
 }
 
@@ -112,6 +119,30 @@
         if(newFOV < FOV_MIN) newFOV = FOV_MIN;
         else if(newFOV > FOV_MAX) newFOV = FOV_MAX;
         [self setFieldOfView:newFOV];
+    }
+}
+
+-(void)tapHandler:(UITapGestureRecognizer*)sender{
+    if(travelTimer == nil)
+        travelTimer = [NSTimer scheduledTimerWithTimeInterval:1.0f/45
+                                                   target:self selector:@selector(beginTrip) userInfo:nil repeats:YES];
+}
+
+-(void) beginTrip{
+    position[0] += .01;
+    if (position[0] > 1.0) {
+        [travelTimer invalidate];
+        travelTimer = [NSTimer scheduledTimerWithTimeInterval:1.0f/45
+                                                       target:self selector:@selector(returnTrip) userInfo:nil repeats:YES];
+    }
+}
+
+-(void) returnTrip{
+    position[0] -= .01;
+    if (position[0] < 0.0) {
+        position[0] = 0.0;
+        [travelTimer invalidate];
+        travelTimer = nil;
     }
 }
 

@@ -44,9 +44,9 @@
 //        glMultMatrixf(GLKMatrix4MakeRotation(-M_PI/2.0, 0, 1, 0).m); // for Tycho where RA 0 is at the center
         [constellations execute];
     glPopMatrix();
-    glPushMatrix();
-        [lines execute];
-    glPopMatrix();
+//    glPushMatrix();
+//        [lines execute];
+//    glPopMatrix();
     
     if(_starCatalog != nil){
         static const GLfloat quadVertices[] = {
@@ -72,6 +72,7 @@
         
         for(int i = 0; i < _starCatalog.count; i++){
             glPushMatrix();
+            glScalef(positions[i*3+DISTANCE], positions[i*3+DISTANCE], positions[i*3+DISTANCE]);
             GLKMatrix4 ra = GLKMatrix4MakeRotation(positions[i*3+RA], 0.0, 1.0, 0.0);
             glMultMatrixf(ra.m);
             GLKMatrix4 dec = GLKMatrix4MakeRotation(positions[i*3+DEC], 1.0, 0.0, 0.0);
