@@ -9,8 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <GLKit/GLKit.h>
 #import "CHCSVParser.h"
-#import "Celestial.h"
 
-@interface ViewController : GLKViewController <CHCSVParserDelegate, LoadingDelegate>
+@interface ViewController : GLKViewController <CHCSVParserDelegate>
 
 @end

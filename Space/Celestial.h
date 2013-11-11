@@ -8,26 +8,21 @@
 
 #import <Foundation/Foundation.h>
 #import <GLKit/GLKit.h>
-
-@protocol LoadingDelegate <NSObject>
-
-@optional
--(void)starsDidLoad;
-@end
+#import "Stars.h"
+#import "LoadingStage.h"
 
 @interface Celestial : GLKView
 
+// device
 @property (nonatomic) float fieldOfView;  // 60-90 is average
 @property (nonatomic) BOOL pinchZoom;
 @property (nonatomic) BOOL orientToDevice;
 @property (nonatomic) GLKMatrix4 attitudeMatrix;
-@property BOOL celestialSphere;  // bonus: rotating stars
-@property (nonatomic,strong) NSArray *stars;
-@property id <LoadingDelegate> loadingDelegate;
-@property float time;
+
+// celestial groups
+@property (nonatomic) Stars *stars;
+@property (nonatomic) LoadingStage *loadingStage;
 
 -(void) execute;  // draw screen
--(void) setTexture:(NSString*)fileName;
--(void) setCelestialTexture:(NSString*)fileName;
 
 @end

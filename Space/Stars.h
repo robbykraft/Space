@@ -6,8 +6,12 @@
 //  Copyright (c) 2013 Robby Kraft. All rights reserved.
 //
 
-#import "CelestialObject.h"
+#import "CelestialGroup.h"
 
-@interface Stars : CelestialObject
+@interface Stars : CelestialGroup
+
+@property (nonatomic) NSArray *starCatalog;
+
+-(void)execute;
 
 @end

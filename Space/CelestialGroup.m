@@ -6,8 +6,8 @@
 //  Copyright (c) 2013 Robby Kraft. All rights reserved.
 //
 
-#import "CelestialObject.h"
+#import "CelestialGroup.h"
 
-@implementation CelestialObject
+@implementation CelestialGroup
 
 @end

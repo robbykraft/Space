@@ -24,7 +24,6 @@
 -(id) init{
     self = [super init];
     if (self) {
-        NSLog(@"successful init");
         lines = [[Sphere alloc] init:SLICES slices:SLICES radius:5.0 squash:1.0 textureFile:@"equirectangular-projection-lines.png"];
         tychoStars = [[Sphere alloc] init:SLICES slices:SLICES radius:7.0 squash:1.0 textureFile:@"Tycho_2048_city_reflection.png"];
         messageTextureInfo = [self loadTexture:@"buildingTheUniverse.png"];
@@ -92,35 +91,26 @@
     return info;
 }
 
--(void)executeLoadingStage{
-    static float daytime;
-    daytime += .01;
-    if(daytime >= 24) daytime = 0;
+-(void)execute{
+    static float spin;
+    spin += .01;
+    if(spin >= 24) spin = 0;
     
     // made-up figures to fake a spinning planet
     GLKMatrix4 latitude = GLKMatrix4MakeRotation(M_PI/180.0*45.0, 0, 0, 1);
     GLKMatrix4 earthTilt = GLKMatrix4MakeRotation(M_PI/180.0*23.45, 1, 0, 0);
-    GLKMatrix4 day = GLKMatrix4MakeRotation(2*M_PI/24.0*daytime, 0, 1, 0);
+    GLKMatrix4 day = GLKMatrix4MakeRotation(2*M_PI/24.0*spin, 0, 1, 0);
     
     glPushMatrix();
-    glMultMatrixf(latitude.m);
-    glMultMatrixf(earthTilt.m);
-    glMultMatrixf(day.m);
-    //        glMultMatrixf(GLKMatrix4MakeRotation(M_PI/2.0, 0, 1, 0).m);
-    [self executeSphere:tychoStars];
+        glMultMatrixf(latitude.m);
+        glMultMatrixf(earthTilt.m);
+        glMultMatrixf(day.m);
+        [tychoStars execute];
     glPopMatrix();
     glPushMatrix();
-    [self executeSphere:lines];
-    [self executeSquare];
+        [lines execute];
+        [self executeSquare];
     glPopMatrix();
 }
-
--(void)executeSphere:(Sphere *)s{
-    GLfloat posX, posY, posZ;
-    [s getPositionX:&posX Y:&posY Z:&posZ];
-    glTranslatef(posX, posY, posZ);
-    [s execute];
-}
-
 
 @end

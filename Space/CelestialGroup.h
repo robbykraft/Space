@@ -8,7 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-@interface CelestialObject : NSObject
-@property GLfloat RA;
-@property GLfloat Dec;
+@interface CelestialGroup : NSObject
+
 @end

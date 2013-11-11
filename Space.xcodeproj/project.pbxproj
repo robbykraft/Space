@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		D51EBD74182F920E00BF8E00 /* CelestialObject.m in Sources */ = {isa = PBXBuildFile; fileRef = D51EBD73182F920E00BF8E00 /* CelestialObject.m */; };
+		D51EBD74182F920E00BF8E00 /* CelestialGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = D51EBD73182F920E00BF8E00 /* CelestialGroup.m */; };
 		D524C7C1182B8FE800A9A454 /* buildingTheUniverse.png in Resources */ = {isa = PBXBuildFile; fileRef = D524C7C0182B8FE800A9A454 /* buildingTheUniverse.png */; };
 		D524C7C3182B958D00A9A454 /* equirectangular-planetarium-lines.png in Resources */ = {isa = PBXBuildFile; fileRef = D524C7C2182B958D00A9A454 /* equirectangular-planetarium-lines.png */; };
 		D55E8FE71828E0C10076A9D7 /* Tycho_2048_city_reflection.png in Resources */ = {isa = PBXBuildFile; fileRef = D55E8FE61828E0C10076A9D7 /* Tycho_2048_city_reflection.png */; };
@@ -59,8 +59,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		D51EBD72182F920E00BF8E00 /* CelestialObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CelestialObject.h; sourceTree = "<group>"; };
-		D51EBD73182F920E00BF8E00 /* CelestialObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CelestialObject.m; sourceTree = "<group>"; };
+		D51EBD72182F920E00BF8E00 /* CelestialGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CelestialGroup.h; sourceTree = "<group>"; };
+		D51EBD73182F920E00BF8E00 /* CelestialGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CelestialGroup.m; sourceTree = "<group>"; };
 		D524C7C0182B8FE800A9A454 /* buildingTheUniverse.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = buildingTheUniverse.png; sourceTree = "<group>"; };
 		D524C7C2182B958D00A9A454 /* equirectangular-planetarium-lines.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "equirectangular-planetarium-lines.png"; sourceTree = "<group>"; };
 		D55E8FE61828E0C10076A9D7 /* Tycho_2048_city_reflection.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Tycho_2048_city_reflection.png; sourceTree = "<group>"; };
@@ -192,10 +192,10 @@
 				D575725F18262BBA0071B21E /* ViewController.m */,
 				D5C3E41D182F0172003817D8 /* Celestial.h */,
 				D5C3E41E182F0172003817D8 /* Celestial.m */,
-				D5EF4CE118304271001DB0AF /* celestial spheres */,
-				D51EBD72182F920E00BF8E00 /* CelestialObject.h */,
-				D51EBD73182F920E00BF8E00 /* CelestialObject.m */,
-				D575729018264CFD0071B21E /* shapes */,
+				D5EF4CE118304271001DB0AF /* Celestial Groups */,
+				D51EBD72182F920E00BF8E00 /* CelestialGroup.h */,
+				D51EBD73182F920E00BF8E00 /* CelestialGroup.m */,
+				D575729018264CFD0071B21E /* Primitives */,
 				D575729118264D300071B21E /* resources */,
 				D575728F18264CE50071B21E /* third party */,
 				D575726118262BBA0071B21E /* Images.xcassets */,
@@ -242,13 +242,13 @@
 			name = "third party";
 			sourceTree = "<group>";
 		};
-		D575729018264CFD0071B21E /* shapes */ = {
+		D575729018264CFD0071B21E /* Primitives */ = {
 			isa = PBXGroup;
 			children = (
 				D5757285182649400071B21E /* Sphere.h */,
 				D5757286182649400071B21E /* Sphere.m */,
 			);
-			name = shapes;
+			name = Primitives;
 			sourceTree = "<group>";
 		};
 		D575729118264D300071B21E /* resources */ = {
@@ -268,7 +268,7 @@
 			name = resources;
 			sourceTree = "<group>";
 		};
-		D5EF4CE118304271001DB0AF /* celestial spheres */ = {
+		D5EF4CE118304271001DB0AF /* Celestial Groups */ = {
 			isa = PBXGroup;
 			children = (
 				D5EF4CDE18304267001DB0AF /* Stars.h */,
@@ -276,7 +276,7 @@
 				D5757288182649480071B21E /* LoadingStage.h */,
 				D5757289182649480071B21E /* LoadingStage.m */,
 			);
-			name = "celestial spheres";
+			name = "Celestial Groups";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -396,7 +396,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D575728018262C5E0071B21E /* CHCSVParser.m in Sources */,
-				D51EBD74182F920E00BF8E00 /* CelestialObject.m in Sources */,
+				D51EBD74182F920E00BF8E00 /* CelestialGroup.m in Sources */,
 				D575726018262BBA0071B21E /* ViewController.m in Sources */,
 				D575725718262BBA0071B21E /* AppDelegate.m in Sources */,
 				D575728A182649480071B21E /* LoadingStage.m in Sources */,

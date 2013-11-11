@@ -10,7 +10,7 @@
 #import "Celestial.h"
 
 @interface ViewController (){
-    Celestial *celestialView;
+    Celestial *celestial;
 }
 @end
 
@@ -18,24 +18,17 @@
 
 - (void)viewDidLoad{
     [super viewDidLoad];
-    [self enterPlanetarium];
-    [self performSelectorInBackground:@selector(getStars) withObject:nil];
+    celestial = [[Celestial alloc] init];
+    [celestial setOrientToDevice:YES];
+    [celestial setPinchZoom:YES];
+    [self setView:celestial];
+    [self performSelectorInBackground:@selector(loadStars:) withObject:@"hyg4.csv"];
 }
 
--(void)enterPlanetarium{
-    celestialView = [[Celestial alloc] init];
-    [celestialView setTexture:@"equirectangular-projection-lines.png"];
-    [celestialView setCelestialSphere:YES];
-    [celestialView setOrientToDevice:YES];
-    [celestialView setPinchZoom:YES];
-    [celestialView setLoadingDelegate:self];
-    [self setView:celestialView];
-}
-
--(void)getStars{
-    NSString *path = [[NSBundle mainBundle] pathForResource:@"hyg4.csv" ofType:NULL];
+-(void)loadStars:(NSString*)catalog{
+    NSString *path = [[NSBundle mainBundle] pathForResource:catalog ofType:NULL];
     NSMutableArray *array = [NSMutableArray arrayWithContentsOfCSVFile:path];
-    [array removeObjectAtIndex:0];
+    [array removeObjectAtIndex:0];  // database has one line of header
     NSLog(@"%d stars loaded",(int)array.count);
     NSMutableArray *stars = [NSMutableArray array];
     for(NSArray *a in array){
@@ -47,14 +40,12 @@
         [star setObject:a[10] forKey:@"Mag"];
         [stars addObject:star];
     }
-    [celestialView setStars:stars];
-}
--(void)starsDidLoad{
+    [[celestial stars] setStarCatalog:stars];
 }
 
 // OpenGL redraw screen
 -(void) glkView:(GLKView *)view drawInRect:(CGRect)rect{
-    [celestialView execute];
+    [celestial execute];
 }
 
 @end

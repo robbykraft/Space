@@ -8,8 +8,10 @@
 
 #import <Foundation/Foundation.h>
 #import <GLKit/GLKit.h>
-#import "CelestialObject.h"
+#import "CelestialGroup.h"
 
-@interface LoadingStage : CelestialObject
--(void) executeLoadingStage;
+@interface LoadingStage : CelestialGroup
+
+-(void) execute;
+
 @end
