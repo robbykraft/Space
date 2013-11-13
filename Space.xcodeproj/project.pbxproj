@@ -21,6 +21,7 @@
 		D55E8FFA1828ED800076A9D7 /* 72.png in Resources */ = {isa = PBXBuildFile; fileRef = D55E8FF11828ED800076A9D7 /* 72.png */; };
 		D55E8FFB1828ED800076A9D7 /* 76.png in Resources */ = {isa = PBXBuildFile; fileRef = D55E8FF21828ED800076A9D7 /* 76.png */; };
 		D55E8FFC1828ED800076A9D7 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = D55E8FF31828ED800076A9D7 /* icon.png */; };
+		D5634C0618335E48008BA2BE /* Planets.m in Sources */ = {isa = PBXBuildFile; fileRef = D5634C0518335E48008BA2BE /* Planets.m */; };
 		D575724718262BBA0071B21E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D575724618262BBA0071B21E /* Foundation.framework */; };
 		D575724918262BBA0071B21E /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D575724818262BBA0071B21E /* CoreGraphics.framework */; };
 		D575724B18262BBA0071B21E /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D575724A18262BBA0071B21E /* UIKit.framework */; };
@@ -74,6 +75,8 @@
 		D55E8FF11828ED800076A9D7 /* 72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 72.png; sourceTree = "<group>"; };
 		D55E8FF21828ED800076A9D7 /* 76.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 76.png; sourceTree = "<group>"; };
 		D55E8FF31828ED800076A9D7 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
+		D5634C0418335E48008BA2BE /* Planets.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Planets.h; sourceTree = "<group>"; };
+		D5634C0518335E48008BA2BE /* Planets.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Planets.m; sourceTree = "<group>"; };
 		D575724318262BBA0071B21E /* Space.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Space.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D575724618262BBA0071B21E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		D575724818262BBA0071B21E /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -273,6 +276,8 @@
 			children = (
 				D5EF4CDE18304267001DB0AF /* Stars.h */,
 				D5EF4CDF18304267001DB0AF /* Stars.m */,
+				D5634C0418335E48008BA2BE /* Planets.h */,
+				D5634C0518335E48008BA2BE /* Planets.m */,
 				D5757288182649480071B21E /* LoadingStage.h */,
 				D5757289182649480071B21E /* LoadingStage.m */,
 			);
@@ -404,6 +409,7 @@
 				D5EF4CE018304267001DB0AF /* Stars.m in Sources */,
 				D5757287182649400071B21E /* Sphere.m in Sources */,
 				D575725318262BBA0071B21E /* main.m in Sources */,
+				D5634C0618335E48008BA2BE /* Planets.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
