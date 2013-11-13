@@ -48,6 +48,8 @@
         _loadingStage = [[LoadingStage alloc] init];
         _stars = [[Stars alloc] init];
         [_stars setDelegate:self];
+        _planets = [[Planets alloc] init];
+        [_planets setDelegate:self];
     }
     return self;
 }
@@ -103,7 +105,14 @@
     glPushMatrix();
         glMultMatrixf(_attitudeMatrix.m);
         glTranslatef(position[0], position[1], position[2]);
-        [_stars execute];
+        glPushMatrix();
+            glRotatef(23.4, 1, 0, 0);   // align ecliptic plane
+            [_stars execute];
+        glPopMatrix();
+        glPushMatrix();
+//            glRotatef(23.4, 1, 0, 0);   // align ecliptic plane
+            [_planets execute];
+        glPopMatrix();
         if(_loadingStage != nil){
             glEnableClientState(GL_TEXTURE_COORD_ARRAY);
             glEnable(GL_TEXTURE_2D);
@@ -189,7 +198,9 @@
 #pragma mark- DELEGATES
 
 -(void) starsDidLoad{
+    NSLog(@"Stars Did Load");
     _loadingStage = nil;
+    [_planets setDistantPlanets:@[@0, @0, @0, @0, @0, @0, @0, @0]];
 }
 
 @end

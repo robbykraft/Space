@@ -9,9 +9,10 @@
 #import <Foundation/Foundation.h>
 #import <GLKit/GLKit.h>
 #import "Stars.h"
+#import "Planets.h"
 #import "LoadingStage.h"
 
-@interface Celestial : GLKView <StarsDelegate>
+@interface Celestial : GLKView <StarsDelegate, PlanetsDelegate>
 
 // device
 @property (nonatomic) float fieldOfView;  // 60-90 is average
@@ -21,6 +22,7 @@
 
 // celestial groups
 @property (nonatomic) Stars *stars;
+@property (nonatomic) Planets *planets;
 @property (nonatomic) LoadingStage *loadingStage;
 
 -(void) execute;  // draw screen

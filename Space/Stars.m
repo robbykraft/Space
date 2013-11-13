@@ -42,10 +42,12 @@
     [delegate starsDidLoad];
 }
 -(void)execute{
+//    glRotatef(23.4, 1, 0, 0);   // align ecliptic plane
+    glMultMatrixf(GLKMatrix4MakeRotation(M_PI/2.0, 0, 1, 0).m);  // for Hipparcos maps where RA 0 is at the edge
     glPushMatrix();
         glMultMatrixf(GLKMatrix4MakeRotation(M_PI/2.0, 0, 1, 0).m);  // for Hipparcos maps where RA 0 is at the edge
 //        glMultMatrixf(GLKMatrix4MakeRotation(-M_PI/2.0, 0, 1, 0).m); // for Tycho where RA 0 is at the center
-//        [constellations execute];
+        [constellations execute];
     glPopMatrix();
 //    glPushMatrix();
 //        [lines execute];
@@ -82,10 +84,8 @@
             glMultMatrixf(dec.m);
             glTranslatef(0.0, 0.0, -1.0);
             glColor4f(1.0, 1.0, 1.0, 1.0);
-            if(i == 144){
-                glScalef(10.0, 10.0, 10.0);
-                glColor4f(1.0, 0.2, 0.2, 1.0);
-            }
+//            if(i == 144){  // sirius
+//            }
             glVertexPointer(3, GL_FLOAT, 0, quadVertices);
             glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
             glPopMatrix();
