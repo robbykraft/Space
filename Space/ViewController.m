@@ -22,7 +22,7 @@
     [celestial setOrientToDevice:YES];
     [celestial setPinchZoom:YES];
     [self setView:celestial];
-    [self performSelectorInBackground:@selector(loadStars:) withObject:@"hyg4.csv"];
+    [self performSelectorInBackground:@selector(loadStars:) withObject:@"hyg5.csv"];
 }
 
 -(void)loadStars:(NSString*)catalog{
