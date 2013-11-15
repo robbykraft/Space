@@ -22,6 +22,14 @@
 		D55E8FFB1828ED800076A9D7 /* 76.png in Resources */ = {isa = PBXBuildFile; fileRef = D55E8FF21828ED800076A9D7 /* 76.png */; };
 		D55E8FFC1828ED800076A9D7 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = D55E8FF31828ED800076A9D7 /* icon.png */; };
 		D5634C0618335E48008BA2BE /* Planets.m in Sources */ = {isa = PBXBuildFile; fileRef = D5634C0518335E48008BA2BE /* Planets.m */; };
+		D5634C21183618A8008BA2BE /* Earth.png in Resources */ = {isa = PBXBuildFile; fileRef = D5634C19183618A8008BA2BE /* Earth.png */; };
+		D5634C22183618A8008BA2BE /* Jupiter.png in Resources */ = {isa = PBXBuildFile; fileRef = D5634C1A183618A8008BA2BE /* Jupiter.png */; };
+		D5634C23183618A8008BA2BE /* Mars.png in Resources */ = {isa = PBXBuildFile; fileRef = D5634C1B183618A8008BA2BE /* Mars.png */; };
+		D5634C24183618A8008BA2BE /* Mercury.png in Resources */ = {isa = PBXBuildFile; fileRef = D5634C1C183618A8008BA2BE /* Mercury.png */; };
+		D5634C25183618A8008BA2BE /* Neptune.png in Resources */ = {isa = PBXBuildFile; fileRef = D5634C1D183618A8008BA2BE /* Neptune.png */; };
+		D5634C26183618A8008BA2BE /* Saturn.png in Resources */ = {isa = PBXBuildFile; fileRef = D5634C1E183618A8008BA2BE /* Saturn.png */; };
+		D5634C27183618A8008BA2BE /* Uranus.png in Resources */ = {isa = PBXBuildFile; fileRef = D5634C1F183618A8008BA2BE /* Uranus.png */; };
+		D5634C28183618A8008BA2BE /* Venus.png in Resources */ = {isa = PBXBuildFile; fileRef = D5634C20183618A8008BA2BE /* Venus.png */; };
 		D575724718262BBA0071B21E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D575724618262BBA0071B21E /* Foundation.framework */; };
 		D575724918262BBA0071B21E /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D575724818262BBA0071B21E /* CoreGraphics.framework */; };
 		D575724B18262BBA0071B21E /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D575724A18262BBA0071B21E /* UIKit.framework */; };
@@ -77,6 +85,14 @@
 		D55E8FF31828ED800076A9D7 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
 		D5634C0418335E48008BA2BE /* Planets.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Planets.h; sourceTree = "<group>"; };
 		D5634C0518335E48008BA2BE /* Planets.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Planets.m; sourceTree = "<group>"; };
+		D5634C19183618A8008BA2BE /* Earth.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Earth.png; path = Planets256/Earth.png; sourceTree = "<group>"; };
+		D5634C1A183618A8008BA2BE /* Jupiter.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Jupiter.png; path = Planets256/Jupiter.png; sourceTree = "<group>"; };
+		D5634C1B183618A8008BA2BE /* Mars.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Mars.png; path = Planets256/Mars.png; sourceTree = "<group>"; };
+		D5634C1C183618A8008BA2BE /* Mercury.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Mercury.png; path = Planets256/Mercury.png; sourceTree = "<group>"; };
+		D5634C1D183618A8008BA2BE /* Neptune.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Neptune.png; path = Planets256/Neptune.png; sourceTree = "<group>"; };
+		D5634C1E183618A8008BA2BE /* Saturn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Saturn.png; path = Planets256/Saturn.png; sourceTree = "<group>"; };
+		D5634C1F183618A8008BA2BE /* Uranus.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Uranus.png; path = Planets256/Uranus.png; sourceTree = "<group>"; };
+		D5634C20183618A8008BA2BE /* Venus.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Venus.png; path = Planets256/Venus.png; sourceTree = "<group>"; };
 		D575724318262BBA0071B21E /* Space.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Space.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D575724618262BBA0071B21E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		D575724818262BBA0071B21E /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -257,6 +273,14 @@
 		D575729118264D300071B21E /* resources */ = {
 			isa = PBXGroup;
 			children = (
+				D5634C19183618A8008BA2BE /* Earth.png */,
+				D5634C1A183618A8008BA2BE /* Jupiter.png */,
+				D5634C1B183618A8008BA2BE /* Mars.png */,
+				D5634C1C183618A8008BA2BE /* Mercury.png */,
+				D5634C1D183618A8008BA2BE /* Neptune.png */,
+				D5634C1E183618A8008BA2BE /* Saturn.png */,
+				D5634C1F183618A8008BA2BE /* Uranus.png */,
+				D5634C20183618A8008BA2BE /* Venus.png */,
 				D5C3E411182E4524003817D8 /* hyg.csv */,
 				D5C3E413182EDEC6003817D8 /* hyg5.csv */,
 				D5C3E415182EE2BC003817D8 /* hyg4.csv */,
@@ -362,10 +386,14 @@
 			files = (
 				D575725D18262BBA0071B21E /* Main_iPad.storyboard in Resources */,
 				D55E8FF41828ED800076A9D7 /* 114.png in Resources */,
+				D5634C26183618A8008BA2BE /* Saturn.png in Resources */,
+				D5634C23183618A8008BA2BE /* Mars.png in Resources */,
 				D5C3E412182E4524003817D8 /* hyg.csv in Resources */,
 				D575726218262BBA0071B21E /* Images.xcassets in Resources */,
 				D524C7C1182B8FE800A9A454 /* buildingTheUniverse.png in Resources */,
+				D5634C25183618A8008BA2BE /* Neptune.png in Resources */,
 				D5C3E421182F2436003817D8 /* Hipparcos_2048_B&W_reflection.png in Resources */,
+				D5634C24183618A8008BA2BE /* Mercury.png in Resources */,
 				D575728E18264B180071B21E /* checker.png in Resources */,
 				D55E8FF81828ED800076A9D7 /* 57.png in Resources */,
 				D524C7C3182B958D00A9A454 /* equirectangular-planetarium-lines.png in Resources */,
@@ -373,12 +401,16 @@
 				D55E8FF71828ED800076A9D7 /* 152.png in Resources */,
 				D575725A18262BBA0071B21E /* Main_iPhone.storyboard in Resources */,
 				D5C3E416182EE2BC003817D8 /* hyg4.csv in Resources */,
+				D5634C28183618A8008BA2BE /* Venus.png in Resources */,
+				D5634C27183618A8008BA2BE /* Uranus.png in Resources */,
 				D5C3E414182EDEC6003817D8 /* hyg5.csv in Resources */,
 				D55E8FE91828E0CD0076A9D7 /* equirectangular-projection-lines.png in Resources */,
 				D55E8FFC1828ED800076A9D7 /* icon.png in Resources */,
 				D55E8FFA1828ED800076A9D7 /* 72.png in Resources */,
+				D5634C22183618A8008BA2BE /* Jupiter.png in Resources */,
 				D55E8FF51828ED800076A9D7 /* 120.png in Resources */,
 				D55E8FFB1828ED800076A9D7 /* 76.png in Resources */,
+				D5634C21183618A8008BA2BE /* Earth.png in Resources */,
 				D55E8FE71828E0C10076A9D7 /* Tycho_2048_city_reflection.png in Resources */,
 				D575725118262BBA0071B21E /* InfoPlist.strings in Resources */,
 				D55E8FF91828ED800076A9D7 /* 60.png in Resources */,

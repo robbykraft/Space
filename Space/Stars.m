@@ -17,7 +17,7 @@
 
 @implementation Stars{
     Sphere *lines;
-    Sphere *constellations;
+//    Sphere *constellations;
     GLfloat *positions;
 }
 
@@ -27,7 +27,7 @@
     self = [super init];
     if (self) {     
         lines = [[Sphere alloc] init:SLICES slices:SLICES radius:20.0 squash:1.0 textureFile:@"equirectangular-projection-lines.png"];
-        constellations = [[Sphere alloc] init:SLICES slices:SLICES radius:30.0 squash:1.0 textureFile:@"Hipparcos_2048_B&W_reflection.png"];
+//        constellations = [[Sphere alloc] init:SLICES slices:SLICES radius:30.0 squash:1.0 textureFile:@"Hipparcos_2048_B&W_reflection.png"];
     }
     return self;
 }
@@ -44,11 +44,12 @@
 -(void)execute{
 //    glRotatef(23.4, 1, 0, 0);   // align ecliptic plane
     glMultMatrixf(GLKMatrix4MakeRotation(M_PI/2.0, 0, 1, 0).m);  // for Hipparcos maps where RA 0 is at the edge
-    glPushMatrix();
-        glMultMatrixf(GLKMatrix4MakeRotation(M_PI/2.0, 0, 1, 0).m);  // for Hipparcos maps where RA 0 is at the edge
+//    glPushMatrix();
+    // one or the other
+//        glMultMatrixf(GLKMatrix4MakeRotation(M_PI/2.0, 0, 1, 0).m);  // for Hipparcos maps where RA 0 is at the edge
 //        glMultMatrixf(GLKMatrix4MakeRotation(-M_PI/2.0, 0, 1, 0).m); // for Tycho where RA 0 is at the center
-        [constellations execute];
-    glPopMatrix();
+//        [constellations execute];
+//    glPopMatrix();
 //    glPushMatrix();
 //        [lines execute];
 //    glPopMatrix();
@@ -67,13 +68,13 @@
         glCullFace(GL_BACK);
         glFrontFace(GL_CW);
         // RA anchor point
-        glPushMatrix();
-        glTranslatef(0.0, 0.0, -1.0);
-        glScalef(10.0, 10.0, 10.0);
-        glColor4f(1.0, 1.0, 1.0, 1.0);
-        glVertexPointer(3, GL_FLOAT, 0, quadVertices);
-        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-        glPopMatrix();
+//        glPushMatrix();
+//        glTranslatef(0.0, 0.0, -1.0);
+//        glScalef(10.0, 10.0, 10.0);
+//        glColor4f(1.0, 1.0, 1.0, 1.0);
+//        glVertexPointer(3, GL_FLOAT, 0, quadVertices);
+//        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+//        glPopMatrix();
         
         for(int i = 0; i < _starCatalog.count; i++){
             glPushMatrix();
