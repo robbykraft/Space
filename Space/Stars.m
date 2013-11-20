@@ -42,17 +42,16 @@
     [delegate starsDidLoad];
 }
 -(void)execute{
-//    glRotatef(23.4, 1, 0, 0);   // align ecliptic plane
     glMultMatrixf(GLKMatrix4MakeRotation(M_PI/2.0, 0, 1, 0).m);  // for Hipparcos maps where RA 0 is at the edge
-//    glPushMatrix();
+    glPushMatrix();
     // one or the other
-//        glMultMatrixf(GLKMatrix4MakeRotation(M_PI/2.0, 0, 1, 0).m);  // for Hipparcos maps where RA 0 is at the edge
+        glMultMatrixf(GLKMatrix4MakeRotation(M_PI/2.0, 0, 1, 0).m);  // for Hipparcos maps where RA 0 is at the edge
 //        glMultMatrixf(GLKMatrix4MakeRotation(-M_PI/2.0, 0, 1, 0).m); // for Tycho where RA 0 is at the center
 //        [constellations execute];
-//    glPopMatrix();
-//    glPushMatrix();
-//        [lines execute];
-//    glPopMatrix();
+    glPopMatrix();
+    glPushMatrix();
+        [lines execute];
+    glPopMatrix();
     
     if(_starCatalog != nil){
         static const GLfloat quadVertices[] = {
@@ -78,7 +77,7 @@
         
         for(int i = 0; i < _starCatalog.count; i++){
             glPushMatrix();
-            glScalef(positions[i*3+DISTANCE], positions[i*3+DISTANCE], positions[i*3+DISTANCE]);
+            glScalef(positions[i*3+DISTANCE]*100, positions[i*3+DISTANCE]*100, positions[i*3+DISTANCE]*100);
             GLKMatrix4 ra = GLKMatrix4MakeRotation(positions[i*3+RA], 0.0, 1.0, 0.0);
             glMultMatrixf(ra.m);
             GLKMatrix4 dec = GLKMatrix4MakeRotation(positions[i*3+DEC], 1.0, 0.0, 0.0);

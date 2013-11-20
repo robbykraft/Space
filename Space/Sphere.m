@@ -121,7 +121,7 @@
             }
             
         }
-        numVertices = (vPtr-m_VertexData)/6;
+        numVertices = (vPtr-m_VertexData)/6.0;
     }
     
     m_Angle = 0.0;

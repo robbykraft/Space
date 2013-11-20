@@ -10,7 +10,7 @@
 #import "Celestial.h"
 
 #define Z_NEAR 0.1f
-#define Z_FAR 1000.0f
+#define Z_FAR 10000.0f
 #define FOV_MAX 155
 #define FOV_MIN 1
 
@@ -23,6 +23,8 @@
     GLKVector3 _eyeVector;
     GLKVector3 travelVector;
     unsigned int travelIncrements;
+    
+    GLKMatrix4 planet, ecliptic, galactic;
 }
 
 -(void) initDevice;    // boot hardware
@@ -50,6 +52,8 @@
         [_stars setDelegate:self];
         _planets = [[Planets alloc] init];
         [_planets setDelegate:self];
+        
+        ecliptic = GLKMatrix4MakeRotation(-23.4/180.0*M_PI, 1, 0, 0);
     }
     return self;
 }
@@ -106,13 +110,15 @@
         glMultMatrixf(_attitudeMatrix.m);
         glTranslatef(position[0], position[1], position[2]);
         glPushMatrix();
-            glRotatef(23.4, 1, 0, 0);   // align ecliptic plane
             [_stars execute];
         glPopMatrix();
         glPushMatrix();
-//            glRotatef(23.4, 1, 0, 0);   // align ecliptic plane
+            glMultMatrixf(ecliptic.m);   // align ecliptic plane  23.4 degrees
             [_planets execute];
         glPopMatrix();
+//        glPushMatrix();
+//            glMultMatrixf(galactic.m);
+//        glPopMatrix();
         if(_loadingStage != nil){
             glEnableClientState(GL_TEXTURE_COORD_ARRAY);
             glEnable(GL_TEXTURE_2D);
@@ -134,9 +140,13 @@
 }
 
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
-    travelVector = _eyeVector;
-    travelIncrements = 0;
-    if(travelTimer == nil){
+    if(travelTimer == nil && !travelIncrements){
+        travelIncrements = 0;
+        travelVector = _eyeVector;
+        travelTimer = [NSTimer scheduledTimerWithTimeInterval:1.0f/45 target:self selector:@selector(departingTrip) userInfo:nil repeats:YES];
+    }
+    if(travelIncrements){
+        [travelTimer invalidate];
         travelTimer = [NSTimer scheduledTimerWithTimeInterval:1.0f/45 target:self selector:@selector(departingTrip) userInfo:nil repeats:YES];
     }
 }

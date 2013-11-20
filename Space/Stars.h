@@ -12,7 +12,6 @@
 
 @optional
 -(void)starsDidLoad;
-
 @end
 
 @interface Stars : CelestialGroup

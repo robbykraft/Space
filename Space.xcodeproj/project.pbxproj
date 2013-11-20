@@ -10,6 +10,7 @@
 		D51EBD74182F920E00BF8E00 /* CelestialGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = D51EBD73182F920E00BF8E00 /* CelestialGroup.m */; };
 		D524C7C1182B8FE800A9A454 /* buildingTheUniverse.png in Resources */ = {isa = PBXBuildFile; fileRef = D524C7C0182B8FE800A9A454 /* buildingTheUniverse.png */; };
 		D524C7C3182B958D00A9A454 /* equirectangular-planetarium-lines.png in Resources */ = {isa = PBXBuildFile; fileRef = D524C7C2182B958D00A9A454 /* equirectangular-planetarium-lines.png */; };
+		D54D4DE818380D52008A624E /* equatorial_line.png in Resources */ = {isa = PBXBuildFile; fileRef = D54D4DE718380D52008A624E /* equatorial_line.png */; };
 		D55E8FE71828E0C10076A9D7 /* Tycho_2048_city_reflection.png in Resources */ = {isa = PBXBuildFile; fileRef = D55E8FE61828E0C10076A9D7 /* Tycho_2048_city_reflection.png */; };
 		D55E8FE91828E0CD0076A9D7 /* equirectangular-projection-lines.png in Resources */ = {isa = PBXBuildFile; fileRef = D55E8FE81828E0CD0076A9D7 /* equirectangular-projection-lines.png */; };
 		D55E8FF41828ED800076A9D7 /* 114.png in Resources */ = {isa = PBXBuildFile; fileRef = D55E8FEB1828ED800076A9D7 /* 114.png */; };
@@ -72,6 +73,7 @@
 		D51EBD73182F920E00BF8E00 /* CelestialGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CelestialGroup.m; sourceTree = "<group>"; };
 		D524C7C0182B8FE800A9A454 /* buildingTheUniverse.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = buildingTheUniverse.png; sourceTree = "<group>"; };
 		D524C7C2182B958D00A9A454 /* equirectangular-planetarium-lines.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "equirectangular-planetarium-lines.png"; sourceTree = "<group>"; };
+		D54D4DE718380D52008A624E /* equatorial_line.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = equatorial_line.png; sourceTree = "<group>"; };
 		D55E8FE61828E0C10076A9D7 /* Tycho_2048_city_reflection.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Tycho_2048_city_reflection.png; sourceTree = "<group>"; };
 		D55E8FE81828E0CD0076A9D7 /* equirectangular-projection-lines.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "equirectangular-projection-lines.png"; sourceTree = "<group>"; };
 		D55E8FEB1828ED800076A9D7 /* 114.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 114.png; sourceTree = "<group>"; };
@@ -285,6 +287,7 @@
 				D5C3E413182EDEC6003817D8 /* hyg5.csv */,
 				D5C3E415182EE2BC003817D8 /* hyg4.csv */,
 				D524C7C0182B8FE800A9A454 /* buildingTheUniverse.png */,
+				D54D4DE718380D52008A624E /* equatorial_line.png */,
 				D524C7C2182B958D00A9A454 /* equirectangular-planetarium-lines.png */,
 				D5C3E420182F2436003817D8 /* Hipparcos_2048_B&W_reflection.png */,
 				D55E8FE81828E0CD0076A9D7 /* equirectangular-projection-lines.png */,
@@ -402,6 +405,7 @@
 				D575725A18262BBA0071B21E /* Main_iPhone.storyboard in Resources */,
 				D5C3E416182EE2BC003817D8 /* hyg4.csv in Resources */,
 				D5634C28183618A8008BA2BE /* Venus.png in Resources */,
+				D54D4DE818380D52008A624E /* equatorial_line.png in Resources */,
 				D5634C27183618A8008BA2BE /* Uranus.png in Resources */,
 				D5C3E414182EDEC6003817D8 /* hyg5.csv in Resources */,
 				D55E8FE91828E0CD0076A9D7 /* equirectangular-projection-lines.png in Resources */,
