@@ -210,7 +210,6 @@
 -(void) starsDidLoad{
     NSLog(@"Stars Did Load");
     _loadingStage = nil;
-    [_planets setDistantPlanets:@[@0, @0, @0, @0, @0, @0, @0, @0]];
 }
 
 @end

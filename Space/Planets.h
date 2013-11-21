@@ -16,8 +16,8 @@
 
 @interface Planets : CelestialGroup
 
-@property (nonatomic) NSArray *distantPlanets;
 @property id <PlanetsDelegate> delegate;
+@property (nonatomic) float J2000;
 
 -(void)execute;
 
