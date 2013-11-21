@@ -28,13 +28,15 @@ typedef enum{
     double distances[OBJECTS];
     double azimuths[OBJECTS];
 }
+
 @synthesize delegate;
+
 // today's date. progression through 2013 320 / 365  (dec: .8767)
 // + 12 years since 2000
 // .12 + .008767   in centuries
 // .128767
 -(id) init{
-    return [self initWithTime:.128767];
+    return [self initWithTime:.128767];  // mid Nov. 2013
 }
 -(id) initWithTime:(float)J2000{
     self = [super init];
@@ -42,22 +44,26 @@ typedef enum{
         planetSphere = [[Sphere alloc] init:SLICES slices:SLICES radius:9999.0 squash:1.0 textureFile:@"equatorial_line.png"];
         names = @[@"Mercury", @"Venus", @"Earth", @"Mars", @"Jupiter", @"Saturn", @"Uranus", @"Neptune"];
         planetTextures = [self loadPlanetTextures];
-        _J2000 = J2000;  // mid Nov. 2013
-        for(int i = 0; i < 8; i++){
-            double *planetPos = [self calculateLocationOfPlanet:i AtTime:J2000];
-            positions[3*i+x] = planetPos[x];
-            positions[3*i+y] = planetPos[y];
-            positions[3*i+z] = planetPos[z];
-            NSLog(@"%@: (%f, %f, %f)",[names objectAtIndex:i], positions[3*i+x], positions[3*i+y], positions[3*i+z]);
-            distances[i] = sqrt(planetPos[x] * planetPos[x] +
-                                planetPos[y] * planetPos[y] +
-                                planetPos[z] * planetPos[z] );
-            NSLog(@"Orbit radius: %f", distances[i]);
-            azimuths[i] = 180./π*atan2( positions[3*i+x], positions[3*i+y]);
-            NSLog(@"%f",azimuths[i]);
-        }
+        _time = J2000;
+        [self calculate];
     }
     return self;
+}
+
+-(void)calculate{
+    for(int i = 0; i < OBJECTS; i++){
+        double *planetPos = [self calculateLocationOfPlanet:i AtTime:_time];
+        positions[3*i+x] = planetPos[x];
+        positions[3*i+y] = planetPos[y];
+        positions[3*i+z] = planetPos[z];
+//        NSLog(@"%@: (%f, %f, %f)",[names objectAtIndex:i], positions[3*i+x], positions[3*i+y], positions[3*i+z]);
+        distances[i] = sqrt(planetPos[x] * planetPos[x] +
+                            planetPos[y] * planetPos[y] +
+                            planetPos[z] * planetPos[z] );
+//        NSLog(@"Orbit radius: %f", distances[i]);
+        azimuths[i] = 180./π*atan2( positions[3*i+x], positions[3*i+y]);
+//        NSLog(@"%f",azimuths[i]);
+    }
 }
 
 // http://ssd.jpl.nasa.gov/txt/aprx_pos_planets.pdf
@@ -131,12 +137,12 @@ static double rates[] = {0.00000037,      0.00001906,     -0.00594749,   149472.
     ecliptic[z] = (            sin(ω)*sin(I)             )*x0 + (             cos(ω)*sin(I)             )*y0;
     return ecliptic;
 }
+
 -(double)KeplersEquation:(double)E M:(double)M e:(double)e{
     double ΔM = M - ( E - (e*180./π) * sin(E*π/180.) );
     double ΔE = ΔM / (1 - e*cos(E*π/180.));
     return E + ΔE;
 }
-
 
 //get location of planet from two times, separated by say a minute
 //build a vector which crosses the two points

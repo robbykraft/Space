@@ -25,6 +25,7 @@
     unsigned int travelIncrements;
     
     GLKMatrix4 planet, ecliptic, galactic;
+    float julianDate;
 }
 
 -(void) initDevice;    // boot hardware
@@ -47,15 +48,23 @@
     if (self) {
         [self initDevice];
         [self initGL];
+        julianDate = .128767;
         _loadingStage = [[LoadingStage alloc] init];
         _stars = [[Stars alloc] init];
         [_stars setDelegate:self];
         _planets = [[Planets alloc] init];
         [_planets setDelegate:self];
-        
+        [_planets setTime:julianDate];
         ecliptic = GLKMatrix4MakeRotation(-23.4/180.0*M_PI, 1, 0, 0);
+        [NSTimer scheduledTimerWithTimeInterval:1.0/30. target:self selector:@selector(incrementTime) userInfo:Nil repeats:YES];
     }
     return self;
+}
+
+-(void)incrementTime{
+    julianDate += .00001;
+    [_planets setTime:julianDate];
+    [_planets calculate];
 }
 
 -(void) initDevice{

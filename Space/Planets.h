@@ -17,8 +17,10 @@
 @interface Planets : CelestialGroup
 
 @property id <PlanetsDelegate> delegate;
-@property (nonatomic) float J2000;
+@property (nonatomic) float time;
 
+-(id) initWithTime:(float)J2000;
+-(void)calculate;  //calculate positions based on time
 -(void)execute;
 
 @end
