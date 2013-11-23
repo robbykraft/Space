@@ -26,7 +26,7 @@
 -(id) init{
     self = [super init];
     if (self) {     
-        lines = [[Sphere alloc] init:SLICES slices:SLICES radius:20.0 squash:1.0 textureFile:@"equirectangular-projection-lines.png"];
+        lines = [[Sphere alloc] init:SLICES slices:SLICES radius:9999.0 squash:1.0 textureFile:@"equirectangular-projection-lines.png"];
 //        constellations = [[Sphere alloc] init:SLICES slices:SLICES radius:30.0 squash:1.0 textureFile:@"Hipparcos_2048_B&W_reflection.png"];
     }
     return self;

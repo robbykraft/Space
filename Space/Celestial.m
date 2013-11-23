@@ -97,6 +97,7 @@
     [self setFieldOfView:_fieldOfView];
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_BLEND);
+    self.drawableDepthFormat = GLKViewDrawableDepthFormat24;
     glLoadIdentity();
 }
 

@@ -20,7 +20,7 @@
     [super viewDidLoad];
     celestial = [[Celestial alloc] init];
     [celestial setOrientToDevice:YES];
-    [celestial setPinchZoom:YES];
+    [celestial setPinchZoom:NO];
     [self setView:celestial];
     [self performSelectorInBackground:@selector(loadStars:) withObject:@"hyg4.csv"];
 }

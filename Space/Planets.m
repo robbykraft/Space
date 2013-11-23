@@ -27,6 +27,8 @@ typedef enum{
     NSArray *planetTextures;
     double distances[OBJECTS];
     double azimuths[OBJECTS];
+    NSArray *planetSpheres;
+    Sphere *sunSphere;
 }
 
 @synthesize delegate;
@@ -41,7 +43,16 @@ typedef enum{
 -(id) initWithTime:(float)J2000{
     self = [super init];
     if (self) {
-        planetSphere = [[Sphere alloc] init:SLICES slices:SLICES radius:9999.0 squash:1.0 textureFile:@"equatorial_line.png"];
+        sunSphere = [[Sphere alloc] init:SLICES slices:SLICES radius:0.16 squash:1.0 textureFile:@"sun_map.png"];
+        planetSphere = [[Sphere alloc] init:SLICES slices:SLICES radius:9800.0 squash:1.0 textureFile:@"equatorial_line.png"];
+        planetSpheres = @[ [[Sphere alloc] init:SLICES slices:SLICES radius:0.16 squash:1.0 textureFile:@"mercury_map.png"],
+                           [[Sphere alloc] init:SLICES slices:SLICES radius:0.16 squash:1.0 textureFile:@"venus_map.png"],
+                           [[Sphere alloc] init:SLICES slices:SLICES radius:0.16 squash:1.0 textureFile:@"earth_map.png"],
+                           [[Sphere alloc] init:SLICES slices:SLICES radius:0.16 squash:1.0 textureFile:@"mars_map.png"],
+                           [[Sphere alloc] init:SLICES slices:SLICES radius:0.16 squash:1.0 textureFile:@"jupiter_map.png"],
+                           [[Sphere alloc] init:SLICES slices:SLICES radius:0.16 squash:1.0 textureFile:@"saturn_map.png"],
+                           [[Sphere alloc] init:SLICES slices:SLICES radius:0.16 squash:1.0 textureFile:@"uranus_map.png"],
+                           [[Sphere alloc] init:SLICES slices:SLICES radius:0.16 squash:1.0 textureFile:@"neptune_map.png"] ];
         names = @[@"Mercury", @"Venus", @"Earth", @"Mars", @"Jupiter", @"Saturn", @"Uranus", @"Neptune"];
         planetTextures = [self loadPlanetTextures];
         _time = J2000;
@@ -147,8 +158,8 @@ static double rates[] = {0.00000037,      0.00001906,     -0.00594749,   149472.
 //get location of planet from two times, separated by say a minute
 //build a vector which crosses the two points
 //interpolate along this path, have the next vector ready
--(void)execute{    
-//    glRotatef(23.4, 1, 0, 0);   // align ecliptic plane
+
+-(void)execute{
     [planetSphere execute];
     static const GLfloat rectangleVertices[] = {
         -.015,  .01, -0.0,
@@ -178,7 +189,7 @@ static double rates[] = {0.00000037,      0.00001906,     -0.00594749,   149472.
     glEnable(GL_TEXTURE_2D);
     glEnable(GL_BLEND);
     glEnable(GL_CULL_FACE);
-    glCullFace(GL_BACK);
+    glCullFace(GL_FRONT);
     glFrontFace(GL_CW);
     
     glEnableClientState(GL_VERTEX_ARRAY);
@@ -187,23 +198,87 @@ static double rates[] = {0.00000037,      0.00001906,     -0.00594749,   149472.
     
     for(int i = OBJECTS-1; i >= 0; i--){
         glPushMatrix();
+//        if(i != Mercury){
             glTranslatef(-positions[3*i+x], -positions[3*i+z], -positions[3*i+y]);
-            glScalef(10.0, 10.0, 10.0);
-            glRotatef(azimuths[i], 0, 1, 0);
-            glBindTexture(GL_TEXTURE_2D, ((GLKTextureInfo*)(planetTextures[i])).name);
-            if(i == Saturn)
-                glVertexPointer(3, GL_FLOAT, 0, rectangleVertices);  // saturn image is 2:1 for the rings
-            else
-                glVertexPointer(3, GL_FLOAT, 0, quadVertices);
-            glNormalPointer(GL_FLOAT, 0, quadNormals);
-            glTexCoordPointer(2, GL_FLOAT, 0, quadTextureCoords);
-            glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+            [(Sphere*)[planetSpheres objectAtIndex:i] execute:NO];
+//        }
+//        else{
+//            glTranslatef(-positions[3*i+x], -positions[3*i+z], -positions[3*i+y]);
+//            glScalef(10.0, 10.0, 10.0);
+//            glRotatef(azimuths[i], 0, 1, 0);
+//            glBindTexture(GL_TEXTURE_2D, ((GLKTextureInfo*)(planetTextures[i])).name);
+//            if(i == Saturn)
+//                glVertexPointer(3, GL_FLOAT, 0, rectangleVertices);  // saturn image is 2:1 for the rings
+//            else
+//                glVertexPointer(3, GL_FLOAT, 0, quadVertices);
+//            glNormalPointer(GL_FLOAT, 0, quadNormals);
+//            glTexCoordPointer(2, GL_FLOAT, 0, quadTextureCoords);
+//            glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+//        }
         glPopMatrix();
     }
+    [sunSphere execute:NO];
     glDisableClientState(GL_VERTEX_ARRAY);
     glDisableClientState(GL_NORMAL_ARRAY);
     glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 }
+
+//-(void)execute{
+//    [planetSphere execute];
+//    static const GLfloat rectangleVertices[] = {
+//        -.015,  .01, -0.0,
+//        .015,  .01, -0.0,
+//        -.015, -.01, -0.0,
+//        .015, -.01, -0.0
+//    };
+//    static const GLfloat quadVertices[] = {
+//        -.01,  .01, -0.0,
+//        .01,  .01, -0.0,
+//        -.01, -.01, -0.0,
+//        .01, -.01, -0.0
+//    };
+//    static const GLfloat quadNormals[] = {
+//        0.0, 0.0, 1.0,
+//        0.0, 0.0, 1.0,
+//        0.0, 0.0, 1.0,
+//        0.0, 0.0, 1.0
+//    };
+//    static const GLfloat quadTextureCoords[] = {
+//        0.0, 1.0,
+//        1.0, 1.0,
+//        0.0, 0.0,
+//        1.0, 0.0
+//    };
+//    
+//    glEnable(GL_TEXTURE_2D);
+//    glEnable(GL_BLEND);
+//    glEnable(GL_CULL_FACE);
+//    glCullFace(GL_BACK);
+//    glFrontFace(GL_CW);
+//    
+//    glEnableClientState(GL_VERTEX_ARRAY);
+//    glEnableClientState(GL_NORMAL_ARRAY);
+//    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+//    
+//    for(int i = OBJECTS-1; i >= 0; i--){
+//        glPushMatrix();
+//            glTranslatef(-positions[3*i+x], -positions[3*i+z], -positions[3*i+y]);
+//            glScalef(10.0, 10.0, 10.0);
+//            glRotatef(azimuths[i], 0, 1, 0);
+//            glBindTexture(GL_TEXTURE_2D, ((GLKTextureInfo*)(planetTextures[i])).name);
+//            if(i == Saturn)
+//                glVertexPointer(3, GL_FLOAT, 0, rectangleVertices);  // saturn image is 2:1 for the rings
+//            else
+//                glVertexPointer(3, GL_FLOAT, 0, quadVertices);
+//            glNormalPointer(GL_FLOAT, 0, quadNormals);
+//            glTexCoordPointer(2, GL_FLOAT, 0, quadTextureCoords);
+//            glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+//        glPopMatrix();
+//    }
+//    glDisableClientState(GL_VERTEX_ARRAY);
+//    glDisableClientState(GL_NORMAL_ARRAY);
+//    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+//}
 
 -(NSArray*)loadPlanetTextures{
     NSMutableArray *array = [NSMutableArray array];
