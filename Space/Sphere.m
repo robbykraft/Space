@@ -235,13 +235,13 @@
     m_TextureInfo = [self loadTexture:textureFile];
 }
 
--(void) getPositionX:(GLfloat *)x Y:(GLfloat *)y Z:(GLfloat *)z{
+-(void) getPositionX:(GLfloat *)x y:(GLfloat *)y z:(GLfloat *)z{
     *x = m_Pos[0];
     *y = m_Pos[1];
     *z = m_Pos[2];
 }
 
--(void) setPositionX:(GLfloat)x Y:(GLfloat)y Z:(GLfloat)z{
+-(void) setPositionX:(GLfloat)x y:(GLfloat)y z:(GLfloat)z{
     m_Pos[0] = x;
     m_Pos[1] = y;
     m_Pos[2] = z;

@@ -30,8 +30,8 @@
 -(bool) execute:(BOOL)invert;
 -(id) init:(GLint)stacks slices:(GLint)slices radius:(GLfloat)radius squash:(GLfloat)squash textureFile:(NSString *)textureFile;
 -(GLKTextureInfo *) loadTexture:(NSString *) filename;
--(void) getPositionX:(GLfloat*)x Y:(GLfloat*)y Z:(GLfloat*)z;
--(void) setPositionX:(GLfloat)x Y:(GLfloat)y Z:(GLfloat)z;
+-(void) getPositionX:(GLfloat*)x y:(GLfloat*)y z:(GLfloat*)z;
+-(void) setPositionX:(GLfloat)x y:(GLfloat)y z:(GLfloat)z;
 -(GLfloat) getRotation;
 -(void) setRotation:(GLfloat)angle;
 -(GLfloat)getRotationalIncrement;

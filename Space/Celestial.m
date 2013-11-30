@@ -9,7 +9,7 @@
 #import <CoreMotion/CoreMotion.h>
 #import "Celestial.h"
 
-#define Z_NEAR 0.1f
+#define Z_NEAR 0.001f
 #define Z_FAR 10000.0f
 #define FOV_MAX 155
 #define FOV_MIN 1
@@ -26,6 +26,8 @@
     
     GLKMatrix4 planet, ecliptic, galactic;
     float julianDate;
+    
+    float speed;
 }
 
 -(void) initDevice;    // boot hardware
@@ -55,6 +57,7 @@
         _planets = [[Planets alloc] init];
         [_planets setDelegate:self];
         [_planets setTime:julianDate];
+        _hud = [[HUD alloc] init];
         ecliptic = GLKMatrix4MakeRotation(-23.4/180.0*M_PI, 1, 0, 0);
         [NSTimer scheduledTimerWithTimeInterval:1.0/30. target:self selector:@selector(incrementTime) userInfo:Nil repeats:YES];
     }
@@ -62,7 +65,7 @@
 }
 
 -(void)incrementTime{
-    julianDate += .00001;
+    julianDate += .0000001;
     [_planets setTime:julianDate];
     [_planets calculate];
 }
@@ -82,6 +85,7 @@
         _aspectRatio = 1/_aspectRatio;
     position = malloc(sizeof(GLfloat)*3);
     position[0] = position[1] = position[2] = 0.0f;
+    speed = 0.001;
 }
 
 -(void)initGL{
@@ -118,6 +122,12 @@
     glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, white);
     glPushMatrix();
         glMultMatrixf(_attitudeMatrix.m);
+    if(_loadingStage != nil){
+        glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+        glEnable(GL_TEXTURE_2D);
+        [_loadingStage execute];
+    }
+    else{
         glTranslatef(position[0], position[1], position[2]);
         glPushMatrix();
             [_stars execute];
@@ -129,12 +139,9 @@
 //        glPushMatrix();
 //            glMultMatrixf(galactic.m);
 //        glPopMatrix();
-        if(_loadingStage != nil){
-            glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-            glEnable(GL_TEXTURE_2D);
-            [_loadingStage execute];
-        }
+    }
     glPopMatrix();
+    [_hud execute];
 }
 
 -(void)pinchHandler:(UIPinchGestureRecognizer*)sender{
@@ -162,20 +169,22 @@
 }
 -(void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event{
     [travelTimer invalidate];
-    travelTimer = [NSTimer scheduledTimerWithTimeInterval:1.0f/45 target:self selector:@selector(returnTrip) userInfo:nil repeats:YES];
+    travelTimer = nil;
+    travelIncrements = 0;
+//    travelTimer = [NSTimer scheduledTimerWithTimeInterval:1.0f/45 target:self selector:@selector(returnTrip) userInfo:nil repeats:YES];
 }
 
 -(void) departingTrip{
-    position[0]+= travelVector.x/100.0;
-    position[1]+= travelVector.y/100.0;
-    position[2]+= travelVector.z/100.0;
+    position[0]+= travelVector.x*speed;
+    position[1]+= travelVector.y*speed;
+    position[2]+= travelVector.z*speed;
     travelIncrements++;
 }
 
 -(void) returnTrip{
-    position[0]-= travelVector.x/100.0;
-    position[1]-= travelVector.y/100.0;
-    position[2]-= travelVector.z/100.0;
+    position[0]-= travelVector.x*speed;
+    position[1]-= travelVector.y*speed;
+    position[2]-= travelVector.z*speed;
     travelIncrements--;
     if (travelIncrements <= 0) {
         position[0] = position[1] = position[2] = 0.0;

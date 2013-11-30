@@ -11,6 +11,7 @@
 #import "Stars.h"
 #import "Planets.h"
 #import "LoadingStage.h"
+#import "HUD.h"
 
 @interface Celestial : GLKView <StarsDelegate, PlanetsDelegate>
 
@@ -24,6 +25,7 @@
 @property (nonatomic) Stars *stars;
 @property (nonatomic) Planets *planets;
 @property (nonatomic) LoadingStage *loadingStage;
+@property (nonatomic) HUD *hud;
 
 -(void) execute;  // draw screen
 

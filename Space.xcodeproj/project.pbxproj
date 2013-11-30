@@ -50,6 +50,10 @@
 		D5757287182649400071B21E /* Sphere.m in Sources */ = {isa = PBXBuildFile; fileRef = D5757286182649400071B21E /* Sphere.m */; };
 		D575728A182649480071B21E /* LoadingStage.m in Sources */ = {isa = PBXBuildFile; fileRef = D5757289182649480071B21E /* LoadingStage.m */; };
 		D575728E18264B180071B21E /* checker.png in Resources */ = {isa = PBXBuildFile; fileRef = D575728D18264B180071B21E /* checker.png */; };
+		D57EB2301847449100A3D28C /* HUD.m in Sources */ = {isa = PBXBuildFile; fileRef = D57EB22F1847449100A3D28C /* HUD.m */; };
+		D57EB2361849DE8700A3D28C /* CelestialObject.m in Sources */ = {isa = PBXBuildFile; fileRef = D57EB2351849DE8700A3D28C /* CelestialObject.m */; };
+		D57EB2391849F1D100A3D28C /* Star.m in Sources */ = {isa = PBXBuildFile; fileRef = D57EB2381849F1D100A3D28C /* Star.m */; };
+		D57EB23C1849F2AA00A3D28C /* Planet.m in Sources */ = {isa = PBXBuildFile; fileRef = D57EB23B1849F2AA00A3D28C /* Planet.m */; };
 		D5C3E412182E4524003817D8 /* hyg.csv in Resources */ = {isa = PBXBuildFile; fileRef = D5C3E411182E4524003817D8 /* hyg.csv */; };
 		D5C3E414182EDEC6003817D8 /* hyg5.csv in Resources */ = {isa = PBXBuildFile; fileRef = D5C3E413182EDEC6003817D8 /* hyg5.csv */; };
 		D5C3E416182EE2BC003817D8 /* hyg4.csv in Resources */ = {isa = PBXBuildFile; fileRef = D5C3E415182EE2BC003817D8 /* hyg4.csv */; };
@@ -122,6 +126,14 @@
 		D5757288182649480071B21E /* LoadingStage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoadingStage.h; sourceTree = "<group>"; };
 		D5757289182649480071B21E /* LoadingStage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoadingStage.m; sourceTree = "<group>"; };
 		D575728D18264B180071B21E /* checker.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = checker.png; sourceTree = "<group>"; };
+		D57EB22E1847449100A3D28C /* HUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HUD.h; sourceTree = "<group>"; };
+		D57EB22F1847449100A3D28C /* HUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HUD.m; sourceTree = "<group>"; };
+		D57EB2341849DE8700A3D28C /* CelestialObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CelestialObject.h; sourceTree = "<group>"; };
+		D57EB2351849DE8700A3D28C /* CelestialObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CelestialObject.m; sourceTree = "<group>"; };
+		D57EB2371849F1D100A3D28C /* Star.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Star.h; sourceTree = "<group>"; };
+		D57EB2381849F1D100A3D28C /* Star.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Star.m; sourceTree = "<group>"; };
+		D57EB23A1849F2AA00A3D28C /* Planet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Planet.h; sourceTree = "<group>"; };
+		D57EB23B1849F2AA00A3D28C /* Planet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Planet.m; sourceTree = "<group>"; };
 		D5C3E411182E4524003817D8 /* hyg.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = hyg.csv; sourceTree = "<group>"; };
 		D5C3E413182EDEC6003817D8 /* hyg5.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = hyg5.csv; sourceTree = "<group>"; };
 		D5C3E415182EE2BC003817D8 /* hyg4.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = hyg4.csv; sourceTree = "<group>"; };
@@ -213,9 +225,14 @@
 				D575725F18262BBA0071B21E /* ViewController.m */,
 				D5C3E41D182F0172003817D8 /* Celestial.h */,
 				D5C3E41E182F0172003817D8 /* Celestial.m */,
-				D5EF4CE118304271001DB0AF /* Celestial Groups */,
+				D57EB22E1847449100A3D28C /* HUD.h */,
+				D57EB22F1847449100A3D28C /* HUD.m */,
 				D51EBD72182F920E00BF8E00 /* CelestialGroup.h */,
 				D51EBD73182F920E00BF8E00 /* CelestialGroup.m */,
+				D57EB2341849DE8700A3D28C /* CelestialObject.h */,
+				D57EB2351849DE8700A3D28C /* CelestialObject.m */,
+				D5EF4CE118304271001DB0AF /* Celestial Groups */,
+				D57EB23D1849F38200A3D28C /* Celestial Objects */,
 				D575729018264CFD0071B21E /* Primitives */,
 				D575729118264D300071B21E /* resources */,
 				D575728F18264CE50071B21E /* third party */,
@@ -296,6 +313,17 @@
 				D55E8FEA1828ED800076A9D7 /* icons */,
 			);
 			name = resources;
+			sourceTree = "<group>";
+		};
+		D57EB23D1849F38200A3D28C /* Celestial Objects */ = {
+			isa = PBXGroup;
+			children = (
+				D57EB2371849F1D100A3D28C /* Star.h */,
+				D57EB2381849F1D100A3D28C /* Star.m */,
+				D57EB23A1849F2AA00A3D28C /* Planet.h */,
+				D57EB23B1849F2AA00A3D28C /* Planet.m */,
+			);
+			name = "Celestial Objects";
 			sourceTree = "<group>";
 		};
 		D5EF4CE118304271001DB0AF /* Celestial Groups */ = {
@@ -436,13 +464,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D57EB2301847449100A3D28C /* HUD.m in Sources */,
+				D57EB2391849F1D100A3D28C /* Star.m in Sources */,
 				D575728018262C5E0071B21E /* CHCSVParser.m in Sources */,
 				D51EBD74182F920E00BF8E00 /* CelestialGroup.m in Sources */,
 				D575726018262BBA0071B21E /* ViewController.m in Sources */,
+				D57EB23C1849F2AA00A3D28C /* Planet.m in Sources */,
 				D575725718262BBA0071B21E /* AppDelegate.m in Sources */,
 				D575728A182649480071B21E /* LoadingStage.m in Sources */,
 				D5C3E41F182F0172003817D8 /* Celestial.m in Sources */,
 				D5EF4CE018304267001DB0AF /* Stars.m in Sources */,
+				D57EB2361849DE8700A3D28C /* CelestialObject.m in Sources */,
 				D5757287182649400071B21E /* Sphere.m in Sources */,
 				D575725318262BBA0071B21E /* main.m in Sources */,
 				D5634C0618335E48008BA2BE /* Planets.m in Sources */,

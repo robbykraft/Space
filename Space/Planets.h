@@ -19,7 +19,7 @@
 @property id <PlanetsDelegate> delegate;
 @property (nonatomic) float time;
 
--(id) initWithTime:(float)J2000;
+-(id) initWithTime:(float)J2000Time;
 -(void)calculate;  //calculate positions based on time
 -(void)execute;
 
