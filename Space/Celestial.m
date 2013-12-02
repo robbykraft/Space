@@ -25,6 +25,8 @@
     unsigned int travelIncrements;
     
     float *lookVertices;
+    float *celestialFocus;
+    float *sphericalCoordinateLook;
     
     GLKMatrix4 planet, ecliptic, galactic;
     float julianDate;
@@ -65,6 +67,11 @@
         lookVertices = malloc(sizeof(float)*6);
         lookVertices[0] = lookVertices[2] = 0.0;
         lookVertices[1] = -1.;
+        
+        celestialFocus = malloc(sizeof(float)*2);
+        celestialFocus[AZIMUTH] = celestialFocus[ALTITUDE] = 0.0f;
+        
+        sphericalCoordinateLook = malloc(sizeof(float)*2);
         [NSTimer scheduledTimerWithTimeInterval:1.0/30. target:self selector:@selector(incrementTime) userInfo:Nil repeats:YES];
     }
     return self;
@@ -121,7 +128,17 @@
 }
 
 -(void)execute{
-    static const GLfloat lineVertices[] = {0.0,-1.0,0.0, 1.0,-1.0,0.0};
+    static const GLfloat RA0LineVertices[] = {0.0,-1.0,0.0, 1.0,-1.0,0.0};
+    static const GLfloat octVertices[] = {
+        1.0f, 1.0f, 0.0f,
+        1.0f, .7071f, .7071f,
+        1.0f, 0.0f, 1.0f,
+        1.0f, -.7071f, .7071f,
+        1.0f, -1.0f, 0.0f,
+        1.0f, -.7071f, -.7071f,
+        1.0f, 0.0f, -1.0f,
+        1.0f, .7071f, -.7071f
+    };
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     GLfloat white[] = {1.0,1.0,1.0,1.0};
@@ -138,14 +155,28 @@
         glLineWidth(1.0);
         glEnableClientState(GL_VERTEX_ARRAY);
         glPushMatrix();
-            glVertexPointer(3, GL_FLOAT, 0, lineVertices);
+            glVertexPointer(3, GL_FLOAT, 0, RA0LineVertices);
             glDrawArrays(GL_LINE_LOOP, 0, 2);
         glPopMatrix();
+//        glPushMatrix();
+//            glVertexPointer(3, GL_FLOAT, 0, lookVertices);
+//            glDrawArrays(GL_LINE_LOOP, 0, 2);
+//        glPopMatrix();
+        // HUD target
         glPushMatrix();
-            glVertexPointer(3, GL_FLOAT, 0, lookVertices);
-            glDrawArrays(GL_LINE_LOOP, 0, 2);
+        GLKMatrix4 ra = GLKMatrix4MakeRotation(celestialFocus[AZIMUTH], 0.0, 1.0, 0.0);
+            glMultMatrixf(ra.m);
+            GLKMatrix4 dec = GLKMatrix4MakeRotation(celestialFocus[ALTITUDE], 0.0, 0.0, 1.0);
+            glMultMatrixf(dec.m);
+            glTranslatef(1.0, 0.0, 0.0);
+            glColor4f(1.0, 1.0, 1.0, 1.0);
+            glScalef(.01, .01, .01);
+            glVertexPointer(3, GL_FLOAT, 0, octVertices);
+            glDrawArrays(GL_LINE_LOOP, 0, 8);
         glPopMatrix();
 
+ 
+        
         glTranslatef(position[0], position[1], position[2]);
         glPushMatrix();
             [_stars execute];
@@ -157,18 +188,26 @@
 //        glPushMatrix();
 //            glMultMatrixf(galactic.m);
 //        glPopMatrix();
+        
     }
     glPopMatrix();
     
+    [_stars setLookAzimuth:sphericalCoordinateLook[AZIMUTH] Altitude:sphericalCoordinateLook[ALTITUDE]];
     if(_loadingStage == nil){
         static int clock = 0;
         clock++;
         
         [_hud setEyeVector:_eyeVector];
         
-        if(clock % 20 == 0){
-            float *newPosition = [_stars getNearestStarToAzimuth:atan2f(_eyeVector.x, _eyeVector.z) Altitude:atan2f(_eyeVector.y, _eyeVector.x+_eyeVector.z)];
-            [_hud setCelestialFocusAzimuth:newPosition[AZIMUTH] Altitude:newPosition[ALTITUDE]];
+        if(clock % 5 == 0){
+            float *focusStar = [_stars getNearestStarToAzimuth:sphericalCoordinateLook[AZIMUTH] Altitude:sphericalCoordinateLook[ALTITUDE]];
+//            [_hud setCelestialFocusAzimuth:newPosition[AZIMUTH] Altitude:newPosition[ALTITUDE]];
+            celestialFocus[AZIMUTH] = focusStar[AZIMUTH];
+            celestialFocus[ALTITUDE] = focusStar[ALTITUDE];
+//            NSLog(@"EYE:(%.3f, %.3f, %.3f) (%f, %f)",_eyeVector.x, _eyeVector.y, _eyeVector.z, sphericalCoordinateLook[AZIMUTH], sphericalCoordinateLook[ALTITUDE]);
+        }
+        if(clock%20 == 0){
+            NSLog(@"%f, %f", sphericalCoordinateLook[AZIMUTH], sphericalCoordinateLook[ALTITUDE]);
         }
         [_hud execute];
     }
@@ -245,6 +284,8 @@
                 lookVertices[3] = _eyeVector.x;
                 lookVertices[4] = _eyeVector.y;
                 lookVertices[5] = _eyeVector.z;
+                sphericalCoordinateLook[AZIMUTH] = atan2f(_eyeVector.z, _eyeVector.x);
+                sphericalCoordinateLook[ALTITUDE] = _eyeVector.y;//*M_PI*.5;
             }];
         }
     }

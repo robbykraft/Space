@@ -6,6 +6,7 @@
 //  Copyright (c) 2013 Robby Kraft. All rights reserved.
 //
 
+#import <GLKit/GLKit.h>
 #import "CelestialGroup.h"
 
 @protocol StarsDelegate <NSObject>
@@ -19,6 +20,7 @@
 @property (nonatomic) NSArray *starCatalog;
 @property id <StarsDelegate> delegate;
 -(void)execute;
+-(void)setLookAzimuth:(float)a Altitude:(float)b;
 
 -(float*)getNearestStarToAzimuth:(float)a Altitude:(float)b;
 

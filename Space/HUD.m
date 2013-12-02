@@ -47,7 +47,7 @@
 -(void)setCelestialFocusAzimuth:(float)a Altitude:(float)b{
     celestialFocus[AZIMUTH] = a;
     celestialFocus[ALTITUDE] = b;
-    NSLog(@"%f, %f",celestialFocus[AZIMUTH], celestialFocus[ALTITUDE]);
+//    NSLog(@"%f, %f",celestialFocus[AZIMUTH], celestialFocus[ALTITUDE]);
 }
 -(void)setLookAzimuth:(float)a Altitude:(float)b{
     look[AZIMUTH] = a;
@@ -63,12 +63,13 @@
         0.0f, 1.0f, .7071f, .7071f, 1.0f, 0.0f, .7071f, -.7071f,
         0.0f, -1.0f, -.7071f, -.7071f, -1.0f, 0.0f, -.7071f, .7071f
     };
-    static const GLfloat quadVertices[] = {
-        -1.0,  1.0,
-        1.0,  1.0,
-        -1.0, -1.0,
-        1.0, -1.0
-    };
+//    static const GLfloat quadVertices[] = {
+//        -1.0,  1.0,
+//        1.0,  1.0,
+//        -1.0, -1.0,
+//        1.0, -1.0
+//    };
+    
 //    static const GLfloat quadVertices[] = {
 //        -1.0,  1.0, -0.0,
 //        1.0,  1.0, -0.0,
@@ -103,11 +104,11 @@
     glPushMatrix();
         glDrawArrays(GL_LINE_LOOP, 0, 8);
     glPopMatrix();
-    glPushMatrix();
-        offset = CGPointMake(look[AZIMUTH] - celestialFocus[AZIMUTH], look[ALTITUDE] - celestialFocus[ALTITUDE]);
-        glTranslatef(-offset.x*200, offset.y*200, 0.0);
-        glDrawArrays(GL_LINE_LOOP, 0, 8);
-    glPopMatrix();
+//    glPushMatrix();
+//        offset = CGPointMake(look[AZIMUTH] - celestialFocus[AZIMUTH], look[ALTITUDE] - celestialFocus[ALTITUDE]);
+//        glTranslatef(-offset.x*200, offset.y*200, 0.0);
+//        glDrawArrays(GL_LINE_LOOP, 0, 8);
+//    glPopMatrix();
 //    glPushMatrix();
 //        glVertexPointer(2, GL_FLOAT, 0, quadVertices);
 //        glTranslatef(-look[AZIMUTH]*75,look[ALTITUDE]*75, 0.0);
