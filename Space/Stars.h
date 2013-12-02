@@ -20,4 +20,6 @@
 @property id <StarsDelegate> delegate;
 -(void)execute;
 
+-(float*)getNearestStarToAzimuth:(float)a Altitude:(float)b;
+
 @end

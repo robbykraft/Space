@@ -24,6 +24,8 @@
     GLKVector3 travelVector;
     unsigned int travelIncrements;
     
+    GLKVector3 RA0Vector;
+    
     GLKMatrix4 planet, ecliptic, galactic;
     float julianDate;
     
@@ -59,6 +61,8 @@
         [_planets setTime:julianDate];
         _hud = [[HUD alloc] init];
         ecliptic = GLKMatrix4MakeRotation(-23.4/180.0*M_PI, 1, 0, 0);
+        
+        RA0Vector = GLKVector3Make(1.0, 0.0, 0.0);
         [NSTimer scheduledTimerWithTimeInterval:1.0/30. target:self selector:@selector(incrementTime) userInfo:Nil repeats:YES];
     }
     return self;
@@ -115,6 +119,7 @@
 }
 
 -(void)execute{
+    static const GLfloat lineVertices[] = {0.0,-1.0,0.0, 1.0,-1.0,0.0};
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     GLfloat white[] = {1.0,1.0,1.0,1.0};
@@ -128,6 +133,13 @@
         [_loadingStage execute];
     }
     else{
+        glLineWidth(1.0);
+        glVertexPointer(3, GL_FLOAT, 0, lineVertices);
+        glEnableClientState(GL_VERTEX_ARRAY);
+        glPushMatrix();
+            glDrawArrays(GL_LINE_LOOP, 0, 2);
+        glPopMatrix();
+
         glTranslatef(position[0], position[1], position[2]);
         glPushMatrix();
             [_stars execute];
@@ -141,7 +153,19 @@
 //        glPopMatrix();
     }
     glPopMatrix();
-    [_hud execute];
+    
+    if(_loadingStage == nil){
+        static int clock = 0;
+        clock++;
+        
+        [_hud setEyeVector:_eyeVector];
+        
+        if(clock % 20 == 0){
+//            float *newPosition = [_stars getNearestStarToAzimuth:lookAzimuth Altitude:lookAltitude];
+//            [_hud setCelestialFocusAzimuth:newPosition[AZIMUTH] Altitude:newPosition[ALTITUDE]];
+        }
+        [_hud execute];
+    }
 }
 
 -(void)pinchHandler:(UIPinchGestureRecognizer*)sender{
@@ -201,6 +225,10 @@
         if(motionManager.isDeviceMotionAvailable){
             [motionManager startDeviceMotionUpdatesToQueue:[NSOperationQueue currentQueue] withHandler:^(CMDeviceMotion *deviceMotion, NSError *error) {
                 CMRotationMatrix a = deviceMotion.attitude.rotationMatrix;
+//                _attitudeMatrix = GLKMatrix4Make(a.m11, a.m21, a.m31, 0.0f,
+//                                                 a.m12, a.m22, a.m32, 0.0f,
+//                                                 a.m13, a.m23, a.m33, 0.0f,
+//                                                 0.0f , 0.0f , 0.0f , 1.0f);
                 _attitudeMatrix = GLKMatrix4Make(a.m11, a.m21, a.m31, 0.0f,
                                                  a.m13, a.m23, a.m33, 0.0f,
                                                  -a.m12,-a.m22,-a.m32,0.0f,

@@ -67,6 +67,7 @@ typedef enum{
 -(void)calculate{
     for(int i = 0; i < OBJECTS; i++){
         double *planetPos = [self calculateLocationOfPlanet:i AtTime:_time];
+        planetPos[Y] = -planetPos[Y];
         positions[3*i+X] = planetPos[X];
         positions[3*i+Y] = planetPos[Y];
         positions[3*i+Z] = planetPos[Z];

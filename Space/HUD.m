@@ -12,7 +12,12 @@
 @implementation HUD{
     float _aspectRatio;
 //    NSArray *textures;
+    float *celestialFocus;
+    float *look;
+    CGPoint offset;
 }
+
+//@synthesize delegate;
 
 -(id) init{
     self = [super init];
@@ -21,6 +26,8 @@
         _aspectRatio = (float)[[UIScreen mainScreen] bounds].size.width / (float)[[UIScreen mainScreen] bounds].size.height;
         if([UIApplication sharedApplication].statusBarOrientation > 2)
             _aspectRatio = 1/_aspectRatio;
+        celestialFocus = malloc(sizeof(float)*2);
+        look = malloc(sizeof(float)*2);
 //        NSMutableArray *array = [NSMutableArray array];
 //        for(int i = 0; i <= 6; i++){
 //            GLKTextureInfo *texture;
@@ -33,7 +40,21 @@
     }
     return self;
 }
--(void) execute{
+-(void)setEyeVector:(GLKVector3)eyeVector{
+    _eyeVector = eyeVector;
+//    atan2f(_eyeVector.z, _eyeVector.x);
+}
+-(void)setCelestialFocusAzimuth:(float)a Altitude:(float)b{
+    celestialFocus[AZIMUTH] = a;
+    celestialFocus[ALTITUDE] = b;
+    NSLog(@"%f, %f",celestialFocus[AZIMUTH], celestialFocus[ALTITUDE]);
+}
+-(void)setLookAzimuth:(float)a Altitude:(float)b{
+    look[AZIMUTH] = a;
+    look[ALTITUDE] = b;
+}
+-(void) execute{   
+    
 //    static const GLfloat hexVertices[] = {
 //        -.5f, -.8660254f, -1.0f, 0.0f, -.5f, .8660254f,
 //        .5f, .8660254f,    1.0f, 0.0f,  .5f, -.8660254f
@@ -42,12 +63,12 @@
         0.0f, 1.0f, .7071f, .7071f, 1.0f, 0.0f, .7071f, -.7071f,
         0.0f, -1.0f, -.7071f, -.7071f, -1.0f, 0.0f, -.7071f, .7071f
     };
-//    static const GLfloat quadVertices[] = {
-//        -1.0,  1.0,
-//        1.0,  1.0,
-//        -1.0, -1.0,
-//        1.0, -1.0
-//    };
+    static const GLfloat quadVertices[] = {
+        -1.0,  1.0,
+        1.0,  1.0,
+        -1.0, -1.0,
+        1.0, -1.0
+    };
 //    static const GLfloat quadVertices[] = {
 //        -1.0,  1.0, -0.0,
 //        1.0,  1.0, -0.0,
@@ -79,9 +100,22 @@
 //    glColor4f(0.5, 0.5, 1.0, 1.0); // blue
     glVertexPointer(2, GL_FLOAT, 0, octVertices);
     glEnableClientState(GL_VERTEX_ARRAY);
-    glDrawArrays(GL_LINE_LOOP, 0, 8);
-    glColor4f(0.5, 0.5, 1.0, 1.0); // blue
+    glPushMatrix();
+        glDrawArrays(GL_LINE_LOOP, 0, 8);
+    glPopMatrix();
+//    glPushMatrix();
+//        offset = CGPointMake(look[AZIMUTH] - celestialFocus[AZIMUTH], look[ALTITUDE] - celestialFocus[ALTITUDE]);
+//        glTranslatef(-offset.x*200, offset.y*200, 0.0);
+//        glDrawArrays(GL_LINE_LOOP, 0, 8);
+//    glPopMatrix();
+    glPushMatrix();
+        glVertexPointer(2, GL_FLOAT, 0, quadVertices);
+        glTranslatef(-look[AZIMUTH]*75,look[ALTITUDE]*75, 0.0);
+        glDrawArrays(GL_LINE_LOOP, 0, 4);
+    glPopMatrix();
     
+    glColor4f(0.5, 0.5, 1.0, 1.0); // blue
+
 //    glScalef(1.175, 1.175, 1);
 //    glRotatef(_rotation, 0, 0, 1);
 //    glDrawArrays(GL_LINE_LOOP, 0, 8);

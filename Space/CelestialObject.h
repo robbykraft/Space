@@ -8,10 +8,12 @@
 
 @interface CelestialObject : NSObject
 
+@property (nonatomic, strong) NSString *name;
+
+//coordinates
 @property float *sphericalCoordinates;
 @property float *euclidianCoordinates;
-
-@property float *position;
+@property float *position;  // pointer to one of the two above
 @property BOOL spherical;
 
 -(id)initWithAzimuth:(float)a Altitude:(float)b Distance:(float)c;
