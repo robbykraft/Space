@@ -24,7 +24,7 @@
     GLKVector3 travelVector;
     unsigned int travelIncrements;
     
-    GLKVector3 RA0Vector;
+    float *lookVertices;
     
     GLKMatrix4 planet, ecliptic, galactic;
     float julianDate;
@@ -60,9 +60,11 @@
         [_planets setDelegate:self];
         [_planets setTime:julianDate];
         _hud = [[HUD alloc] init];
-        ecliptic = GLKMatrix4MakeRotation(-23.4/180.0*M_PI, 1, 0, 0);
+        ecliptic = GLKMatrix4MakeRotation(23.4/180.0*M_PI, 1, 0, 0);
         
-        RA0Vector = GLKVector3Make(1.0, 0.0, 0.0);
+        lookVertices = malloc(sizeof(float)*6);
+        lookVertices[0] = lookVertices[2] = 0.0;
+        lookVertices[1] = -1.;
         [NSTimer scheduledTimerWithTimeInterval:1.0/30. target:self selector:@selector(incrementTime) userInfo:Nil repeats:YES];
     }
     return self;
@@ -134,9 +136,13 @@
     }
     else{
         glLineWidth(1.0);
-        glVertexPointer(3, GL_FLOAT, 0, lineVertices);
         glEnableClientState(GL_VERTEX_ARRAY);
         glPushMatrix();
+            glVertexPointer(3, GL_FLOAT, 0, lineVertices);
+            glDrawArrays(GL_LINE_LOOP, 0, 2);
+        glPopMatrix();
+        glPushMatrix();
+            glVertexPointer(3, GL_FLOAT, 0, lookVertices);
             glDrawArrays(GL_LINE_LOOP, 0, 2);
         glPopMatrix();
 
@@ -161,8 +167,8 @@
         [_hud setEyeVector:_eyeVector];
         
         if(clock % 20 == 0){
-//            float *newPosition = [_stars getNearestStarToAzimuth:lookAzimuth Altitude:lookAltitude];
-//            [_hud setCelestialFocusAzimuth:newPosition[AZIMUTH] Altitude:newPosition[ALTITUDE]];
+            float *newPosition = [_stars getNearestStarToAzimuth:atan2f(_eyeVector.x, _eyeVector.z) Altitude:atan2f(_eyeVector.y, _eyeVector.x+_eyeVector.z)];
+            [_hud setCelestialFocusAzimuth:newPosition[AZIMUTH] Altitude:newPosition[ALTITUDE]];
         }
         [_hud execute];
     }
@@ -233,9 +239,12 @@
                                                  a.m13, a.m23, a.m33, 0.0f,
                                                  -a.m12,-a.m22,-a.m32,0.0f,
                                                  0.0f , 0.0f , 0.0f , 1.0f);
-                _eyeVector = GLKVector3Make(_attitudeMatrix.m02,
-                                            _attitudeMatrix.m12,
-                                            _attitudeMatrix.m22);
+                _eyeVector = GLKVector3Make(-_attitudeMatrix.m02,
+                                            -_attitudeMatrix.m12,
+                                            -_attitudeMatrix.m22);
+                lookVertices[3] = _eyeVector.x;
+                lookVertices[4] = _eyeVector.y;
+                lookVertices[5] = _eyeVector.z;
             }];
         }
     }

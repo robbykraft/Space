@@ -103,16 +103,16 @@
     glPushMatrix();
         glDrawArrays(GL_LINE_LOOP, 0, 8);
     glPopMatrix();
-//    glPushMatrix();
-//        offset = CGPointMake(look[AZIMUTH] - celestialFocus[AZIMUTH], look[ALTITUDE] - celestialFocus[ALTITUDE]);
-//        glTranslatef(-offset.x*200, offset.y*200, 0.0);
-//        glDrawArrays(GL_LINE_LOOP, 0, 8);
-//    glPopMatrix();
     glPushMatrix();
-        glVertexPointer(2, GL_FLOAT, 0, quadVertices);
-        glTranslatef(-look[AZIMUTH]*75,look[ALTITUDE]*75, 0.0);
-        glDrawArrays(GL_LINE_LOOP, 0, 4);
+        offset = CGPointMake(look[AZIMUTH] - celestialFocus[AZIMUTH], look[ALTITUDE] - celestialFocus[ALTITUDE]);
+        glTranslatef(-offset.x*200, offset.y*200, 0.0);
+        glDrawArrays(GL_LINE_LOOP, 0, 8);
     glPopMatrix();
+//    glPushMatrix();
+//        glVertexPointer(2, GL_FLOAT, 0, quadVertices);
+//        glTranslatef(-look[AZIMUTH]*75,look[ALTITUDE]*75, 0.0);
+//        glDrawArrays(GL_LINE_LOOP, 0, 4);
+//    glPopMatrix();
     
     glColor4f(0.5, 0.5, 1.0, 1.0); // blue
 

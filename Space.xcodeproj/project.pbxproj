@@ -168,6 +168,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		D50F3D72184C149E00F1D4D5 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				D51EBD72182F920E00BF8E00 /* CelestialGroup.h */,
+				D51EBD73182F920E00BF8E00 /* CelestialGroup.m */,
+				D57EB2341849DE8700A3D28C /* CelestialObject.h */,
+				D57EB2351849DE8700A3D28C /* CelestialObject.m */,
+			);
+			name = Classes;
+			sourceTree = "<group>";
+		};
 		D55E8FEA1828ED800076A9D7 /* icons */ = {
 			isa = PBXGroup;
 			children = (
@@ -227,10 +238,7 @@
 				D5C3E41E182F0172003817D8 /* Celestial.m */,
 				D57EB22E1847449100A3D28C /* HUD.h */,
 				D57EB22F1847449100A3D28C /* HUD.m */,
-				D51EBD72182F920E00BF8E00 /* CelestialGroup.h */,
-				D51EBD73182F920E00BF8E00 /* CelestialGroup.m */,
-				D57EB2341849DE8700A3D28C /* CelestialObject.h */,
-				D57EB2351849DE8700A3D28C /* CelestialObject.m */,
+				D50F3D72184C149E00F1D4D5 /* Classes */,
 				D5EF4CE118304271001DB0AF /* Celestial Groups */,
 				D57EB23D1849F38200A3D28C /* Celestial Objects */,
 				D575729018264CFD0071B21E /* Primitives */,
