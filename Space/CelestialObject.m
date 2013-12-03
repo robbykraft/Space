@@ -8,16 +8,26 @@
 
 #import "CelestialObject.h"
 
+@interface CelestialObject (){
+    float *_sphericalCoordinates;
+    float *_euclidianCoordinates;
+}
+@end
+
 @implementation CelestialObject
 
 -(id)initWithAzimuth:(float)a Altitude:(float)b Distance:(float)c{
     self = [self init];
     if(self){
+        _sphericalCoordinates = malloc(sizeof(float)*3);
+        _sphericalCoordinates[AZIMUTH] = a;
+        _sphericalCoordinates[ALTITUDE] = b;
+        _sphericalCoordinates[DISTANCE] = c;
+        _azimuth = _sphericalCoordinates[AZIMUTH];
+        _altitude = _sphericalCoordinates[ALTITUDE];
+        _distance = _sphericalCoordinates[DISTANCE];
         _position = _sphericalCoordinates;
-        _position[AZIMUTH] = a;
-        _position[ALTITUDE] = b;
-        _position[DISTANCE] = c;
-        _spherical = YES;
+        _euclidian = NO;
     }
     return self;
 }
@@ -25,11 +35,12 @@
 -(id)initWithX:(float)a y:(float)b z:(float)c{
     self = [self init];
     if(self){
+        _euclidianCoordinates = malloc(sizeof(float)*3);
+        _euclidianCoordinates[X] = a;
+        _euclidianCoordinates[Y] = b;
+        _euclidianCoordinates[Z] = c;
         _position = _euclidianCoordinates;
-        _position[X] = a;
-        _position[Y] = b;
-        _position[Z] = c;
-        _spherical = NO;
+        _euclidian = YES;
     }
     return self;
 }

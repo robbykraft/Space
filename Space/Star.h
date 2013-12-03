@@ -11,4 +11,5 @@
 @interface Star : CelestialObject
 @property float radius;
 @property float spectrum;
+@property float magnitude;
 @end

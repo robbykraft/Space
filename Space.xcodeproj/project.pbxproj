@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D50F3D79184DD8AD00F1D4D5 /* mask.png in Resources */ = {isa = PBXBuildFile; fileRef = D50F3D78184DD8AD00F1D4D5 /* mask.png */; };
 		D51EBD74182F920E00BF8E00 /* CelestialGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = D51EBD73182F920E00BF8E00 /* CelestialGroup.m */; };
 		D524C7C1182B8FE800A9A454 /* buildingTheUniverse.png in Resources */ = {isa = PBXBuildFile; fileRef = D524C7C0182B8FE800A9A454 /* buildingTheUniverse.png */; };
 		D524C7C3182B958D00A9A454 /* equirectangular-planetarium-lines.png in Resources */ = {isa = PBXBuildFile; fileRef = D524C7C2182B958D00A9A454 /* equirectangular-planetarium-lines.png */; };
@@ -73,6 +74,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		D50F3D78184DD8AD00F1D4D5 /* mask.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mask.png; sourceTree = "<group>"; };
 		D51EBD72182F920E00BF8E00 /* CelestialGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CelestialGroup.h; sourceTree = "<group>"; };
 		D51EBD73182F920E00BF8E00 /* CelestialGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CelestialGroup.m; sourceTree = "<group>"; };
 		D524C7C0182B8FE800A9A454 /* buildingTheUniverse.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = buildingTheUniverse.png; sourceTree = "<group>"; };
@@ -238,9 +240,9 @@
 				D5C3E41E182F0172003817D8 /* Celestial.m */,
 				D57EB22E1847449100A3D28C /* HUD.h */,
 				D57EB22F1847449100A3D28C /* HUD.m */,
-				D50F3D72184C149E00F1D4D5 /* Classes */,
 				D5EF4CE118304271001DB0AF /* Celestial Groups */,
 				D57EB23D1849F38200A3D28C /* Celestial Objects */,
+				D50F3D72184C149E00F1D4D5 /* Classes */,
 				D575729018264CFD0071B21E /* Primitives */,
 				D575729118264D300071B21E /* resources */,
 				D575728F18264CE50071B21E /* third party */,
@@ -300,6 +302,7 @@
 		D575729118264D300071B21E /* resources */ = {
 			isa = PBXGroup;
 			children = (
+				D50F3D78184DD8AD00F1D4D5 /* mask.png */,
 				D5634C19183618A8008BA2BE /* Earth.png */,
 				D5634C1A183618A8008BA2BE /* Jupiter.png */,
 				D5634C1B183618A8008BA2BE /* Mars.png */,
@@ -430,6 +433,7 @@
 				D5C3E412182E4524003817D8 /* hyg.csv in Resources */,
 				D575726218262BBA0071B21E /* Images.xcassets in Resources */,
 				D524C7C1182B8FE800A9A454 /* buildingTheUniverse.png in Resources */,
+				D50F3D79184DD8AD00F1D4D5 /* mask.png in Resources */,
 				D5634C25183618A8008BA2BE /* Neptune.png in Resources */,
 				D5C3E421182F2436003817D8 /* Hipparcos_2048_B&W_reflection.png in Resources */,
 				D5634C24183618A8008BA2BE /* Mercury.png in Resources */,

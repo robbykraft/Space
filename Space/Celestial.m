@@ -8,6 +8,7 @@
 
 #import <CoreMotion/CoreMotion.h>
 #import "Celestial.h"
+#import "Sphere.h"
 
 #define Z_NEAR 0.001f
 #define Z_FAR 10000.0f
@@ -24,14 +25,18 @@
     GLKVector3 travelVector;
     unsigned int travelIncrements;
     
-    float *lookVertices;
     float *celestialFocus;
-    float *sphericalCoordinateLook;
+    GLfloat lookAzimuth;
+    GLfloat lookAltitude;
     
     GLKMatrix4 planet, ecliptic, galactic;
     float julianDate;
-    
+    GLKTextureInfo *maskTexture;
+    GLKTextureInfo *jupiterTexture;
     float speed;
+    
+    NSString *currentFocusName;
+    Sphere *earth;
 }
 
 -(void) initDevice;    // boot hardware
@@ -64,14 +69,11 @@
         _hud = [[HUD alloc] init];
         ecliptic = GLKMatrix4MakeRotation(23.4/180.0*M_PI, 1, 0, 0);
         
-        lookVertices = malloc(sizeof(float)*6);
-        lookVertices[0] = lookVertices[2] = 0.0;
-        lookVertices[1] = -1.;
-        
         celestialFocus = malloc(sizeof(float)*2);
         celestialFocus[AZIMUTH] = celestialFocus[ALTITUDE] = 0.0f;
         
-        sphericalCoordinateLook = malloc(sizeof(float)*2);
+        earth = [[Sphere alloc] init:24 slices:24 radius:7.0 squash:1.0 textureFile:@"equirectangular-planetarium-lines.png"];
+
         [NSTimer scheduledTimerWithTimeInterval:1.0/30. target:self selector:@selector(incrementTime) userInfo:Nil repeats:YES];
     }
     return self;
@@ -116,6 +118,8 @@
     glEnable(GL_BLEND);
     self.drawableDepthFormat = GLKViewDrawableDepthFormat24;
     glLoadIdentity();
+    maskTexture = [self loadTexture:@"mask.png"];
+    jupiterTexture = [self loadTexture:@"Jupiter.png"];
 }
 
 -(void)setFieldOfView:(float)fieldOfView{
@@ -128,7 +132,53 @@
 }
 
 -(void)execute{
-    static const GLfloat RA0LineVertices[] = {0.0,-1.0,0.0, 1.0,-1.0,0.0};
+    static const GLfloat quadVertices[] = {
+        0.0,  .001, -.001,
+        0.0,  .001,  .001,
+        0.0, -.001, -.001,
+        0.0, -.001,  .001,
+    };
+    static const GLfloat quadNormals[] = {
+        -1.0, 0.0, 0.0,
+        -1.0, 0.0, 0.0,
+        -1.0, 0.0, 0.0,
+        -1.0, 0.0, 0.0
+    };
+    static const GLfloat quadTextureCoords[] = {
+        0.0, 1.0,
+        1.0, 1.0,
+        0.0, 0.0,
+        1.0, 0.0
+    };
+    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+    glDisable(GL_TEXTURE_2D);
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glEnable(GL_CULL_FACE);
+    glCullFace(GL_BACK);
+    glFrontFace(GL_CW);
+    
+    glEnable(GL_TEXTURE_2D);
+    glEnable(GL_BLEND);
+    glEnable(GL_CULL_FACE);
+    glCullFace(GL_BACK);
+    glFrontFace(GL_CW);
+    
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glEnableClientState(GL_NORMAL_ARRAY);
+    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+
+//    glPushMatrix();
+//        GLKMatrix4 az = GLKMatrix4MakeRotation(lookAzimuth, 0.0, 1.0, 0.0);
+//        glMultMatrixf(az.m);
+//        GLKMatrix4 alt = GLKMatrix4MakeRotation(lookAltitude, 0.0, 0.0, 1.0);
+//        glMultMatrixf(alt.m);
+//        glTranslatef(1.0, 0.0, 0.0);
+//        glScalef(1.0, 10.0, 10.0);
+//        glColor4f(1.0, 1.0, 1.0, 1.0);
+//        glVertexPointer(3, GL_FLOAT, 0, quadVertices);
+//        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+//    glPopMatrix();
+
     static const GLfloat octVertices[] = {
         1.0f, 1.0f, 0.0f,
         1.0f, .7071f, .7071f,
@@ -154,17 +204,17 @@
     else{
         glLineWidth(1.0);
         glEnableClientState(GL_VERTEX_ARRAY);
-        glPushMatrix();
-            glVertexPointer(3, GL_FLOAT, 0, RA0LineVertices);
-            glDrawArrays(GL_LINE_LOOP, 0, 2);
-        glPopMatrix();
+        
+        // Right Ascention 0° LINE
+//        static const GLfloat RA0LineVertices[] = {0.0,-1.0,0.0, 1.0,-1.0,0.0};
 //        glPushMatrix();
-//            glVertexPointer(3, GL_FLOAT, 0, lookVertices);
+//            glVertexPointer(3, GL_FLOAT, 0, RA0LineVertices);
 //            glDrawArrays(GL_LINE_LOOP, 0, 2);
 //        glPopMatrix();
+        
         // HUD target
         glPushMatrix();
-        GLKMatrix4 ra = GLKMatrix4MakeRotation(celestialFocus[AZIMUTH], 0.0, 1.0, 0.0);
+            GLKMatrix4 ra = GLKMatrix4MakeRotation(celestialFocus[AZIMUTH], 0.0, 1.0, 0.0);
             glMultMatrixf(ra.m);
             GLKMatrix4 dec = GLKMatrix4MakeRotation(celestialFocus[ALTITUDE], 0.0, 0.0, 1.0);
             glMultMatrixf(dec.m);
@@ -173,9 +223,45 @@
             glScalef(.01, .01, .01);
             glVertexPointer(3, GL_FLOAT, 0, octVertices);
             glDrawArrays(GL_LINE_LOOP, 0, 8);
+            glScalef(1000.0, 1000.0, 1000.0);
         glPopMatrix();
+        
+//        glPushMatrix();
+//            GLKMatrix4 ra3 = GLKMatrix4MakeRotation(lookAzimuth, 0.0, 1.0, 0.0);
+//            glMultMatrixf(ra3.m);
+//            GLKMatrix4 dec3 = GLKMatrix4MakeRotation(lookAltitude, 0.0, 0.0, 1.0);
+//            glMultMatrixf(dec3.m);
+//            glTranslatef(1.0, 0.0, 0.0);
+//            glColor4f(1.0, 1.0, 1.0, 1.0);
+//            glScalef(200.0, 200.0, 200.0);
+//            glDisable(GL_BLEND);
+//            glBindTexture(GL_TEXTURE_2D, jupiterTexture.name);
+//            glVertexPointer(3, GL_FLOAT, 0, quadVertices);
+//            glNormalPointer(GL_FLOAT, 0, quadNormals);
+//            glTexCoordPointer(2, GL_FLOAT, 0, quadTextureCoords);
+//            glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+//        glPopMatrix();
+//
+//        glPushMatrix();
+//            GLKMatrix4 ra2 = GLKMatrix4MakeRotation(lookAzimuth, 0.0, 1.0, 0.0);
+//            glMultMatrixf(ra2.m);
+//            GLKMatrix4 dec2 = GLKMatrix4MakeRotation(lookAltitude, 0.0, 0.0, 1.0);
+//            glMultMatrixf(dec2.m);
+//            glTranslatef(.50, 0.0, 0.0);
+//            glColor4f(1.0, 1.0, 1.0, 1.0);
+//            glScalef(100.0, 100.0, 100.0);
+//            glEnable(GL_BLEND);
+//            glBlendFunc(GL_DST_COLOR, GL_ZERO);
+//            glBindTexture(GL_TEXTURE_2D, maskTexture.name);
+//            glVertexPointer(3, GL_FLOAT, 0, quadVertices);
+//            glNormalPointer(GL_FLOAT, 0, quadNormals);
+//            glTexCoordPointer(2, GL_FLOAT, 0, quadTextureCoords);
+//            glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+//        glPopMatrix();
 
- 
+//        glPushMatrix();
+//        [earth executeMasked];
+//        glPopMatrix();
         
         glTranslatef(position[0], position[1], position[2]);
         glPushMatrix();
@@ -192,7 +278,7 @@
     }
     glPopMatrix();
     
-    [_stars setLookAzimuth:sphericalCoordinateLook[AZIMUTH] Altitude:sphericalCoordinateLook[ALTITUDE]];
+    [_stars setLookAzimuth:lookAzimuth Altitude:lookAltitude];
     if(_loadingStage == nil){
         static int clock = 0;
         clock++;
@@ -200,17 +286,35 @@
         [_hud setEyeVector:_eyeVector];
         
         if(clock % 5 == 0){
-            float *focusStar = [_stars getNearestStarToAzimuth:sphericalCoordinateLook[AZIMUTH] Altitude:sphericalCoordinateLook[ALTITUDE]];
+            CelestialObject *star = [_stars nearestStarToAzimuth:lookAzimuth Altitude:lookAltitude];
 //            [_hud setCelestialFocusAzimuth:newPosition[AZIMUTH] Altitude:newPosition[ALTITUDE]];
-            celestialFocus[AZIMUTH] = focusStar[AZIMUTH];
-            celestialFocus[ALTITUDE] = focusStar[ALTITUDE];
+            celestialFocus[AZIMUTH] = [star azimuth];
+            celestialFocus[ALTITUDE] = [star altitude];
+            if(![currentFocusName isEqualToString:[star name]]){
+                currentFocusName = [star name];
+                NSLog(@"%@",currentFocusName);
+            }
 //            NSLog(@"EYE:(%.3f, %.3f, %.3f) (%f, %f)",_eyeVector.x, _eyeVector.y, _eyeVector.z, sphericalCoordinateLook[AZIMUTH], sphericalCoordinateLook[ALTITUDE]);
         }
         if(clock%20 == 0){
-            NSLog(@"%f, %f", sphericalCoordinateLook[AZIMUTH], sphericalCoordinateLook[ALTITUDE]);
+//            NSLog(@"%f, %f", lookAzimuth, lookAltitude);
         }
         [_hud execute];
     }
+}
+
+-(GLKTextureInfo *) loadTexture:(NSString *) filename
+{
+    NSError *error;
+    GLKTextureInfo *info;
+    NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES], GLKTextureLoaderOriginBottomLeft, nil];
+    NSString *path = [[NSBundle mainBundle] pathForResource:filename ofType:NULL];
+    info=[GLKTextureLoader textureWithContentsOfFile:path options:options error:&error];
+    glBindTexture(GL_TEXTURE_2D, info.name);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    return info;
 }
 
 -(void)pinchHandler:(UIPinchGestureRecognizer*)sender{
@@ -270,10 +374,6 @@
         if(motionManager.isDeviceMotionAvailable){
             [motionManager startDeviceMotionUpdatesToQueue:[NSOperationQueue currentQueue] withHandler:^(CMDeviceMotion *deviceMotion, NSError *error) {
                 CMRotationMatrix a = deviceMotion.attitude.rotationMatrix;
-//                _attitudeMatrix = GLKMatrix4Make(a.m11, a.m21, a.m31, 0.0f,
-//                                                 a.m12, a.m22, a.m32, 0.0f,
-//                                                 a.m13, a.m23, a.m33, 0.0f,
-//                                                 0.0f , 0.0f , 0.0f , 1.0f);
                 _attitudeMatrix = GLKMatrix4Make(a.m11, a.m21, a.m31, 0.0f,
                                                  a.m13, a.m23, a.m33, 0.0f,
                                                  -a.m12,-a.m22,-a.m32,0.0f,
@@ -281,11 +381,8 @@
                 _eyeVector = GLKVector3Make(-_attitudeMatrix.m02,
                                             -_attitudeMatrix.m12,
                                             -_attitudeMatrix.m22);
-                lookVertices[3] = _eyeVector.x;
-                lookVertices[4] = _eyeVector.y;
-                lookVertices[5] = _eyeVector.z;
-                sphericalCoordinateLook[AZIMUTH] = atan2f(_eyeVector.z, _eyeVector.x);
-                sphericalCoordinateLook[ALTITUDE] = _eyeVector.y;//*M_PI*.5;
+                lookAzimuth = atan2f(-_eyeVector.z, _eyeVector.x);
+                lookAltitude = asinf(_eyeVector.y);
             }];
         }
     }

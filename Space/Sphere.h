@@ -27,6 +27,7 @@
     GLfloat m_RotationalIncrement;
 }
 -(bool) execute;
+-(bool) executeMasked;
 -(bool) execute:(BOOL)invert;
 -(id) init:(GLint)stacks slices:(GLint)slices radius:(GLfloat)radius squash:(GLfloat)squash textureFile:(NSString *)textureFile;
 -(GLKTextureInfo *) loadTexture:(NSString *) filename;

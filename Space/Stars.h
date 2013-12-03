@@ -7,6 +7,7 @@
 //
 
 #import <GLKit/GLKit.h>
+#import "CelestialObject.h"
 #import "CelestialGroup.h"
 
 @protocol StarsDelegate <NSObject>
@@ -23,5 +24,6 @@
 -(void)setLookAzimuth:(float)a Altitude:(float)b;
 
 -(float*)getNearestStarToAzimuth:(float)a Altitude:(float)b;
+-(CelestialObject*)nearestStarToAzimuth:(float)a Altitude:(float)b;
 
 @end

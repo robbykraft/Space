@@ -170,6 +170,43 @@
     return true;
 }
 
+-(bool) executeMasked
+{
+    glMatrixMode(GL_MODELVIEW);
+    glEnable(GL_CULL_FACE);
+    glCullFace(GL_FRONT);
+    glFrontFace(GL_CW);
+    
+    glEnableClientState(GL_NORMAL_ARRAY);
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glEnableClientState(GL_COLOR_ARRAY);
+    
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_DST_COLOR, GL_ZERO);
+    
+    if(m_TexCoordsData != nil)
+    {
+        glEnable(GL_TEXTURE_2D);
+        glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+        if(m_TextureInfo != 0)
+            glBindTexture(GL_TEXTURE_2D, m_TextureInfo.name);
+        glTexCoordPointer(2, GL_FLOAT, 0, m_TexCoordsData);
+    }
+    glMatrixMode(GL_MODELVIEW);
+    
+    glVertexPointer(3, GL_FLOAT, 0, m_VertexData);
+    glNormalPointer(GL_FLOAT, 0, m_NormalData);
+    glColorPointer(4, GL_UNSIGNED_BYTE, 0, m_ColorData);
+    
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, (m_Slices +1) * 2 * (m_Stacks-1)+2);
+    
+    glDisable(GL_BLEND);
+    glDisable(GL_TEXTURE_2D);
+    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+    
+    return true;
+}
+
 -(bool) execute:(BOOL)invert
 {
     glMatrixMode(GL_MODELVIEW);

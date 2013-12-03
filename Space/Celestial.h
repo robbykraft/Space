@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <GLKit/GLKit.h>
+#import "CelestialObject.h"
 #import "Stars.h"
 #import "Planets.h"
 #import "LoadingStage.h"
