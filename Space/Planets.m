@@ -41,10 +41,12 @@ typedef enum{
     self = [super init];
     if (self) {
 
-        static float sunRadius = 696342.;
+        static float sunRadius = 15000.; //696342.;
         static float radiuses[] = {2439.7, 6051.8, 6371.00, 3389.5, 69911., 58232., 25362., 24622., 1151.};
         //saturns rings // 7,000 km to 80,000 km above surface. hole at 60,300
-        static float kmAU = 1495978.71;
+        static float kmAU = 14959.7871 * 4;  //actual km/AU 149597871.
+        
+        _earthPosition = malloc(sizeof(float)*3);
 
         sunSphere = [[Sphere alloc] init:SLICES slices:SLICES radius:sunRadius/kmAU squash:1.0 textureFile:@"sun_map.png"];
         planetSphere = [[Sphere alloc] init:SLICES slices:SLICES radius:700.0 squash:1.0 textureFile:@"equatorial_line.png"];
@@ -71,6 +73,11 @@ typedef enum{
         positions[3*i+X] = planetPos[X];
         positions[3*i+Y] = planetPos[Y];
         positions[3*i+Z] = planetPos[Z];
+        if(i == Earth){
+            _earthPosition[X] = planetPos[X];
+            _earthPosition[Y] = planetPos[Y];
+            _earthPosition[Z] = planetPos[Z];
+        }
 //        NSLog(@"%@: (%f, %f, %f)",[names objectAtIndex:i], positions[3*i+x], positions[3*i+y], positions[3*i+z]);
         distances[i] = sqrt(planetPos[X] * planetPos[X] +
                             planetPos[Y] * planetPos[Y] +
@@ -171,12 +178,12 @@ static double rates[] = {0.00000037,      0.00001906,     -0.00594749,   149472.
 //        -.015, -.01, -0.0,
 //        .015, -.01, -0.0
 //    };
-//    static const GLfloat quadVertices[] = {
-//        -.01,  .01, -0.0,
-//        .01,  .01, -0.0,
-//        -.01, -.01, -0.0,
-//        .01, -.01, -0.0
-//    };
+    static const GLfloat quadVertices[] = {
+        -.01,  .01, -0.0,
+        .01,  .01, -0.0,
+        -.01, -.01, -0.0,
+        .01, -.01, -0.0
+    };
 //    static const GLfloat quadNormals[] = {
 //        0.0, 0.0, 1.0,
 //        0.0, 0.0, 1.0,
@@ -218,6 +225,9 @@ static double rates[] = {0.00000037,      0.00001906,     -0.00594749,   149472.
 //            glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 //        }
         glPopMatrix();
+    }
+    for(int i = 0; i < 50; i++){
+        
     }
     [sunSphere execute:NO];
     glDisableClientState(GL_VERTEX_ARRAY);

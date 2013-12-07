@@ -8,6 +8,7 @@
 
 #import "HUD.h"
 #import <GLKit/GLKit.h>
+#import "Word.h"
 
 @implementation HUD{
     float _aspectRatio;
@@ -15,6 +16,7 @@
     float *celestialFocus;
     float *look;
     CGPoint offset;
+    Word *starName;
 }
 
 //@synthesize delegate;
@@ -37,6 +39,7 @@
 //            [array addObject:texture];
 //        }
 //        textures = array;
+        starName = [[Word alloc] init];
     }
     return self;
 }
@@ -59,10 +62,6 @@
 //        -.5f, -.8660254f, -1.0f, 0.0f, -.5f, .8660254f,
 //        .5f, .8660254f,    1.0f, 0.0f,  .5f, -.8660254f
 //    };
-    static const GLfloat octVertices[] = {
-        0.0f, 1.0f, .7071f, .7071f, 1.0f, 0.0f, .7071f, -.7071f,
-        0.0f, -1.0f, -.7071f, -.7071f, -1.0f, 0.0f, -.7071f, .7071f
-    };
 //    static const GLfloat quadVertices[] = {
 //        -1.0,  1.0,
 //        1.0,  1.0,
@@ -88,22 +87,36 @@
 //        0.0, 0.0,
 //        1.0, 0.0
 //    };
+
+    static const GLfloat octVertices[] = {
+        0.0f, 1.0f, .7071f, .7071f, 1.0f, 0.0f, .7071f, -.7071f,
+        0.0f, -1.0f, -.7071f, -.7071f, -1.0f, 0.0f, -.7071f, .7071f
+    };
     
     [self switchToOrtho];
     CGFloat HUD_RADIUS = 4.0;
     
-//    glDisable(GL_TEXTURE_2D);
-//    glDisable(GL_BLEND);
     glLineWidth(1.0);
     glTranslatef([[UIScreen mainScreen] bounds].size.height*.5, [[UIScreen mainScreen] bounds].size.width*.5, 0.0);
     glScalef(HUD_RADIUS/_aspectRatio, HUD_RADIUS*_aspectRatio, 1);
     
-//    glColor4f(0.5, 0.5, 1.0, 1.0); // blue
+    // reticle
+    glColor4f(0.5, 0.5, 1.0, 1.0); // blue
     glVertexPointer(2, GL_FLOAT, 0, octVertices);
     glEnableClientState(GL_VERTEX_ARRAY);
     glPushMatrix();
         glDrawArrays(GL_LINE_LOOP, 0, 8);
     glPopMatrix();
+    // star name
+    glPushMatrix();
+        glTranslatef(-5., -45., 0.0);
+        [starName execute];
+    glPopMatrix();
+    
+    glLoadIdentity();
+    
+    [self switchBackToFrustum];
+
 //    glPushMatrix();
 //        offset = CGPointMake(look[AZIMUTH] - celestialFocus[AZIMUTH], look[ALTITUDE] - celestialFocus[ALTITUDE]);
 //        glTranslatef(-offset.x*200, offset.y*200, 0.0);
@@ -114,8 +127,6 @@
 //        glTranslatef(-look[AZIMUTH]*75,look[ALTITUDE]*75, 0.0);
 //        glDrawArrays(GL_LINE_LOOP, 0, 4);
 //    glPopMatrix();
-    
-    glColor4f(0.5, 0.5, 1.0, 1.0); // blue
 
 //    glScalef(1.175, 1.175, 1);
 //    glRotatef(_rotation, 0, 0, 1);
@@ -139,10 +150,10 @@
     glTexCoordPointer(2, GL_FLOAT, 0, quadTextureCoords);
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 */
-    
-    glLoadIdentity();
-    
-    [self switchBackToFrustum];
+}
+
+-(void)updateStarName:(NSString *)string{
+    [starName setText:string];
 }
 
 -(GLKTextureInfo *) loadTexture:(NSString *) filename

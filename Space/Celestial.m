@@ -80,7 +80,7 @@
 }
 
 -(void)incrementTime{
-    julianDate += .0000001;
+    julianDate += .00001;  // .0000001;
     [_planets setTime:julianDate];
     [_planets calculate];
 }
@@ -150,6 +150,7 @@
         0.0, 0.0,
         1.0, 0.0
     };
+    glMatrixMode(GL_MODELVIEW);
     glDisableClientState(GL_TEXTURE_COORD_ARRAY);
     glDisable(GL_TEXTURE_2D);
     glEnableClientState(GL_VERTEX_ARRAY);
@@ -240,7 +241,7 @@
 //            glNormalPointer(GL_FLOAT, 0, quadNormals);
 //            glTexCoordPointer(2, GL_FLOAT, 0, quadTextureCoords);
 //            glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-//        glPopMatrix();
+//        glPopMatrix();/Users/Robby/Code/Space/Space/Celestial.m
 //
 //        glPushMatrix();
 //            GLKMatrix4 ra2 = GLKMatrix4MakeRotation(lookAzimuth, 0.0, 1.0, 0.0);
@@ -263,12 +264,14 @@
 //        [earth executeMasked];
 //        glPopMatrix();
         
-        glTranslatef(position[0], position[1], position[2]);
+//        glTranslatef(position[0], position[1], position[2]);
+
         glPushMatrix();
             [_stars execute];
         glPopMatrix();
         glPushMatrix();
             glMultMatrixf(ecliptic.m);   // align ecliptic plane  23.4 degrees
+            glTranslatef(-_planets.earthPosition[X], -_planets.earthPosition[Z], -_planets.earthPosition[Y]);
             [_planets execute];
         glPopMatrix();
 //        glPushMatrix();
@@ -277,7 +280,10 @@
         
     }
     glPopMatrix();
-    
+//    glMatrixMode(GL_PROJECTION);
+//    glTranslatef(_planets.earthPosition[X], -_planets.earthPosition[Z], _planets.earthPosition[Y]);
+//    glMatrixMode(GL_MODELVIEW);
+
     [_stars setLookAzimuth:lookAzimuth Altitude:lookAltitude];
     if(_loadingStage == nil){
         static int clock = 0;
@@ -292,6 +298,7 @@
             celestialFocus[ALTITUDE] = [star altitude];
             if(![currentFocusName isEqualToString:[star name]]){
                 currentFocusName = [star name];
+                [_hud updateStarName:currentFocusName];
                 NSLog(@"%@",currentFocusName);
             }
 //            NSLog(@"EYE:(%.3f, %.3f, %.3f) (%f, %f)",_eyeVector.x, _eyeVector.y, _eyeVector.z, sphericalCoordinateLook[AZIMUTH], sphericalCoordinateLook[ALTITUDE]);
@@ -316,6 +323,30 @@
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     return info;
 }
+//
+// space exploration
+//   translation in space
+//
+-(void) departingTrip{
+    position[0]+= travelVector.x*speed;
+    position[1]+= travelVector.y*speed;
+    position[2]+= travelVector.z*speed;
+    travelIncrements++;
+}
+
+-(void) returnTrip{
+    position[0]-= travelVector.x*speed;
+    position[1]-= travelVector.y*speed;
+    position[2]-= travelVector.z*speed;
+    travelIncrements--;
+    if (travelIncrements <= 0) {
+        position[0] = position[1] = position[2] = 0.0;
+        [travelTimer invalidate];
+        travelTimer = nil;
+    }
+}
+
+#pragma mark- INTERACTION
 
 -(void)pinchHandler:(UIPinchGestureRecognizer*)sender{
     static float zoom;
@@ -344,26 +375,7 @@
     [travelTimer invalidate];
     travelTimer = nil;
     travelIncrements = 0;
-//    travelTimer = [NSTimer scheduledTimerWithTimeInterval:1.0f/45 target:self selector:@selector(returnTrip) userInfo:nil repeats:YES];
-}
-
--(void) departingTrip{
-    position[0]+= travelVector.x*speed;
-    position[1]+= travelVector.y*speed;
-    position[2]+= travelVector.z*speed;
-    travelIncrements++;
-}
-
--(void) returnTrip{
-    position[0]-= travelVector.x*speed;
-    position[1]-= travelVector.y*speed;
-    position[2]-= travelVector.z*speed;
-    travelIncrements--;
-    if (travelIncrements <= 0) {
-        position[0] = position[1] = position[2] = 0.0;
-        [travelTimer invalidate];
-        travelTimer = nil;
-    }
+    //    travelTimer = [NSTimer scheduledTimerWithTimeInterval:1.0f/45 target:self selector:@selector(returnTrip) userInfo:nil repeats:YES];
 }
 
 #pragma mark- SETTERS

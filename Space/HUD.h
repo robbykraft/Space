@@ -22,5 +22,6 @@
 -(void) setLookAzimuth:(float)a Altitude:(float)b;
 -(void) setCelestialFocusAzimuth:(float)a Altitude:(float)b;
 -(void) execute;
+-(void) updateStarName:(NSString*)string;
 
 @end
