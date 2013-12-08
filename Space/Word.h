@@ -9,7 +9,10 @@
 #import <Foundation/Foundation.h>
 
 @interface Word : NSObject
+
 @property (nonatomic, strong) NSString *text;
+
 -(id)initWithString:(NSString*)string;
 -(void)execute;
+
 @end

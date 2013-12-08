@@ -81,29 +81,6 @@
     return celestialStars[closestIndex];
 }
 
--(float*)getNearestStarToAzimuth:(float)a Altitude:(float)b{
-    look[AZIMUTH] = a;
-    look[ALTITUDE] = b;
-//    float closestDistance = fabsf(-[celestialStars[0] azimuth]-a) + fabsf([celestialStars[0] altitude]-b);
-    float closestDistance = fabsf(a-positions[0+AZIMUTH]) + fabsf(b-positions[0+ALTITUDE]);
-    int closestIndex = 0;
-    float newDistance;
-    for(int i = 1; i < starCount; i++){
-        newDistance = fabsf(positions[i*3+AZIMUTH]-a) + fabsf(positions[i*3+ALTITUDE]-b);
-//        newDistance = fabsf(-[celestialStars[i] azimuth]-a) + fabsf([celestialStars[i] altitude]-b);
-        if(newDistance < closestDistance){
-            closestDistance = newDistance;
-            closestIndex = i;
-        }
-    }
-    float *starPosition = malloc(sizeof(float)*2);
-    starPosition[AZIMUTH] = positions[closestIndex*3+AZIMUTH];
-    starPosition[ALTITUDE] = positions[closestIndex*3+ALTITUDE];
-//    starPosition[AZIMUTH] = [celestialStars[closestIndex] azimuth];
-//    starPosition[ALTITUDE] = [celestialStars[closestIndex] altitude];
-    return starPosition;
-}
-
 -(void)execute{
     glPushMatrix();
     // one or the other
@@ -114,7 +91,53 @@
     glPushMatrix();
         [lines execute];
     glPopMatrix();
+
     
+//    glPushMatrix();
+//    GLKMatrix4 az = GLKMatrix4MakeRotation(lookAzimuth, 0.0, 1.0, 0.0);
+//    glMultMatrixf(az.m);
+//    GLKMatrix4 alt = GLKMatrix4MakeRotation(lookAltitude, 0.0, 0.0, 1.0);
+//    glMultMatrixf(alt.m);
+//    glTranslatef(1.0, 0.0, 0.0);
+//    glScalef(1.0, 10.0, 10.0);
+//    glColor4f(1.0, 1.0, 1.0, 1.0);
+//    glVertexPointer(3, GL_FLOAT, 0, quadVertices);
+//    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+//    glPopMatrix();
+
+//    glPushMatrix();
+//    GLKMatrix4 ra3 = GLKMatrix4MakeRotation(lookAzimuth, 0.0, 1.0, 0.0);
+//    glMultMatrixf(ra3.m);
+//    GLKMatrix4 dec3 = GLKMatrix4MakeRotation(lookAltitude, 0.0, 0.0, 1.0);
+//    glMultMatrixf(dec3.m);
+//    glTranslatef(1.0, 0.0, 0.0);
+//    glColor4f(1.0, 1.0, 1.0, 1.0);
+//    glScalef(200.0, 200.0, 200.0);
+//    glDisable(GL_BLEND);
+//    glBindTexture(GL_TEXTURE_2D, jupiterTexture.name);
+//    glVertexPointer(3, GL_FLOAT, 0, quadVertices);
+//    glNormalPointer(GL_FLOAT, 0, quadNormals);
+//    glTexCoordPointer(2, GL_FLOAT, 0, quadTextureCoords);
+//    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+//    glPopMatrix();
+//    
+//    glPushMatrix();
+//    GLKMatrix4 ra2 = GLKMatrix4MakeRotation(lookAzimuth, 0.0, 1.0, 0.0);
+//    glMultMatrixf(ra2.m);
+//    GLKMatrix4 dec2 = GLKMatrix4MakeRotation(lookAltitude, 0.0, 0.0, 1.0);
+//    glMultMatrixf(dec2.m);
+//    glTranslatef(.50, 0.0, 0.0);
+//    glColor4f(1.0, 1.0, 1.0, 1.0);
+//    glScalef(100.0, 100.0, 100.0);
+//    glEnable(GL_BLEND);
+//    glBlendFunc(GL_DST_COLOR, GL_ZERO);
+//    glBindTexture(GL_TEXTURE_2D, maskTexture.name);
+//    glVertexPointer(3, GL_FLOAT, 0, quadVertices);
+//    glNormalPointer(GL_FLOAT, 0, quadNormals);
+//    glTexCoordPointer(2, GL_FLOAT, 0, quadTextureCoords);
+//    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+//    glPopMatrix();
+
     if(_starCatalog != nil){
 //        static const GLfloat quadVertices[] = {
 //            -.001,  .001, -0.0,

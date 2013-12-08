@@ -112,6 +112,7 @@
         glTranslatef(-5., -45., 0.0);
         [starName execute];
     glPopMatrix();
+    glDisableClientState(GL_VERTEX_ARRAY);
     
     glLoadIdentity();
     

@@ -28,7 +28,7 @@
 }
 -(bool) execute;
 -(bool) executeMasked;
--(bool) execute:(BOOL)invert;
+-(bool) execute:(BOOL)invert transparency:(BOOL)transparent;
 -(id) init:(GLint)stacks slices:(GLint)slices radius:(GLfloat)radius squash:(GLfloat)squash textureFile:(NSString *)textureFile;
 -(GLKTextureInfo *) loadTexture:(NSString *) filename;
 -(void) getPositionX:(GLfloat*)x y:(GLfloat*)y z:(GLfloat*)z;

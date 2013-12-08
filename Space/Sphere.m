@@ -170,6 +170,48 @@
     return true;
 }
 
+-(bool) execute:(BOOL)invert transparency:(BOOL)transparent
+{
+    glMatrixMode(GL_MODELVIEW);
+    glEnable(GL_CULL_FACE);
+    if(invert)
+        glCullFace(GL_FRONT);
+    else
+        glCullFace(GL_BACK);
+    glFrontFace(GL_CW);
+    
+    glEnableClientState(GL_NORMAL_ARRAY);
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glEnableClientState(GL_COLOR_ARRAY);
+    
+    if(transparent){
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    }
+    
+    if(m_TexCoordsData != nil)
+    {
+        glEnable(GL_TEXTURE_2D);
+        glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+        if(m_TextureInfo != 0)
+            glBindTexture(GL_TEXTURE_2D, m_TextureInfo.name);
+        glTexCoordPointer(2, GL_FLOAT, 0, m_TexCoordsData);
+    }
+    glMatrixMode(GL_MODELVIEW);
+    
+    glVertexPointer(3, GL_FLOAT, 0, m_VertexData);
+    glNormalPointer(GL_FLOAT, 0, m_NormalData);
+    glColorPointer(4, GL_UNSIGNED_BYTE, 0, m_ColorData);
+    
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, (m_Slices +1) * 2 * (m_Stacks-1)+2);
+    
+    glDisable(GL_BLEND);
+    glDisable(GL_TEXTURE_2D);
+    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+    
+    return true;
+}
+
 -(bool) executeMasked
 {
     glMatrixMode(GL_MODELVIEW);
@@ -206,44 +248,6 @@
     
     return true;
 }
-
--(bool) execute:(BOOL)invert
-{
-    glMatrixMode(GL_MODELVIEW);
-    glEnable(GL_CULL_FACE);
-    if(invert)
-        glCullFace(GL_FRONT);
-    else
-        glCullFace(GL_BACK);
-    glFrontFace(GL_CW);
-    
-    glEnableClientState(GL_NORMAL_ARRAY);
-    glEnableClientState(GL_VERTEX_ARRAY);
-    glEnableClientState(GL_COLOR_ARRAY);
-    
-    if(m_TexCoordsData != nil)
-    {
-        glEnable(GL_TEXTURE_2D);
-        glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-        if(m_TextureInfo != 0)
-            glBindTexture(GL_TEXTURE_2D, m_TextureInfo.name);
-        glTexCoordPointer(2, GL_FLOAT, 0, m_TexCoordsData);
-    }
-    glMatrixMode(GL_MODELVIEW);
-    
-    glVertexPointer(3, GL_FLOAT, 0, m_VertexData);
-    glNormalPointer(GL_FLOAT, 0, m_NormalData);
-    glColorPointer(4, GL_UNSIGNED_BYTE, 0, m_ColorData);
-    
-    glDrawArrays(GL_TRIANGLE_STRIP, 0, (m_Slices +1) * 2 * (m_Stacks-1)+2);
-    
-    glDisable(GL_BLEND);
-    glDisable(GL_TEXTURE_2D);
-    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-    
-    return true;
-}
-
 
 -(GLKTextureInfo *) loadTexture:(NSString *) filename
 {

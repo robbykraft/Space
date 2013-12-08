@@ -23,7 +23,6 @@
 -(void)execute;
 -(void)setLookAzimuth:(float)a Altitude:(float)b;
 
--(float*)getNearestStarToAzimuth:(float)a Altitude:(float)b;
--(CelestialObject*)nearestStarToAzimuth:(float)a Altitude:(float)b;
+-(id)nearestStarToAzimuth:(float)a Altitude:(float)b;
 
 @end
